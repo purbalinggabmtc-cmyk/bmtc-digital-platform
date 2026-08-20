@@ -1,77 +1,105 @@
-/* =====================================
-   BMTC DIGITAL PLATFORM
-   STYLE SHEET
-===================================== */
-
-
-/* ================================
-   RESET
-================================ */
-
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
 }
+
 
 
 html {
-    scroll-behavior: smooth;
+
+    scroll-behavior:smooth;
+
 }
+
 
 
 body {
 
-    font-family: Arial, Helvetica, sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
 
-    background: #111111;
+    background:#111111;
 
-    color: #ffffff;
+    color:white;
 
-    line-height: 1.6;
+    line-height:1.6;
 
 }
 
 
 
-/* ================================
-   NAVBAR
-================================ */
+/* NAVBAR */
 
 
 .navbar {
 
-    width: 100%;
 
-    display: flex;
+    width:100%;
 
-    justify-content: space-between;
+    display:flex;
 
-    align-items: center;
+    justify-content:space-between;
 
-    padding: 20px 8%;
+    align-items:center;
 
-    background: #000000;
+    padding:18px 8%;
 
-    position: sticky;
+    background:#000000;
 
-    top: 0;
+    position:sticky;
 
-    z-index: 999;
+    top:0;
+
+    z-index:999;
+
 
 }
 
 
 
-.logo {
+.brand {
 
-    font-size: 32px;
 
-    font-weight: 900;
+    display:flex;
 
-    letter-spacing: 2px;
+    align-items:center;
 
-    color: #D4AF37;
+    gap:15px;
+
+
+}
+
+
+
+.logo-image {
+
+
+    width:55px;
+
+    height:55px;
+
+    object-fit:contain;
+
+
+}
+
+
+
+.logo-text {
+
+
+    font-size:32px;
+
+    font-weight:900;
+
+    letter-spacing:2px;
+
+    color:#D4AF37;
+
 
 }
 
@@ -79,9 +107,11 @@ body {
 
 nav {
 
-    display: flex;
 
-    align-items: center;
+    display:flex;
+
+    align-items:center;
+
 
 }
 
@@ -89,15 +119,15 @@ nav {
 
 nav a {
 
-    color: #ffffff;
 
-    text-decoration: none;
+    color:white;
 
-    margin-left: 25px;
+    text-decoration:none;
 
-    font-size: 16px;
+    margin-left:25px;
 
-    transition: 0.3s;
+    transition:.3s;
+
 
 }
 
@@ -105,46 +135,51 @@ nav a {
 
 nav a:hover {
 
-    color: #C8102E;
+
+    color:#C8102E;
+
 
 }
 
 
 
-/* ================================
-   HERO SECTION
-================================ */
+
+
+/* HERO */
 
 
 .hero {
 
-    min-height: 85vh;
 
-    display: flex;
+    min-height:85vh;
 
-    align-items: center;
+    display:flex;
 
-    padding: 0 8%;
+    align-items:center;
+
+    padding:0 8%;
 
 
     background:
 
     linear-gradient(
 
-        rgba(0,0,0,0.65),
+        rgba(0,0,0,.65),
 
-        rgba(0,0,0,0.85)
+        rgba(0,0,0,.85)
 
     ),
 
     url("https://yrvnmmascklkuzpjkwxn.supabase.co/storage/v1/object/public/bmtc%20media/hero.jpg");
 
 
-    background-size: cover;
 
-    background-position: center;
+    background-size:cover;
 
-    background-repeat: no-repeat;
+    background-position:center;
+
+    background-repeat:no-repeat;
+
 
 }
 
@@ -152,7 +187,9 @@ nav a:hover {
 
 .hero-content {
 
-    max-width: 750px;
+
+    max-width:750px;
+
 
 }
 
@@ -160,17 +197,14 @@ nav a:hover {
 
 .hero h1 {
 
-    font-size: 55px;
 
-    line-height: 1.1;
+    font-size:55px;
 
-    letter-spacing: 3px;
+    line-height:1.1;
 
-    font-weight: 900;
+    letter-spacing:3px;
 
-    color: #D4AF37;
-
-    text-transform: uppercase;
+    color:#D4AF37;
 
 }
 
@@ -178,11 +212,13 @@ nav a:hover {
 
 .hero p {
 
-    margin-top: 20px;
 
-    font-size: 22px;
+    margin-top:20px;
 
-    color: #dddddd;
+    font-size:22px;
+
+    color:#ddd;
+
 
 }
 
@@ -190,23 +226,23 @@ nav a:hover {
 
 .button {
 
-    display: inline-block;
 
-    margin-top: 30px;
+    display:inline-block;
 
-    padding: 14px 35px;
+    margin-top:30px;
 
-    background: #C8102E;
+    padding:14px 35px;
 
-    color: white;
+    background:#C8102E;
 
-    text-decoration: none;
+    color:white;
 
-    border-radius: 6px;
+    text-decoration:none;
 
-    font-weight: bold;
+    border-radius:6px;
 
-    transition: 0.3s;
+    font-weight:bold;
+
 
 }
 
@@ -214,22 +250,24 @@ nav a:hover {
 
 .button:hover {
 
-    background: #950c22;
+
+    background:#950c22;
+
 
 }
 
 
 
-/* ================================
-   ABOUT SECTION
-================================ */
+/* ABOUT */
 
 
 .about {
 
-    padding: 80px 8%;
 
-    text-align: center;
+    padding:80px 8%;
+
+    text-align:center;
+
 
 }
 
@@ -237,11 +275,13 @@ nav a:hover {
 
 .about h2 {
 
-    font-size: 36px;
 
-    color: #D4AF37;
+    font-size:36px;
 
-    margin-bottom: 25px;
+    color:#D4AF37;
+
+    margin-bottom:25px;
+
 
 }
 
@@ -249,30 +289,34 @@ nav a:hover {
 
 .about p {
 
-    max-width: 900px;
 
-    margin: auto;
+    max-width:900px;
 
-    color: #dddddd;
+    margin:auto;
 
-    font-size: 18px;
+    color:#ddd;
+
+    font-size:18px;
+
 
 }
 
 
 
-/* ================================
-   FEATURE CARD
-================================ */
+
+
+/* CARD */
 
 
 .feature {
 
-    display: flex;
 
-    gap: 30px;
+    display:flex;
 
-    padding: 50px 8%;
+    gap:30px;
+
+    padding:50px 8%;
+
 
 }
 
@@ -280,27 +324,17 @@ nav a:hover {
 
 .card {
 
-    flex: 1;
 
-    background: #1b1b1b;
+    flex:1;
 
-    padding: 35px;
+    background:#1c1c1c;
 
-    border-radius: 12px;
+    padding:35px;
 
-    border: 1px solid #333333;
+    border-radius:12px;
 
-    transition: 0.3s;
+    border:1px solid #333;
 
-}
-
-
-
-.card:hover {
-
-    transform: translateY(-8px);
-
-    border-color: #D4AF37;
 
 }
 
@@ -308,11 +342,11 @@ nav a:hover {
 
 .card h3 {
 
-    color: #C8102E;
 
-    font-size: 24px;
+    color:#C8102E;
 
-    margin-bottom: 15px;
+    margin-bottom:15px;
+
 
 }
 
@@ -320,202 +354,141 @@ nav a:hover {
 
 .card p {
 
-    color: #cccccc;
+
+    color:#ccc;
+
 
 }
 
 
 
-/* ================================
-   FOOTER
-================================ */
+
+
+/* FOOTER */
 
 
 footer {
 
-    background: #000000;
 
-    padding: 35px;
+    padding:35px;
 
-    text-align: center;
+    text-align:center;
 
-    color: #999999;
+    background:#000;
+
 
 }
 
 
 
-/* ================================
-   TABLET
-================================ */
 
 
-@media(max-width:900px){
-
-
-    .hero h1 {
-
-        font-size: 45px;
-
-    }
-
-
-    .feature {
-
-        gap: 20px;
-
-    }
-
-}
-
-
-
-/* ================================
-   MOBILE
-================================ */
+/* MOBILE */
 
 
 @media(max-width:768px){
 
 
-    .navbar {
+.navbar {
 
-        flex-direction: column;
 
-        padding: 20px 5%;
+    flex-direction:column;
 
-        gap: 20px;
-
-    }
-
-
-
-    nav {
-
-        flex-wrap: wrap;
-
-        justify-content: center;
-
-        gap: 15px;
-
-    }
-
-
-
-    nav a {
-
-        margin-left: 0;
-
-        font-size: 14px;
-
-    }
-
-
-
-    .hero {
-
-        min-height: 75vh;
-
-        padding: 0 5%;
-
-        text-align: center;
-
-    }
-
-
-
-    .hero h1 {
-
-        font-size: 34px;
-
-        letter-spacing: 1px;
-
-    }
-
-
-
-    .hero p {
-
-        font-size: 17px;
-
-    }
-
-
-
-    .button {
-
-        padding: 12px 25px;
-
-    }
-
-
-
-    .about {
-
-        padding: 50px 5%;
-
-    }
-
-
-
-    .about h2 {
-
-        font-size: 30px;
-
-    }
-
-
-
-    .about p {
-
-        font-size: 16px;
-
-    }
-
-
-
-    .feature {
-
-        flex-direction: column;
-
-        padding: 30px 5%;
-
-    }
-
-
-
-    .card {
-
-        padding: 25px;
-
-    }
+    gap:20px;
 
 
 }
 
 
 
-/* ================================
-   SMALL PHONE
-================================ */
+.brand {
 
 
-@media(max-width:400px){
+    justify-content:center;
 
 
-    .logo {
-
-        font-size: 26px;
-
-    }
+}
 
 
 
-    .hero h1 {
+nav {
 
-        font-size: 28px;
 
-    }
+    flex-wrap:wrap;
+
+    justify-content:center;
+
+
+}
+
+
+
+nav a {
+
+
+    margin:8px;
+
+    font-size:14px;
+
+
+}
+
+
+
+.hero {
+
+
+    min-height:75vh;
+
+    padding:0 5%;
+
+    text-align:center;
+
+
+}
+
+
+
+.hero h1 {
+
+
+    font-size:34px;
+
+
+}
+
+
+
+.hero p {
+
+
+    font-size:17px;
+
+
+}
+
+
+
+.feature {
+
+
+    flex-direction:column;
+
+    padding:30px 5%;
+
+
+}
+
+
+
+.about {
+
+
+    padding:50px 5%;
+
+
+}
+
 
 
 }

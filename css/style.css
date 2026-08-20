@@ -7,23 +7,15 @@
 /* RESET */
 
 * {
-
     margin:0;
-
     padding:0;
-
     box-sizing:border-box;
-
 }
-
 
 
 html {
-
     scroll-behavior:smooth;
-
 }
-
 
 
 body {
@@ -37,8 +29,6 @@ body {
     line-height:1.6;
 
 }
-
-
 
 
 
@@ -70,7 +60,6 @@ body {
 }
 
 
-
 .brand {
 
     display:flex;
@@ -82,7 +71,6 @@ body {
 }
 
 
-
 .logo-image {
 
     width:55px;
@@ -92,7 +80,6 @@ body {
     object-fit:contain;
 
 }
-
 
 
 .logo-text {
@@ -118,10 +105,9 @@ nav {
 }
 
 
-
 nav a {
 
-    color:#ffffff;
+    color:white;
 
     text-decoration:none;
 
@@ -134,14 +120,11 @@ nav a {
 }
 
 
-
 nav a:hover {
 
     color:#C8102E;
 
 }
-
-
 
 
 
@@ -164,11 +147,8 @@ nav a:hover {
     background:
 
     linear-gradient(
-
         rgba(0,0,0,.65),
-
         rgba(0,0,0,.85)
-
     ),
 
     url("https://yrvnmmascklkuzpjkwxn.supabase.co/storage/v1/object/public/bmtc%20media/hero.jpg");
@@ -191,7 +171,6 @@ nav a:hover {
 }
 
 
-
 .hero h1 {
 
     font-size:55px;
@@ -207,7 +186,6 @@ nav a:hover {
 }
 
 
-
 .hero p {
 
     margin-top:20px;
@@ -217,9 +195,6 @@ nav a:hover {
     color:#dddddd;
 
 }
-
-
-
 
 
 .button {
@@ -240,8 +215,9 @@ nav a:hover {
 
     font-weight:bold;
 
-}
+    transition:.3s;
 
+}
 
 
 .button:hover {
@@ -249,8 +225,6 @@ nav a:hover {
     background:#950c22;
 
 }
-
-
 
 
 
@@ -268,7 +242,6 @@ nav a:hover {
 }
 
 
-
 .about h2 {
 
     font-size:36px;
@@ -278,7 +251,6 @@ nav a:hover {
     margin-bottom:25px;
 
 }
-
 
 
 .about p {
@@ -295,10 +267,8 @@ nav a:hover {
 
 
 
-
-
 /* =====================================
-   FEATURE CARD
+   FEATURE
 ===================================== */
 
 
@@ -311,7 +281,6 @@ nav a:hover {
     padding:50px 8%;
 
 }
-
 
 
 .card {
@@ -329,7 +298,6 @@ nav a:hover {
 }
 
 
-
 .card h3 {
 
     color:#C8102E;
@@ -339,14 +307,11 @@ nav a:hover {
 }
 
 
-
 .card p {
 
     color:#cccccc;
 
 }
-
-
 
 
 
@@ -366,7 +331,6 @@ nav a:hover {
 }
 
 
-
 .page-header h1 {
 
     font-size:48px;
@@ -378,7 +342,6 @@ nav a:hover {
 }
 
 
-
 .page-header p {
 
     color:#cccccc;
@@ -386,8 +349,6 @@ nav a:hover {
     font-size:20px;
 
 }
-
-
 
 
 
@@ -409,7 +370,6 @@ nav a:hover {
 }
 
 
-
 .profile-card {
 
     background:#1c1c1c;
@@ -423,7 +383,6 @@ nav a:hover {
 }
 
 
-
 .profile-card h2 {
 
     color:#D4AF37;
@@ -433,14 +392,11 @@ nav a:hover {
 }
 
 
-
 .profile-card p {
 
     color:#dddddd;
 
 }
-
-
 
 
 
@@ -462,7 +418,6 @@ nav a:hover {
 }
 
 
-
 .activity-card {
 
     background:#1c1c1c;
@@ -478,7 +433,6 @@ nav a:hover {
 }
 
 
-
 .activity-card:hover {
 
     transform:translateY(-8px);
@@ -486,7 +440,6 @@ nav a:hover {
     border-color:#D4AF37;
 
 }
-
 
 
 .activity-card h2 {
@@ -498,14 +451,11 @@ nav a:hover {
 }
 
 
-
 .activity-card p {
 
     color:#dddddd;
 
 }
-
-
 
 
 
@@ -527,7 +477,6 @@ nav a:hover {
 }
 
 
-
 .gallery-card {
 
     background:#1c1c1c;
@@ -543,7 +492,6 @@ nav a:hover {
 }
 
 
-
 .gallery-card:hover {
 
     transform:translateY(-8px);
@@ -551,7 +499,6 @@ nav a:hover {
     border-color:#D4AF37;
 
 }
-
 
 
 .gallery-card img {
@@ -565,7 +512,6 @@ nav a:hover {
 }
 
 
-
 .gallery-card h3 {
 
     padding:20px;
@@ -577,6 +523,52 @@ nav a:hover {
 }
 
 
+
+/* =====================================
+   CONTACT
+===================================== */
+
+
+.contact-section {
+
+    padding:70px 8%;
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:30px;
+
+}
+
+
+.contact-card {
+
+    background:#1c1c1c;
+
+    padding:35px;
+
+    border-radius:12px;
+
+    border:1px solid #333333;
+
+}
+
+
+.contact-card h2 {
+
+    color:#D4AF37;
+
+    margin-bottom:20px;
+
+}
+
+
+.contact-card p {
+
+    color:#dddddd;
+
+}
 
 
 
@@ -599,10 +591,8 @@ footer {
 
 
 
-
-
 /* =====================================
-   TABLET
+   RESPONSIVE
 ===================================== */
 
 
@@ -616,7 +606,6 @@ footer {
 }
 
 
-
 .gallery-section {
 
     grid-template-columns:repeat(2,1fr);
@@ -624,15 +613,15 @@ footer {
 }
 
 
+.contact-section {
+
+    grid-template-columns:1fr;
+
 }
 
 
+}
 
-
-
-/* =====================================
-   MOBILE
-===================================== */
 
 
 @media(max-width:768px){
@@ -647,7 +636,6 @@ footer {
 }
 
 
-
 nav {
 
     flex-wrap:wrap;
@@ -657,7 +645,6 @@ nav {
 }
 
 
-
 nav a {
 
     margin:8px;
@@ -665,7 +652,6 @@ nav a {
     font-size:14px;
 
 }
-
 
 
 .hero {
@@ -679,7 +665,6 @@ nav a {
 }
 
 
-
 .hero h1 {
 
     font-size:34px;
@@ -687,21 +672,11 @@ nav a {
 }
 
 
-
 .hero p {
 
     font-size:17px;
 
 }
-
-
-
-.about {
-
-    padding:50px 5%;
-
-}
-
 
 
 .feature {
@@ -713,13 +688,18 @@ nav a {
 }
 
 
+.about {
+
+    padding:50px 5%;
+
+}
+
 
 .page-header {
 
     padding:60px 5%;
 
 }
-
 
 
 .page-header h1 {
@@ -729,13 +709,11 @@ nav a {
 }
 
 
-
 .profile-section {
 
     padding:40px 5%;
 
 }
-
 
 
 .activity-section {
@@ -747,7 +725,6 @@ nav a {
 }
 
 
-
 .gallery-section {
 
     grid-template-columns:1fr;
@@ -757,10 +734,16 @@ nav a {
 }
 
 
-
 .gallery-card img {
 
     height:240px;
+
+}
+
+
+.contact-section {
+
+    padding:40px 5%;
 
 }
 

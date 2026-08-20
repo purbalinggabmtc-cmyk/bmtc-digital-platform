@@ -146,7 +146,7 @@ nav a:hover {
 
 
 /* =====================================
-   HERO HOMEPAGE
+   HERO
 ===================================== */
 
 
@@ -217,6 +217,8 @@ nav a:hover {
     color:#dddddd;
 
 }
+
+
 
 
 
@@ -390,7 +392,7 @@ nav a:hover {
 
 
 /* =====================================
-   PROFILE PAGE
+   PROFILE
 ===================================== */
 
 
@@ -443,7 +445,7 @@ nav a:hover {
 
 
 /* =====================================
-   ACTIVITY PAGE
+   ACTIVITY
 ===================================== */
 
 
@@ -508,6 +510,77 @@ nav a:hover {
 
 
 /* =====================================
+   GALLERY
+===================================== */
+
+
+.gallery-section {
+
+    padding:70px 8%;
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:30px;
+
+}
+
+
+
+.gallery-card {
+
+    background:#1c1c1c;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    border:1px solid #333333;
+
+    transition:.3s;
+
+}
+
+
+
+.gallery-card:hover {
+
+    transform:translateY(-8px);
+
+    border-color:#D4AF37;
+
+}
+
+
+
+.gallery-card img {
+
+    width:100%;
+
+    height:280px;
+
+    object-fit:cover;
+
+}
+
+
+
+.gallery-card h3 {
+
+    padding:20px;
+
+    color:#D4AF37;
+
+    text-align:center;
+
+}
+
+
+
+
+
+/* =====================================
    FOOTER
 ===================================== */
 
@@ -536,11 +609,19 @@ footer {
 @media(max-width:900px){
 
 
-    .hero h1 {
+.hero h1 {
 
-        font-size:45px;
+    font-size:45px;
 
-    }
+}
+
+
+
+.gallery-section {
+
+    grid-template-columns:repeat(2,1fr);
+
+}
 
 
 }
@@ -557,113 +638,131 @@ footer {
 @media(max-width:768px){
 
 
-    .navbar {
+.navbar {
 
-        flex-direction:column;
+    flex-direction:column;
 
-        gap:20px;
+    gap:20px;
 
-    }
+}
 
 
 
-    nav {
+nav {
 
-        flex-wrap:wrap;
+    flex-wrap:wrap;
 
-        justify-content:center;
+    justify-content:center;
 
-    }
+}
 
 
 
-    nav a {
+nav a {
 
-        margin:8px;
+    margin:8px;
 
-        font-size:14px;
+    font-size:14px;
 
-    }
+}
 
 
 
-    .hero {
+.hero {
 
-        min-height:75vh;
+    min-height:75vh;
 
-        padding:0 5%;
+    padding:0 5%;
 
-        text-align:center;
+    text-align:center;
 
-    }
+}
 
 
 
-    .hero h1 {
+.hero h1 {
 
-        font-size:34px;
+    font-size:34px;
 
-    }
+}
 
 
 
-    .hero p {
+.hero p {
 
-        font-size:17px;
+    font-size:17px;
 
-    }
+}
 
 
 
-    .about {
+.about {
 
-        padding:50px 5%;
+    padding:50px 5%;
 
-    }
+}
 
 
 
-    .feature {
+.feature {
 
-        flex-direction:column;
+    flex-direction:column;
 
-        padding:30px 5%;
+    padding:30px 5%;
 
-    }
+}
 
 
 
-    .page-header {
+.page-header {
 
-        padding:60px 5%;
+    padding:60px 5%;
 
-    }
+}
 
 
 
-    .page-header h1 {
+.page-header h1 {
 
-        font-size:34px;
+    font-size:34px;
 
-    }
+}
 
 
 
-    .profile-section {
+.profile-section {
 
-        padding:40px 5%;
+    padding:40px 5%;
 
-    }
+}
 
 
 
-    .activity-section {
+.activity-section {
 
-        grid-template-columns:1fr;
+    grid-template-columns:1fr;
 
-        padding:40px 5%;
+    padding:40px 5%;
 
-    }
+}
+
+
+
+.gallery-section {
+
+    grid-template-columns:1fr;
+
+    padding:40px 5%;
+
+}
+
+
+
+.gallery-card img {
+
+    height:240px;
+
+}
 
 
 }

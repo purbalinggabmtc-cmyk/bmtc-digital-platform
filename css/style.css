@@ -40,13 +40,14 @@ body {
 
 
 
+
+
 /* =====================================
    NAVBAR
 ===================================== */
 
 
 .navbar {
-
 
     width:100%;
 
@@ -66,7 +67,6 @@ body {
 
     z-index:999;
 
-
 }
 
 
@@ -85,20 +85,17 @@ body {
 
 .logo-image {
 
-
     width:55px;
 
     height:55px;
 
     object-fit:contain;
 
-
 }
 
 
 
 .logo-text {
-
 
     font-size:32px;
 
@@ -108,25 +105,21 @@ body {
 
     color:#D4AF37;
 
-
 }
 
 
 
 nav {
 
-
     display:flex;
 
     align-items:center;
-
 
 }
 
 
 
 nav a {
-
 
     color:#ffffff;
 
@@ -138,16 +131,13 @@ nav a {
 
     transition:.3s;
 
-
 }
 
 
 
 nav a:hover {
 
-
     color:#C8102E;
-
 
 }
 
@@ -161,7 +151,6 @@ nav a:hover {
 
 
 .hero {
-
 
     min-height:85vh;
 
@@ -185,13 +174,11 @@ nav a:hover {
     url("https://yrvnmmascklkuzpjkwxn.supabase.co/storage/v1/object/public/bmtc%20media/hero.jpg");
 
 
-
     background-size:cover;
 
     background-position:center;
 
     background-repeat:no-repeat;
-
 
 }
 
@@ -199,16 +186,13 @@ nav a:hover {
 
 .hero-content {
 
-
     max-width:750px;
-
 
 }
 
 
 
 .hero h1 {
-
 
     font-size:55px;
 
@@ -220,13 +204,11 @@ nav a:hover {
 
     font-weight:900;
 
-
 }
 
 
 
 .hero p {
-
 
     margin-top:20px;
 
@@ -234,13 +216,11 @@ nav a:hover {
 
     color:#dddddd;
 
-
 }
 
 
 
 .button {
-
 
     display:inline-block;
 
@@ -258,33 +238,30 @@ nav a:hover {
 
     font-weight:bold;
 
-
 }
 
 
 
 .button:hover {
 
-
     background:#950c22;
-
 
 }
 
 
 
+
+
 /* =====================================
-   ABOUT HOMEPAGE
+   ABOUT
 ===================================== */
 
 
 .about {
 
-
     padding:80px 8%;
 
     text-align:center;
-
 
 }
 
@@ -292,20 +269,17 @@ nav a:hover {
 
 .about h2 {
 
-
     font-size:36px;
 
     color:#D4AF37;
 
     margin-bottom:25px;
 
-
 }
 
 
 
 .about p {
-
 
     max-width:900px;
 
@@ -315,8 +289,9 @@ nav a:hover {
 
     font-size:18px;
 
-
 }
+
+
 
 
 
@@ -327,20 +302,17 @@ nav a:hover {
 
 .feature {
 
-
     display:flex;
 
     gap:30px;
 
     padding:50px 8%;
 
-
 }
 
 
 
 .card {
-
 
     flex:1;
 
@@ -350,8 +322,7 @@ nav a:hover {
 
     border-radius:12px;
 
-    border:1px solid #333;
-
+    border:1px solid #333333;
 
 }
 
@@ -359,11 +330,9 @@ nav a:hover {
 
 .card h3 {
 
-
     color:#C8102E;
 
     margin-bottom:15px;
-
 
 }
 
@@ -371,11 +340,52 @@ nav a:hover {
 
 .card p {
 
+    color:#cccccc;
+
+}
+
+
+
+
+
+/* =====================================
+   PAGE HEADER
+===================================== */
+
+
+.page-header {
+
+    padding:90px 8%;
+
+    text-align:center;
+
+    background:#0b0b0b;
+
+}
+
+
+
+.page-header h1 {
+
+    font-size:48px;
+
+    color:#D4AF37;
+
+    text-transform:uppercase;
+
+}
+
+
+
+.page-header p {
 
     color:#cccccc;
 
+    font-size:20px;
 
 }
+
+
 
 
 
@@ -384,59 +394,7 @@ nav a:hover {
 ===================================== */
 
 
-.page-header {
-
-
-    padding:90px 8%;
-
-    text-align:center;
-
-
-    background:
-
-    linear-gradient(
-
-        rgba(0,0,0,.7),
-
-        rgba(0,0,0,.9)
-
-    );
-
-
-}
-
-
-
-.page-header h1 {
-
-
-    font-size:48px;
-
-    color:#D4AF37;
-
-    text-transform:uppercase;
-
-
-}
-
-
-
-.page-header p {
-
-
-    font-size:20px;
-
-    color:#cccccc;
-
-
-}
-
-
-
-
-
 .profile-section {
-
 
     padding:70px 8%;
 
@@ -446,13 +404,11 @@ nav a:hover {
 
     gap:30px;
 
-
 }
 
 
 
 .profile-card {
-
 
     background:#1c1c1c;
 
@@ -460,8 +416,7 @@ nav a:hover {
 
     border-radius:12px;
 
-    border:1px solid #333;
-
+    border:1px solid #333333;
 
 }
 
@@ -469,11 +424,9 @@ nav a:hover {
 
 .profile-card h2 {
 
-
     color:#D4AF37;
 
     margin-bottom:20px;
-
 
 }
 
@@ -481,15 +434,76 @@ nav a:hover {
 
 .profile-card p {
 
-
     color:#dddddd;
+
+}
+
+
+
+
+
+/* =====================================
+   ACTIVITY PAGE
+===================================== */
+
+
+.activity-section {
+
+    padding:70px 8%;
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:30px;
+
+}
+
+
+
+.activity-card {
+
+    background:#1c1c1c;
+
+    padding:35px;
+
+    border-radius:12px;
+
+    border:1px solid #333333;
+
+    transition:.3s;
+
+}
+
+
+
+.activity-card:hover {
+
+    transform:translateY(-8px);
+
+    border-color:#D4AF37;
+
+}
+
+
+
+.activity-card h2 {
+
+    color:#C8102E;
 
     margin-bottom:15px;
 
-    font-size:17px;
+}
 
+
+
+.activity-card p {
+
+    color:#dddddd;
 
 }
+
+
 
 
 
@@ -500,7 +514,6 @@ nav a:hover {
 
 footer {
 
-
     padding:35px;
 
     text-align:center;
@@ -509,7 +522,6 @@ footer {
 
     color:#999999;
 
-
 }
 
 
@@ -517,20 +529,18 @@ footer {
 
 
 /* =====================================
-   RESPONSIVE TABLET
+   TABLET
 ===================================== */
 
 
 @media(max-width:900px){
 
 
-.hero h1 {
+    .hero h1 {
 
+        font-size:45px;
 
-    font-size:45px;
-
-
-}
+    }
 
 
 }
@@ -540,163 +550,120 @@ footer {
 
 
 /* =====================================
-   RESPONSIVE MOBILE
+   MOBILE
 ===================================== */
 
 
 @media(max-width:768px){
 
 
+    .navbar {
 
-.navbar {
+        flex-direction:column;
 
+        gap:20px;
 
-    flex-direction:column;
+    }
 
-    gap:20px;
 
 
-}
+    nav {
 
+        flex-wrap:wrap;
 
+        justify-content:center;
 
-.brand {
+    }
 
 
-    justify-content:center;
 
+    nav a {
 
-}
+        margin:8px;
 
+        font-size:14px;
 
+    }
 
-nav {
 
 
-    flex-wrap:wrap;
+    .hero {
 
-    justify-content:center;
+        min-height:75vh;
 
+        padding:0 5%;
 
-}
+        text-align:center;
 
+    }
 
 
-nav a {
 
+    .hero h1 {
 
-    margin:8px;
+        font-size:34px;
 
-    font-size:14px;
+    }
 
 
-}
 
+    .hero p {
 
+        font-size:17px;
 
-.hero {
+    }
 
 
-    min-height:75vh;
 
-    padding:0 5%;
+    .about {
 
-    text-align:center;
+        padding:50px 5%;
 
+    }
 
-}
 
 
+    .feature {
 
-.hero h1 {
+        flex-direction:column;
 
+        padding:30px 5%;
 
-    font-size:34px;
+    }
 
 
-}
 
+    .page-header {
 
+        padding:60px 5%;
 
-.hero p {
+    }
 
 
-    font-size:17px;
 
+    .page-header h1 {
 
-}
+        font-size:34px;
 
+    }
 
 
-.about {
 
+    .profile-section {
 
-    padding:50px 5%;
+        padding:40px 5%;
 
+    }
 
-}
 
 
+    .activity-section {
 
-.about h2 {
+        grid-template-columns:1fr;
 
+        padding:40px 5%;
 
-    font-size:30px;
-
-
-}
-
-
-
-.feature {
-
-
-    flex-direction:column;
-
-    padding:30px 5%;
-
-
-}
-
-
-
-.page-header {
-
-
-    padding:60px 5%;
-
-
-}
-
-
-
-.page-header h1 {
-
-
-    font-size:34px;
-
-
-}
-
-
-
-.profile-section {
-
-
-    padding:40px 5%;
-
-
-}
-
-
-
-.profile-card {
-
-
-    padding:25px;
-
-
-}
+    }
 
 
 }

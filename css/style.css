@@ -1,6 +1,188 @@
-/* BMTC Digital Platform */
+* {
+    box-sizing: border-box;
+}
+
 
 body {
-    margin: 0;
+
+    margin:0;
+
     font-family: Arial, sans-serif;
+
+    background:#111;
+
+    color:white;
+
+}
+
+
+
+.navbar {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:20px 8%;
+
+    background:#000;
+
+}
+
+
+
+.logo {
+
+    font-size:32px;
+
+    font-weight:bold;
+
+    color:#D4AF37;
+
+}
+
+
+
+nav a {
+
+    color:white;
+
+    text-decoration:none;
+
+    margin-left:25px;
+
+}
+
+
+
+nav a:hover {
+
+    color:#C8102E;
+
+}
+
+
+
+.hero {
+
+    min-height:80vh;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 8%;
+
+
+    background:
+
+    linear-gradient(
+    rgba(0,0,0,.7),
+    rgba(0,0,0,.7)
+    );
+
+}
+
+
+
+.hero h1 {
+
+    font-size:55px;
+
+    color:#D4AF37;
+
+}
+
+
+
+.hero p {
+
+    font-size:22px;
+
+}
+
+
+
+.button {
+
+    display:inline-block;
+
+    margin-top:25px;
+
+    padding:12px 30px;
+
+    background:#C8102E;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:5px;
+
+}
+
+
+
+.about {
+
+    padding:70px 8%;
+
+    text-align:center;
+
+}
+
+
+
+.about h2 {
+
+    color:#D4AF37;
+
+}
+
+
+
+.feature {
+
+    display:flex;
+
+    gap:30px;
+
+    padding:50px 8%;
+
+}
+
+
+
+.card {
+
+    flex:1;
+
+    background:#1c1c1c;
+
+    padding:30px;
+
+    border-radius:10px;
+
+}
+
+
+
+.card h3 {
+
+    color:#C8102E;
+
+}
+
+
+
+footer {
+
+    padding:30px;
+
+    text-align:center;
+
+    background:#000;
+
 }

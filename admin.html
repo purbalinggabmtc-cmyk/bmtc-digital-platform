@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
 
+
 <head>
 
-
 <meta charset="UTF-8">
-
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -21,27 +20,44 @@ Dashboard Admin BMTC
 </head>
 
 
-
 <body>
 
 
 
-<header class="navbar">
+
+<header class="site-header">
 
 
-<div class="brand">
+
+<div class="brand-main">
 
 
-<img 
+
+<img
+
 src="https://yrvnmmascklkuzpjkwxn.supabase.co/storage/v1/object/public/bmtc%20media/logo/logo-bmtc.png"
+
 alt="Logo BMTC"
-class="logo-image"
+
+class="main-logo"
+
 >
 
 
-<div class="logo-text">
 
-BMTC
+
+<div class="brand-title">
+
+
+<h1>
+BMTC ADMIN
+</h1>
+
+
+<p>
+Management Dashboard
+</p>
+
 
 </div>
 
@@ -51,28 +67,28 @@ BMTC
 
 
 
-<nav>
+
+<nav class="main-nav">
 
 
 <a href="index.html">
-
 Website
-
 </a>
 
 
-
 <a href="#" onclick="logout()">
-
 Logout
-
 </a>
 
 
 </nav>
 
 
+
 </header>
+
+
+
 
 
 
@@ -88,7 +104,7 @@ Dashboard Admin BMTC
 
 
 <p>
-Selamat datang di sistem pengelolaan BMTC
+Kelola informasi dan aktivitas organisasi
 </p>
 
 
@@ -99,7 +115,10 @@ Selamat datang di sistem pengelolaan BMTC
 
 
 
-<section class="admin-menu">
+
+
+
+<section class="admin-dashboard">
 
 
 
@@ -107,34 +126,23 @@ Selamat datang di sistem pengelolaan BMTC
 
 
 <h2>
-Berita
+📰 Berita
 </h2>
 
 
 <p>
-Kelola berita organisasi
+Tambah, edit, dan kelola berita BMTC.
 </p>
+
+
+<a href="admin-news.html">
+Kelola Berita
+</a>
 
 
 </div>
 
 
-
-
-<div class="admin-card">
-
-
-<h2>
-Galeri
-</h2>
-
-
-<p>
-Kelola foto kegiatan
-</p>
-
-
-</div>
 
 
 
@@ -143,20 +151,97 @@ Kelola foto kegiatan
 
 
 <h2>
-Kegiatan
+📷 Galeri
 </h2>
 
 
 <p>
-Kelola agenda BMTC
+Kelola dokumentasi kegiatan organisasi.
 </p>
 
 
+<a href="#">
+Kelola Galeri
+</a>
+
+
 </div>
+
+
+
+
+
+
+
+<div class="admin-card">
+
+
+<h2>
+🏍️ Kegiatan
+</h2>
+
+
+<p>
+Kelola agenda dan kegiatan BMTC.
+</p>
+
+
+<a href="#">
+Kelola Kegiatan
+</a>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="admin-card">
+
+
+<h2>
+💰 Keuangan
+</h2>
+
+
+<p>
+Kelola transaksi dan laporan bendahara.
+</p>
+
+
+<a href="#">
+Dashboard Keuangan
+</a>
+
+
+</div>
+
+
 
 
 
 </section>
+
+
+
+
+
+
+
+
+
+<footer>
+
+
+<p>
+© BMTC Digital Platform
+</p>
+
+
+</footer>
 
 
 
@@ -167,7 +252,11 @@ Kelola agenda BMTC
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
+<script src="js/supabase.js"></script>
+
+
 <script src="js/auth.js"></script>
+
 
 
 
@@ -180,5 +269,6 @@ checkLogin();
 
 
 </body>
+
 
 </html>

@@ -1,14 +1,42 @@
-// BMTC NEWS MODULE
+// ======================================
+// BMTC NEWS CMS
+// ======================================
 
-async function addNews(){
+
+
+function createSlug(text){
+
+
+    return text
+
+    .toLowerCase()
+
+    .replace(/[^a-z0-9]+/g,'-')
+
+    .replace(/^-+|-+$/g,'');
+
+}
+
+
+
+
+
+async function saveNews(){
 
 
     const title =
     document.getElementById("title").value;
 
 
+
+    const summary =
+    document.getElementById("summary").value;
+
+
+
     const content =
     document.getElementById("content").value;
+
 
 
     const image_url =
@@ -16,7 +44,24 @@ async function addNews(){
 
 
 
-    const {data,error} =
+    const status =
+    document.getElementById("status").value;
+
+
+
+    const {data:userData} =
+    await client.auth.getUser();
+
+
+
+
+    const user =
+    userData.user;
+
+
+
+
+    const {error} =
 
     await client
 
@@ -28,13 +73,23 @@ async function addNews(){
 
             title:title,
 
+            slug:createSlug(title),
+
+            summary:summary,
+
             content:content,
 
-            image_url:image_url
+            image_url:image_url,
+
+            status:status,
+
+            created_by:user.id
 
         }
 
     ]);
+
+
 
 
 
@@ -43,7 +98,7 @@ async function addNews(){
 
         document.getElementById("message").innerHTML =
 
-        error.message;
+        "Gagal menyimpan: " + error.message;
 
 
         return;
@@ -52,9 +107,34 @@ async function addNews(){
 
 
 
+
     document.getElementById("message").innerHTML =
 
     "Berita berhasil disimpan";
+
+
+
+    clearForm();
+
+
+}
+
+
+
+
+
+
+
+function clearForm(){
+
+
+    document.getElementById("title").value="";
+
+    document.getElementById("summary").value="";
+
+    document.getElementById("content").value="";
+
+    document.getElementById("image_url").value="";
 
 
 }

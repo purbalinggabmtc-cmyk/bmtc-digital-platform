@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+
+
+<head>
+
+
+<meta charset="UTF-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>
+Kelola Berita BMTC
+</title>
+
+
+<link rel="stylesheet" href="css/style.css">
+
+
+</head>
+
+
+
+<body>
+
+
+
+<header class="navbar">
+
+
+<div class="brand">
+
+
+<img
+src="https://yrvnmmascklkuzpjkwxn.supabase.co/storage/v1/object/public/bmtc%20media/logo/logo-bmtc.png"
+alt="Logo BMTC"
+class="logo-image"
+>
+
+
+<div class="logo-text">
+BMTC
+</div>
+
+
+</div>
+
+
+
+<nav>
+
+
+<a href="admin.html">
+Dashboard
+</a>
+
+
+<a href="#" onclick="logout()">
+Logout
+</a>
+
+
+</nav>
+
+
+</header>
+
+
+
+
+
+<section class="admin-header">
+
+
+<h1>
+Kelola Berita BMTC
+</h1>
+
+
+<p>
+Tambah informasi terbaru organisasi
+</p>
+
+
+</section>
+
+
+
+
+
+<section class="news-form-section">
+
+
+<div class="news-form-card">
+
+
+
+<h2>
+Tambah Berita
+</h2>
+
+
+
+<input
+
+type="text"
+
+id="title"
+
+placeholder="Judul berita"
+
+>
+
+
+
+<textarea
+
+id="content"
+
+placeholder="Isi berita"
+
+></textarea>
+
+
+
+
+<input
+
+type="text"
+
+id="image_url"
+
+placeholder="URL foto berita"
+
+>
+
+
+
+
+<button onclick="addNews()">
+
+Simpan Berita
+
+</button>
+
+
+
+<p id="message"></p>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script src="js/auth.js"></script>
+
+
+<script src="js/news.js"></script>
+
+
+
+<script>
+
+checkLogin();
+
+</script>
+
+
+
+</body>
+
+
+</html>

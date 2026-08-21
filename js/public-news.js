@@ -3,13 +3,10 @@
 // ======================================
 
 
-
 async function loadNews(){
 
 
-
     const container =
-
     document.getElementById("news-container");
 
 
@@ -23,36 +20,26 @@ async function loadNews(){
 
 
 
-    const { data, error } =
+    const {data,error}=
 
     await client
 
     .from("news")
 
     .select(
-
         "id,title,summary,image_url,created_at"
-
     )
 
     .eq(
-
         "status",
-
         "publish"
-
     )
 
     .order(
-
         "created_at",
-
         {
-
             ascending:false
-
         }
-
     )
 
     .limit(3);
@@ -64,22 +51,13 @@ async function loadNews(){
     if(error){
 
 
-        console.error(
-
-            "NEWS ERROR:",
-
-            error
-
-        );
-
+        console.error(error);
 
 
         container.innerHTML =
-
         "<p>Berita gagal dimuat</p>";
 
 
-
         return;
 
 
@@ -89,13 +67,11 @@ async function loadNews(){
 
 
 
-    if(!data || data.length === 0){
+    if(data.length===0){
 
 
         container.innerHTML =
-
-        "<p>Belum ada berita terbaru</p>";
-
+        "<p>Belum ada berita</p>";
 
 
         return;
@@ -107,22 +83,27 @@ async function loadNews(){
 
 
 
-    container.innerHTML = "";
+    container.innerHTML="";
 
 
 
 
 
-    data.forEach(news => {
+    data.forEach(news=>{
+
+
+        const date =
+        new Date(news.created_at)
+        .toLocaleDateString(
+            "id-ID"
+        );
 
 
 
         container.innerHTML += `
 
 
-
-        <div class="news-card">
-
+        <article class="news-card">
 
 
             <img
@@ -135,28 +116,44 @@ async function loadNews(){
 
 
 
+            <div class="news-content">
+
+
+            <small>
+            ${date}
+            </small>
+
 
             <h3>
-
             ${news.title}
-
             </h3>
 
 
 
-
-
             <p>
-
             ${news.summary ?? ""}
-
             </p>
 
 
 
+            <a
 
-        </div>
+            href="detail-berita.html?id=${news.id}"
 
+            class="news-button"
+
+            >
+
+            Baca Selengkapnya
+
+            </a>
+
+
+
+            </div>
+
+
+        </article>
 
 
         `;

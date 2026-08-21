@@ -1,6 +1,6 @@
 /* =====================================
    BMTC DIGITAL PLATFORM
-   GLOBAL STYLE
+   GLOBAL CSS
 ===================================== */
 
 
@@ -22,9 +22,9 @@ body {
 
     font-family:Arial, Helvetica, sans-serif;
 
-    background:#111111;
+    background:#111;
 
-    color:#ffffff;
+    color:white;
 
     line-height:1.6;
 
@@ -49,7 +49,7 @@ body {
 
     padding:18px 8%;
 
-    background:#000000;
+    background:#000;
 
     position:sticky;
 
@@ -58,6 +58,7 @@ body {
     z-index:999;
 
 }
+
 
 
 .brand {
@@ -71,6 +72,7 @@ body {
 }
 
 
+
 .logo-image {
 
     width:55px;
@@ -82,26 +84,25 @@ body {
 }
 
 
+
 .logo-text {
 
     font-size:32px;
 
     font-weight:900;
 
-    letter-spacing:2px;
-
     color:#D4AF37;
 
 }
+
 
 
 nav {
 
     display:flex;
 
-    align-items:center;
-
 }
+
 
 
 nav a {
@@ -112,9 +113,8 @@ nav a {
 
     margin-left:25px;
 
-    transition:.3s;
-
 }
+
 
 
 nav a:hover {
@@ -122,6 +122,8 @@ nav a:hover {
     color:#C8102E;
 
 }
+
+
 
 
 
@@ -158,11 +160,13 @@ nav a:hover {
 }
 
 
+
 .hero-content {
 
     max-width:750px;
 
 }
+
 
 
 .hero h1 {
@@ -174,11 +178,12 @@ nav a:hover {
 }
 
 
+
 .hero p {
 
-    margin-top:20px;
-
     font-size:22px;
+
+    margin-top:20px;
 
 }
 
@@ -196,9 +201,9 @@ nav a:hover {
 
     color:white;
 
-    border-radius:6px;
-
     text-decoration:none;
+
+    border-radius:6px;
 
 }
 
@@ -207,7 +212,7 @@ nav a:hover {
 
 
 /* =====================================
-   CONTENT CARD
+   GENERAL SECTION
 ===================================== */
 
 
@@ -223,11 +228,39 @@ nav a:hover {
 
 
 
+.page-header {
+
+    padding:90px 8%;
+
+    text-align:center;
+
+    background:#0b0b0b;
+
+}
+
+
+
+.page-header h1 {
+
+    color:#D4AF37;
+
+    font-size:48px;
+
+}
+
+
+
+
+
+/* =====================================
+   CARD
+===================================== */
+
+
+.card,
 .profile-card,
 .activity-card,
-.gallery-card,
-.contact-card,
-.card {
+.contact-card {
 
     background:#1c1c1c;
 
@@ -240,32 +273,6 @@ nav a:hover {
 }
 
 
-
-
-
-/* =====================================
-   PAGE HEADER
-===================================== */
-
-
-.page-header {
-
-    padding:90px 8%;
-
-    text-align:center;
-
-    background:#0b0b0b;
-
-}
-
-
-.page-header h1 {
-
-    color:#D4AF37;
-
-    font-size:48px;
-
-}
 
 
 
@@ -285,13 +292,17 @@ nav a:hover {
 }
 
 
+
 .gallery-card {
+
+    background:#1c1c1c;
+
+    border-radius:12px;
 
     overflow:hidden;
 
-    padding:0;
-
 }
+
 
 
 .gallery-card img {
@@ -303,6 +314,8 @@ nav a:hover {
     object-fit:cover;
 
 }
+
+
 
 
 
@@ -346,7 +359,7 @@ nav a:hover {
 
     width:100%;
 
-    max-width:420px;
+    max-width:400px;
 
     background:#1c1c1c;
 
@@ -362,15 +375,23 @@ nav a:hover {
 
 
 
-.login-logo {
+/* FIX LOGO LOGIN */
 
-    width:120px;
+.login-card img.login-logo {
 
-    height:120px;
+    width:100px !important;
 
-    object-fit:contain;
+    height:100px !important;
 
-    margin-bottom:20px;
+    max-width:100px !important;
+
+    max-height:100px !important;
+
+    object-fit:contain !important;
+
+    display:block;
+
+    margin:0 auto 25px auto;
 
 }
 
@@ -380,7 +401,9 @@ nav a:hover {
 
     color:#D4AF37;
 
-    margin-bottom:30px;
+    font-size:28px;
+
+    margin-bottom:25px;
 
 }
 
@@ -394,13 +417,13 @@ nav a:hover {
 
     margin-bottom:15px;
 
-    border-radius:6px;
+    background:#333;
 
     border:none;
 
-    background:#333;
-
     color:white;
+
+    border-radius:6px;
 
 }
 
@@ -431,14 +454,6 @@ nav a:hover {
 .login-card button:hover {
 
     background:#950c22;
-
-}
-
-
-
-#message {
-
-    margin-top:15px;
 
 }
 
@@ -489,11 +504,11 @@ nav a:hover {
 
     background:#1c1c1c;
 
-    padding:35px;
+    border:1px solid #333;
 
     border-radius:12px;
 
-    border:1px solid #333;
+    padding:35px;
 
 }
 
@@ -502,8 +517,6 @@ nav a:hover {
 .admin-card h2 {
 
     color:#C8102E;
-
-    margin-bottom:15px;
 
 }
 
@@ -550,6 +563,7 @@ footer {
 
 
 
+
 @media(max-width:768px){
 
 
@@ -568,6 +582,14 @@ nav {
     flex-wrap:wrap;
 
     justify-content:center;
+
+}
+
+
+
+nav a {
+
+    margin:8px;
 
 }
 
@@ -601,6 +623,16 @@ nav {
 .login-card {
 
     padding:30px;
+
+}
+
+
+
+.login-card img.login-logo {
+
+    width:80px !important;
+
+    height:80px !important;
 
 }
 

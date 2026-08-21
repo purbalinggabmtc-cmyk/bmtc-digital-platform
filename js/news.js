@@ -7,15 +7,17 @@
 function createSlug(text){
 
 
-    return text
+return text
 
-    .toLowerCase()
+.toLowerCase()
 
-    .replace(/[^a-z0-9]+/g,'-')
+.replace(/[^a-z0-9]+/g,'-')
 
-    .replace(/^-+|-+$/g,'');
+.replace(/^-+|-+$/g,'');
+
 
 }
+
 
 
 
@@ -26,182 +28,179 @@ async function saveNews(){
 
 
 
-    const title =
+const title =
 
-    document.getElementById("title").value;
+document.getElementById("title").value;
 
 
 
-    const summary =
+const summary =
 
-    document.getElementById("summary").value;
+document.getElementById("summary").value;
 
 
 
-    const content =
+const content =
 
-    document.getElementById("content").value;
+document.getElementById("content").value;
 
 
 
-    const status =
+const status =
 
-    document.getElementById("status").value;
+document.getElementById("status").value;
 
 
 
 
+const file =
 
-    const file =
+document
 
-    document
+.getElementById("image_file")
 
-    .getElementById("image_file")
+.files[0];
 
-    .files[0];
 
 
 
 
+try {
 
-    let image_url = "";
 
 
+let image_url="";
 
 
 
-    try {
 
+if(file){
 
 
-        if(file){
 
+image_url =
 
-            image_url =
+await uploadImage(
 
-            await uploadImage(
+file,
 
-                file,
+"news"
 
-                "news"
-
-            );
-
-
-        }
-
-
-
-
-
-
-
-        const {data:userData} =
-
-        await client.auth.getUser();
-
-
-
-
-        const user =
-
-        userData.user;
-
-
-
-
-
-
-
-        const {error} =
-
-        await client
-
-        .from("news")
-
-        .insert([
-
-
-            {
-
-
-                title:title,
-
-
-                slug:createSlug(title),
-
-
-                summary:summary,
-
-
-                content:content,
-
-
-                image_url:image_url,
-
-
-                status:status,
-
-
-                created_by:user.id
-
-
-            }
-
-
-        ]);
-
-
-
-
-
-
-
-
-        if(error){
-
-
-            throw error;
-
-
-        }
-
-
-
-
-
-
-
-        document.getElementById("message").innerHTML =
-
-        "Berita berhasil disimpan";
-
-
-
-        clearForm();
-
-
-
-
-    }
-
-
-    catch(error){
-
-
-
-        document.getElementById("message").innerHTML =
-
-        "Gagal menyimpan: " + error.message;
-
-
-
-    }
+);
 
 
 
 }
 
+
+
+
+
+const {data:userData}=
+
+await client.auth.getUser();
+
+
+
+
+const user=
+
+userData.user;
+
+
+
+
+
+
+
+const {error}=
+
+await client
+
+.from("news")
+
+.insert([
+
+{
+
+
+title:title,
+
+
+slug:createSlug(title),
+
+
+summary:summary,
+
+
+content:content,
+
+
+image_url:image_url,
+
+
+status:status,
+
+
+created_by:user.id
+
+
+}
+
+
+]);
+
+
+
+
+
+
+
+if(error){
+
+throw error;
+
+}
+
+
+
+
+
+document.getElementById("message").innerHTML=
+
+"Berita berhasil disimpan";
+
+
+
+
+
+clearForm();
+
+
+
+
+
+}
+
+catch(error){
+
+
+
+document.getElementById("message").innerHTML=
+
+"Gagal menyimpan: "
+
++
+
+error.message;
+
+
+
+}
+
+
+
+}
 
 
 
@@ -213,22 +212,19 @@ async function saveNews(){
 function clearForm(){
 
 
-
-    document.getElementById("title").value="";
-
-
-    document.getElementById("summary").value="";
+document.getElementById("title").value="";
 
 
-    document.getElementById("content").value="";
+document.getElementById("summary").value="";
 
 
-    document.getElementById("image_file").value="";
+document.getElementById("content").value="";
 
 
+document.getElementById("image_file").value="";
 
-    document.getElementById("image-preview").style.display="none";
 
+document.getElementById("image-preview").style.display="none";
 
 
 }
@@ -239,9 +235,6 @@ function clearForm(){
 
 
 
-
-
-// IMAGE PREVIEW
 
 
 document
@@ -256,31 +249,30 @@ function(){
 
 
 
-    const file = this.files[0];
+const file=this.files[0];
 
 
 
-    if(file){
+if(file){
 
 
 
-        const preview =
+const preview=
 
-        document.getElementById("image-preview");
-
-
-
-        preview.src =
-
-        URL.createObjectURL(file);
+document.getElementById("image-preview");
 
 
 
-        preview.style.display="block";
+preview.src=
+
+URL.createObjectURL(file);
 
 
 
-    }
+preview.style.display="block";
+
+
+}
 
 
 

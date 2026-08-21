@@ -931,3 +931,189 @@ footer {
 
 
 }
+
+/* =====================================
+   ADMIN DASHBOARD
+===================================== */
+
+
+.admin-header {
+
+    padding:70px 8%;
+
+    text-align:center;
+
+    background:#0b0b0b;
+
+}
+
+
+.admin-header h1 {
+
+    color:#D4AF37;
+
+    font-size:42px;
+
+    margin-bottom:10px;
+
+}
+
+
+.admin-header p {
+
+    color:#cccccc;
+
+    font-size:18px;
+
+}
+
+
+
+
+.admin-dashboard {
+
+
+    padding:50px 8%;
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:30px;
+
+
+}
+
+
+
+
+
+.admin-card {
+
+
+    background:#1c1c1c;
+
+    border:1px solid #333;
+
+    border-radius:15px;
+
+    padding:35px;
+
+    transition:.3s;
+
+
+}
+
+
+
+.admin-card:hover {
+
+
+    transform:translateY(-8px);
+
+    border-color:#D4AF37;
+
+
+}
+
+
+
+
+
+.admin-card h2 {
+
+
+    color:#D4AF37;
+
+    margin-bottom:15px;
+
+
+}
+
+
+
+
+.admin-card p {
+
+
+    color:#cccccc;
+
+    margin-bottom:25px;
+
+
+}
+
+
+
+
+.admin-card a {
+
+
+    display:inline-block;
+
+    padding:10px 25px;
+
+    background:#C8102E;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:6px;
+
+    transition:.3s;
+
+
+}
+
+
+
+
+.admin-card a:hover {
+
+
+    background:#950c22;
+
+
+}
+
+
+
+
+
+
+@media(max-width:768px){
+
+
+.admin-dashboard {
+
+
+    grid-template-columns:1fr;
+
+    padding:35px 5%;
+
+
+}
+
+
+
+.admin-header {
+
+
+    padding:50px 5%;
+
+
+}
+
+
+
+.admin-header h1 {
+
+
+    font-size:32px;
+
+
+}
+
+
+}

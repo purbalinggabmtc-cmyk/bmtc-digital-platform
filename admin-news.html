@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="id">
 
-
 <head>
 
-
 <meta charset="UTF-8">
-
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
 <title>
-Kelola Berita BMTC
+CMS Berita BMTC
 </title>
 
 
@@ -22,9 +19,7 @@ Kelola Berita BMTC
 </head>
 
 
-
 <body>
-
 
 
 <header class="navbar">
@@ -35,8 +30,8 @@ Kelola Berita BMTC
 
 <img
 src="https://yrvnmmascklkuzpjkwxn.supabase.co/storage/v1/object/public/bmtc%20media/logo/logo-bmtc.png"
-alt="Logo BMTC"
 class="logo-image"
+alt="Logo BMTC"
 >
 
 
@@ -50,7 +45,6 @@ BMTC
 
 
 <nav>
-
 
 <a href="admin.html">
 Dashboard
@@ -80,7 +74,7 @@ Kelola Berita BMTC
 
 
 <p>
-Tambah informasi terbaru organisasi
+Publikasi informasi resmi organisasi
 </p>
 
 
@@ -90,11 +84,11 @@ Tambah informasi terbaru organisasi
 
 
 
-<section class="news-form-section">
+<section class="news-admin-container">
+
 
 
 <div class="news-form-card">
-
 
 
 <h2>
@@ -103,43 +97,88 @@ Tambah Berita
 
 
 
+<label>
+Judul Berita
+</label>
+
+
 <input
-
 type="text"
-
 id="title"
-
-placeholder="Judul berita"
-
+placeholder="Contoh: Anniversary BMTC ke-24"
 >
 
 
 
+
+<label>
+Ringkasan
+</label>
+
+
 <textarea
-
-id="content"
-
-placeholder="Isi berita"
-
+id="summary"
+placeholder="Ringkasan berita"
 ></textarea>
 
 
 
 
+
+<label>
+Isi Berita
+</label>
+
+
+<textarea
+id="content"
+placeholder="Isi lengkap berita"
+rows="8"
+></textarea>
+
+
+
+
+
+<label>
+URL Foto
+</label>
+
+
 <input
-
 type="text"
-
 id="image_url"
-
-placeholder="URL foto berita"
-
+placeholder="URL gambar Supabase"
 >
 
 
 
 
-<button onclick="addNews()">
+<label>
+Status
+</label>
+
+
+<select id="status">
+
+
+<option value="draft">
+Draft
+</option>
+
+
+<option value="publish">
+Publish
+</option>
+
+
+</select>
+
+
+
+
+
+<button onclick="saveNews()">
 
 Simpan Berita
 
@@ -150,11 +189,34 @@ Simpan Berita
 <p id="message"></p>
 
 
+</div>
+
+
+
+
+
+<div class="news-preview-card">
+
+
+<h2>
+Preview
+</h2>
+
+
+<div id="preview">
+
+
+Belum ada data
 
 </div>
 
 
+</div>
+
+
+
 </section>
+
 
 
 
@@ -165,7 +227,6 @@ Simpan Berita
 
 
 <script src="js/auth.js"></script>
-
 
 <script src="js/news.js"></script>
 
@@ -178,8 +239,6 @@ checkLogin();
 </script>
 
 
-
 </body>
-
 
 </html>

@@ -95,7 +95,6 @@ body {
 }
 
 
-
 nav {
 
     display:flex;
@@ -112,8 +111,6 @@ nav a {
     text-decoration:none;
 
     margin-left:25px;
-
-    font-size:16px;
 
     transition:.3s;
 
@@ -158,10 +155,7 @@ nav a:hover {
 
     background-position:center;
 
-    background-repeat:no-repeat;
-
 }
-
 
 
 .hero-content {
@@ -175,13 +169,7 @@ nav a:hover {
 
     font-size:55px;
 
-    line-height:1.1;
-
-    letter-spacing:3px;
-
     color:#D4AF37;
-
-    font-weight:900;
 
 }
 
@@ -192,9 +180,8 @@ nav a:hover {
 
     font-size:22px;
 
-    color:#dddddd;
-
 }
+
 
 
 .button {
@@ -209,109 +196,50 @@ nav a:hover {
 
     color:white;
 
-    text-decoration:none;
-
     border-radius:6px;
 
-    font-weight:bold;
-
-    transition:.3s;
+    text-decoration:none;
 
 }
 
 
-.button:hover {
-
-    background:#950c22;
-
-}
 
 
 
 /* =====================================
-   ABOUT
+   CONTENT CARD
 ===================================== */
 
 
-.about {
+.about,
+.profile-section,
+.activity-section,
+.gallery-section,
+.contact-section {
 
-    padding:80px 8%;
-
-    text-align:center;
-
-}
-
-
-.about h2 {
-
-    font-size:36px;
-
-    color:#D4AF37;
-
-    margin-bottom:25px;
-
-}
-
-
-.about p {
-
-    max-width:900px;
-
-    margin:auto;
-
-    color:#dddddd;
-
-    font-size:18px;
+    padding:70px 8%;
 
 }
 
 
 
-/* =====================================
-   FEATURE
-===================================== */
-
-
-.feature {
-
-    display:flex;
-
-    gap:30px;
-
-    padding:50px 8%;
-
-}
-
-
+.profile-card,
+.activity-card,
+.gallery-card,
+.contact-card,
 .card {
-
-    flex:1;
 
     background:#1c1c1c;
 
-    padding:35px;
+    border:1px solid #333;
 
     border-radius:12px;
 
-    border:1px solid #333333;
+    padding:35px;
 
 }
 
 
-.card h3 {
-
-    color:#C8102E;
-
-    margin-bottom:15px;
-
-}
-
-
-.card p {
-
-    color:#cccccc;
-
-}
 
 
 
@@ -333,127 +261,9 @@ nav a:hover {
 
 .page-header h1 {
 
+    color:#D4AF37;
+
     font-size:48px;
-
-    color:#D4AF37;
-
-    text-transform:uppercase;
-
-}
-
-
-.page-header p {
-
-    color:#cccccc;
-
-    font-size:20px;
-
-}
-
-
-
-/* =====================================
-   PROFILE
-===================================== */
-
-
-.profile-section {
-
-    padding:70px 8%;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:30px;
-
-}
-
-
-.profile-card {
-
-    background:#1c1c1c;
-
-    padding:35px;
-
-    border-radius:12px;
-
-    border:1px solid #333333;
-
-}
-
-
-.profile-card h2 {
-
-    color:#D4AF37;
-
-    margin-bottom:20px;
-
-}
-
-
-.profile-card p {
-
-    color:#dddddd;
-
-}
-
-
-
-/* =====================================
-   ACTIVITY
-===================================== */
-
-
-.activity-section {
-
-    padding:70px 8%;
-
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:30px;
-
-}
-
-
-.activity-card {
-
-    background:#1c1c1c;
-
-    padding:35px;
-
-    border-radius:12px;
-
-    border:1px solid #333333;
-
-    transition:.3s;
-
-}
-
-
-.activity-card:hover {
-
-    transform:translateY(-8px);
-
-    border-color:#D4AF37;
-
-}
-
-
-.activity-card h2 {
-
-    color:#C8102E;
-
-    margin-bottom:15px;
-
-}
-
-
-.activity-card p {
-
-    color:#dddddd;
 
 }
 
@@ -466,8 +276,6 @@ nav a:hover {
 
 .gallery-section {
 
-    padding:70px 8%;
-
     display:grid;
 
     grid-template-columns:repeat(3,1fr);
@@ -479,24 +287,9 @@ nav a:hover {
 
 .gallery-card {
 
-    background:#1c1c1c;
-
-    border-radius:12px;
-
     overflow:hidden;
 
-    border:1px solid #333333;
-
-    transition:.3s;
-
-}
-
-
-.gallery-card:hover {
-
-    transform:translateY(-8px);
-
-    border-color:#D4AF37;
+    padding:0;
 
 }
 
@@ -512,11 +305,155 @@ nav a:hover {
 }
 
 
-.gallery-card h3 {
+
+/* =====================================
+   LOGIN PAGE
+===================================== */
+
+
+.login-section {
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
 
     padding:20px;
 
+
+    background:
+
+    linear-gradient(
+        rgba(0,0,0,.8),
+        rgba(0,0,0,.95)
+    ),
+
+    url("https://yrvnmmascklkuzpjkwxn.supabase.co/storage/v1/object/public/bmtc%20media/hero.jpg");
+
+
+    background-size:cover;
+
+    background-position:center;
+
+}
+
+
+
+.login-card {
+
+    width:100%;
+
+    max-width:420px;
+
+    background:#1c1c1c;
+
+    padding:40px;
+
+    border-radius:15px;
+
+    text-align:center;
+
+    border:1px solid #333;
+
+}
+
+
+
+.login-logo {
+
+    width:120px;
+
+    height:120px;
+
+    object-fit:contain;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.login-card h1 {
+
     color:#D4AF37;
+
+    margin-bottom:30px;
+
+}
+
+
+
+.login-card input {
+
+    width:100%;
+
+    padding:14px;
+
+    margin-bottom:15px;
+
+    border-radius:6px;
+
+    border:none;
+
+    background:#333;
+
+    color:white;
+
+}
+
+
+
+.login-card button {
+
+    width:100%;
+
+    padding:14px;
+
+    background:#C8102E;
+
+    color:white;
+
+    border:none;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+}
+
+
+
+.login-card button:hover {
+
+    background:#950c22;
+
+}
+
+
+
+#message {
+
+    margin-top:15px;
+
+}
+
+
+
+
+
+/* =====================================
+   ADMIN DASHBOARD
+===================================== */
+
+
+.admin-header {
+
+    padding:80px 8%;
 
     text-align:center;
 
@@ -524,14 +461,19 @@ nav a:hover {
 
 
 
-/* =====================================
-   CONTACT
-===================================== */
+.admin-header h1 {
+
+    color:#D4AF37;
+
+    font-size:42px;
+
+}
 
 
-.contact-section {
 
-    padding:70px 8%;
+.admin-menu {
+
+    padding:50px 8%;
 
     display:grid;
 
@@ -542,7 +484,8 @@ nav a:hover {
 }
 
 
-.contact-card {
+
+.admin-card {
 
     background:#1c1c1c;
 
@@ -550,25 +493,21 @@ nav a:hover {
 
     border-radius:12px;
 
-    border:1px solid #333333;
+    border:1px solid #333;
 
 }
 
 
-.contact-card h2 {
 
-    color:#D4AF37;
+.admin-card h2 {
 
-    margin-bottom:20px;
+    color:#C8102E;
 
-}
-
-
-.contact-card p {
-
-    color:#dddddd;
+    margin-bottom:15px;
 
 }
+
+
 
 
 
@@ -583,11 +522,11 @@ footer {
 
     text-align:center;
 
-    background:#000000;
-
-    color:#999999;
+    background:#000;
 
 }
+
+
 
 
 
@@ -599,23 +538,10 @@ footer {
 @media(max-width:900px){
 
 
-.hero h1 {
+.gallery-section,
+.admin-menu {
 
-    font-size:45px;
-
-}
-
-
-.gallery-section {
-
-    grid-template-columns:repeat(2,1fr);
-
-}
-
-
-.contact-section {
-
-    grid-template-columns:1fr;
+    grid-template-columns:1fr 1fr;
 
 }
 
@@ -636,6 +562,7 @@ footer {
 }
 
 
+
 nav {
 
     flex-wrap:wrap;
@@ -645,24 +572,13 @@ nav {
 }
 
 
-nav a {
-
-    margin:8px;
-
-    font-size:14px;
-
-}
-
 
 .hero {
-
-    min-height:75vh;
-
-    padding:0 5%;
 
     text-align:center;
 
 }
+
 
 
 .hero h1 {
@@ -672,80 +588,22 @@ nav a {
 }
 
 
-.hero p {
 
-    font-size:17px;
-
-}
-
-
-.feature {
-
-    flex-direction:column;
-
-    padding:30px 5%;
-
-}
-
-
-.about {
-
-    padding:50px 5%;
-
-}
-
-
-.page-header {
-
-    padding:60px 5%;
-
-}
-
-
-.page-header h1 {
-
-    font-size:34px;
-
-}
-
-
-.profile-section {
-
-    padding:40px 5%;
-
-}
-
-
-.activity-section {
+.gallery-section,
+.admin-menu {
 
     grid-template-columns:1fr;
 
-    padding:40px 5%;
-
 }
 
 
-.gallery-section {
 
-    grid-template-columns:1fr;
+.login-card {
 
-    padding:40px 5%;
-
-}
-
-
-.gallery-card img {
-
-    height:240px;
+    padding:30px;
 
 }
 
-
-.contact-section {
-
-    padding:40px 5%;
-
-}
 
 
 }

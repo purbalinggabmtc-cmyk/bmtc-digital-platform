@@ -4,7 +4,7 @@ const SUPABASE_URL =
 
 
 const SUPABASE_KEY =
-"MASUKKAN_ANON_KEY";
+"sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
 
 
 const client =

@@ -10,7 +10,7 @@ const SUPABASE_URL =
 
 
 const SUPABASE_KEY =
-"MASUKKAN_PUBLISHABLE_KEY_ANDA";
+"sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
 
 
 

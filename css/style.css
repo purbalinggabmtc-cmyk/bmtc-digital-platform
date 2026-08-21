@@ -1,20 +1,26 @@
 /* =====================================
    BMTC DIGITAL PLATFORM
-   GLOBAL CSS
+   COMPACT ORGANIZATION STYLE
 ===================================== */
 
 
 /* RESET */
 
 * {
+
     margin:0;
+
     padding:0;
+
     box-sizing:border-box;
+
 }
 
 
 html {
+
     scroll-behavior:smooth;
+
 }
 
 
@@ -33,97 +39,85 @@ body {
 
 
 /* =====================================
-   NAVBAR
+   HERO BRAND HEADER
 ===================================== */
 
 
-.navbar {
+.hero-header {
 
-    width:100%;
 
-    display:flex;
+    position:relative;
 
-    justify-content:space-between;
+    z-index:10;
 
-    align-items:center;
 
-    padding:18px 8%;
+    padding:35px 8%;
+
 
     background:#000;
 
-    position:sticky;
-
-    top:0;
-
-    z-index:999;
 
 }
 
 
 
-.brand {
+.brand-main {
+
 
     display:flex;
 
     align-items:center;
 
-    gap:15px;
+    gap:25px;
+
 
 }
 
 
 
-.logo-image {
+.main-logo {
 
-    width:55px;
 
-    height:55px;
+    width:95px;
+
+    height:95px;
 
     object-fit:contain;
 
+
 }
 
 
 
-.logo-text {
+.brand-title h1 {
 
-    font-size:32px;
+
+    font-size:42px;
 
     font-weight:900;
 
+    letter-spacing:2px;
+
     color:#D4AF37;
 
-}
+    text-transform:uppercase;
 
+    line-height:1.1;
 
-
-nav {
-
-    display:flex;
-
-    align-items:center;
 
 }
 
 
 
-nav a {
-
-    color:white;
-
-    text-decoration:none;
-
-    margin-left:25px;
-
-    transition:.3s;
-
-}
+.brand-title p {
 
 
+    margin-top:10px;
 
-nav a:hover {
+    font-size:18px;
 
-    color:#C8102E;
+    color:#ddd;
+
 
 }
 
@@ -132,28 +126,26 @@ nav a:hover {
 
 
 /* =====================================
-   HERO
+   HERO IMAGE
 ===================================== */
 
 
 .hero {
 
-    min-height:85vh;
 
-    display:flex;
+    height:45vh;
 
-    align-items:center;
 
-    padding:0 8%;
+    position:relative;
 
 
     background:
 
     linear-gradient(
 
-        rgba(0,0,0,.65),
+        rgba(0,0,0,.45),
 
-        rgba(0,0,0,.85)
+        rgba(0,0,0,.75)
 
     ),
 
@@ -164,130 +156,6 @@ nav a:hover {
 
     background-position:center;
 
-    background-repeat:no-repeat;
-
-}
-
-
-
-.hero-content {
-
-    max-width:100%;
-
-}
-
-
-
-.hero h1 {
-
-    font-size:42px;
-
-    color:#D4AF37;
-
-    font-weight:900;
-
-    letter-spacing:2px;
-
-    white-space:nowrap;
-
-    text-transform:uppercase;
-
-}
-
-
-
-.hero p {
-
-    margin-top:20px;
-
-    font-size:22px;
-
-    color:#ffffff;
-
-}
-
-
-
-.button {
-
-    display:inline-block;
-
-    margin-top:30px;
-
-    padding:14px 35px;
-
-    background:#C8102E;
-
-    color:white;
-
-    text-decoration:none;
-
-    border-radius:6px;
-
-}
-
-
-
-
-
-/* =====================================
-   SECTION GENERAL
-===================================== */
-
-
-.about,
-.profile-section,
-.activity-section,
-.gallery-section,
-.contact-section {
-
-    padding:70px 8%;
-
-}
-
-
-
-.page-header {
-
-    padding:90px 8%;
-
-    text-align:center;
-
-    background:#0b0b0b;
-
-}
-
-
-
-.page-header h1 {
-
-    font-size:48px;
-
-    color:#D4AF37;
-
-}
-
-
-
-
-
-/* =====================================
-   CARD
-===================================== */
-
-
-.card,
-.profile-card,
-.activity-card,
-.contact-card {
-
-    background:#1c1c1c;
-
-    border:1px solid #333;
-
-    border-radius:12px;
-
-    padding:35px;
 
 }
 
@@ -302,11 +170,31 @@ nav a:hover {
 
 .feature {
 
+
     display:flex;
 
-    gap:30px;
+    gap:25px;
 
-    padding:50px 8%;
+    padding:45px 8%;
+
+
+}
+
+
+
+.card {
+
+
+    flex:1;
+
+    background:#1c1c1c;
+
+    padding:30px;
+
+    border-radius:12px;
+
+    border:1px solid #333;
+
 
 }
 
@@ -314,9 +202,176 @@ nav a:hover {
 
 .card h3 {
 
+
     color:#C8102E;
 
-    margin-bottom:15px;
+    margin-bottom:12px;
+
+
+}
+
+
+
+.card p {
+
+
+    color:#ddd;
+
+
+}
+
+
+
+
+
+/* =====================================
+   NEWS SECTION
+===================================== */
+
+
+.latest-news {
+
+
+    padding:40px 8%;
+
+
+}
+
+
+
+.latest-news h2 {
+
+
+    color:#D4AF37;
+
+    font-size:32px;
+
+    margin-bottom:25px;
+
+
+}
+
+
+
+#news-container {
+
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+
+
+}
+
+
+
+.news-card {
+
+
+    background:#1c1c1c;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    border:1px solid #333;
+
+
+}
+
+
+
+.news-card img {
+
+
+    width:100%;
+
+    height:220px;
+
+    object-fit:cover;
+
+
+}
+
+
+
+.news-card h3 {
+
+
+    padding:15px;
+
+    color:#D4AF37;
+
+
+}
+
+
+
+.news-card p {
+
+
+    padding:0 15px 20px;
+
+    color:#ccc;
+
+
+}
+
+
+
+/* =====================================
+   PAGE HEADER
+===================================== */
+
+
+.page-header {
+
+
+    padding:80px 8%;
+
+    text-align:center;
+
+    background:#0b0b0b;
+
+
+}
+
+
+
+.page-header h1 {
+
+
+    color:#D4AF37;
+
+    font-size:45px;
+
+
+}
+
+
+
+
+
+/* =====================================
+   CARD GLOBAL
+===================================== */
+
+
+.profile-card,
+.activity-card,
+.contact-card {
+
+
+    background:#1c1c1c;
+
+    border:1px solid #333;
+
+    border-radius:12px;
+
+    padding:35px;
+
 
 }
 
@@ -331,11 +386,15 @@ nav a:hover {
 
 .gallery-section {
 
+
+    padding:60px 8%;
+
     display:grid;
 
     grid-template-columns:repeat(3,1fr);
 
-    gap:30px;
+    gap:25px;
+
 
 }
 
@@ -343,11 +402,13 @@ nav a:hover {
 
 .gallery-card {
 
+
     background:#1c1c1c;
 
     border-radius:12px;
 
     overflow:hidden;
+
 
 }
 
@@ -355,11 +416,13 @@ nav a:hover {
 
 .gallery-card img {
 
+
     width:100%;
 
-    height:280px;
+    height:260px;
 
     object-fit:cover;
+
 
 }
 
@@ -374,6 +437,7 @@ nav a:hover {
 
 .login-section {
 
+
     min-height:100vh;
 
     display:flex;
@@ -382,7 +446,6 @@ nav a:hover {
 
     align-items:center;
 
-    padding:20px;
 
 }
 
@@ -390,9 +453,8 @@ nav a:hover {
 
 .login-card {
 
-    width:100%;
 
-    max-width:400px;
+    width:400px;
 
     background:#1c1c1c;
 
@@ -402,53 +464,19 @@ nav a:hover {
 
     text-align:center;
 
+
 }
 
 
 
-.login-card img.login-logo {
+.login-logo {
 
-    width:100px !important;
 
-    height:100px !important;
+    width:100px;
+
+    height:100px;
 
     object-fit:contain;
-
-    margin-bottom:20px;
-
-}
-
-
-
-.login-card input {
-
-    width:100%;
-
-    padding:14px;
-
-    margin-bottom:15px;
-
-    background:#333;
-
-    border:none;
-
-    color:white;
-
-}
-
-
-
-.login-card button {
-
-    width:100%;
-
-    padding:14px;
-
-    background:#C8102E;
-
-    color:white;
-
-    border:none;
 
 }
 
@@ -463,17 +491,11 @@ nav a:hover {
 
 .admin-header {
 
-    padding:80px 8%;
+
+    padding:70px 8%;
 
     text-align:center;
 
-}
-
-
-
-.admin-header h1 {
-
-    color:#D4AF37;
 
 }
 
@@ -481,13 +503,15 @@ nav a:hover {
 
 .admin-menu {
 
-    padding:50px 8%;
+
+    padding:40px 8%;
 
     display:grid;
 
     grid-template-columns:repeat(3,1fr);
 
-    gap:30px;
+    gap:25px;
+
 
 }
 
@@ -495,60 +519,13 @@ nav a:hover {
 
 .admin-card {
 
-    background:#1c1c1c;
-
-    padding:35px;
-
-    border-radius:12px;
-
-}
-
-
-
-
-
-/* =====================================
-   NEWS
-===================================== */
-
-
-.latest-news {
-
-    padding:70px 8%;
-
-}
-
-
-
-.latest-news h2 {
-
-    color:#D4AF37;
-
-    margin-bottom:30px;
-
-}
-
-
-
-.news-card {
 
     background:#1c1c1c;
 
+    padding:30px;
+
     border-radius:12px;
 
-    overflow:hidden;
-
-}
-
-
-
-.news-card img {
-
-    width:100%;
-
-    height:250px;
-
-    object-fit:cover;
 
 }
 
@@ -563,11 +540,13 @@ nav a:hover {
 
 footer {
 
-    padding:35px;
+
+    padding:30px;
+
+    background:#000;
 
     text-align:center;
 
-    background:#000;
 
 }
 
@@ -583,53 +562,82 @@ footer {
 @media(max-width:900px){
 
 
-.hero h1 {
-
-    font-size:36px;
-
-}
+.brand-title h1 {
 
 
-.gallery-section,
-.admin-menu {
-
-    grid-template-columns:1fr 1fr;
-
-}
+    font-size:32px;
 
 
 }
 
 
+
+#news-container {
+
+
+    grid-template-columns:repeat(2,1fr);
+
+
+}
+
+
+
+}
 
 
 
 @media(max-width:768px){
 
 
-.navbar {
+.hero-header {
+
+
+    padding:25px 5%;
+
+
+}
+
+
+
+.brand-main {
+
 
     flex-direction:column;
 
-    gap:20px;
+    text-align:center;
+
 
 }
 
 
 
-nav {
+.main-logo {
 
-    flex-wrap:wrap;
 
-    justify-content:center;
+    width:80px;
+
+    height:80px;
+
 
 }
 
 
 
-nav a {
+.brand-title h1 {
 
-    margin:8px;
+
+    font-size:26px;
+
+
+}
+
+
+
+.brand-title p {
+
+
+    font-size:15px;
+
 
 }
 
@@ -637,27 +645,9 @@ nav a {
 
 .hero {
 
-    text-align:center;
 
-    min-height:75vh;
+    height:35vh;
 
-}
-
-
-
-.hero h1 {
-
-    font-size:28px;
-
-    white-space:normal;
-
-}
-
-
-
-.hero p {
-
-    font-size:17px;
 
 }
 
@@ -665,26 +655,46 @@ nav a {
 
 .feature {
 
+
     flex-direction:column;
+
+    padding:30px 5%;
+
 
 }
 
 
 
-.gallery-section,
-.admin-menu {
+.latest-news {
+
+
+    padding:30px 5%;
+
+
+}
+
+
+
+#news-container {
+
 
     grid-template-columns:1fr;
 
-}
-
-
-
-.login-card {
-
-    padding:30px;
 
 }
+
+
+
+.gallery-section {
+
+
+    grid-template-columns:1fr;
+
+    padding:40px 5%;
+
+
+}
+
 
 
 }

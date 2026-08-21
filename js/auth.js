@@ -1,17 +1,19 @@
-// Authentication BMTC
 const SUPABASE_URL =
 "https://yrvnmmascklkuzpjkwxn.supabase.co";
 
 
+
 const SUPABASE_KEY =
-"sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
+"MASUKKAN_PUBLISHABLE_KEY_DISINI";
+
 
 
 const client =
 supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+    SUPABASE_URL,
+    SUPABASE_KEY
 );
+
 
 
 
@@ -22,35 +24,57 @@ const email =
 document.getElementById("email").value;
 
 
+
 const password =
 document.getElementById("password").value;
 
 
 
-const {data,error} =
+
+const { data, error } =
 await client.auth.signInWithPassword({
 
-email,
+    email: email,
 
-password
+    password: password
 
 });
 
 
 
+
+
 if(error){
 
+
 document.getElementById("message").innerHTML =
-"Login gagal";
+
+"Login gagal: " + error.message;
+
 
 return;
+
 
 }
 
 
 
-window.location.href =
-"admin.html";
+
+
+document.getElementById("message").innerHTML =
+
+"Login berhasil";
+
+
+
+setTimeout(()=>{
+
+
+window.location.href="admin.html";
+
+
+},1000);
+
 
 
 }

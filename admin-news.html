@@ -22,29 +22,48 @@ CMS Berita BMTC
 <body>
 
 
-<header class="navbar">
+
+<header class="site-header">
 
 
-<div class="brand">
+<div class="brand-main">
 
 
 <img
+
 src="https://yrvnmmascklkuzpjkwxn.supabase.co/storage/v1/object/public/bmtc%20media/logo/logo-bmtc.png"
-class="logo-image"
+
+class="main-logo"
+
 alt="Logo BMTC"
+
 >
 
 
-<div class="logo-text">
-BMTC
-</div>
+
+<div class="brand-title">
+
+
+<h1>
+BMTC ADMIN
+</h1>
+
+
+<p>
+Management Dashboard
+</p>
 
 
 </div>
 
 
+</div>
 
-<nav>
+
+
+
+<nav class="main-nav">
+
 
 <a href="admin.html">
 Dashboard
@@ -60,6 +79,8 @@ Logout
 
 
 </header>
+
+
 
 
 
@@ -84,7 +105,12 @@ Publikasi informasi resmi organisasi
 
 
 
+
+
+
 <section class="news-admin-container">
+
+
 
 
 
@@ -97,16 +123,23 @@ Tambah Berita
 
 
 
+
 <label>
 Judul Berita
 </label>
 
 
 <input
+
 type="text"
+
 id="title"
+
 placeholder="Contoh: Anniversary BMTC ke-24"
+
 >
+
+
 
 
 
@@ -117,9 +150,13 @@ Ringkasan
 
 
 <textarea
+
 id="summary"
+
 placeholder="Ringkasan berita"
+
 ></textarea>
+
 
 
 
@@ -131,25 +168,49 @@ Isi Berita
 
 
 <textarea
+
 id="content"
+
 placeholder="Isi lengkap berita"
+
 rows="8"
+
 ></textarea>
 
 
 
 
 
+
+
 <label>
-URL Foto
+Upload Foto Berita
 </label>
 
 
 <input
-type="text"
-id="image_url"
-placeholder="URL gambar Supabase"
+
+type="file"
+
+id="image_file"
+
+accept="image/*"
+
 >
+
+
+
+
+<img
+
+id="image-preview"
+
+style="width:220px;margin-top:15px;border-radius:10px;display:none"
+
+>
+
+
+
 
 
 
@@ -178,6 +239,8 @@ Publish
 
 
 
+
+
 <button onclick="saveNews()">
 
 Simpan Berita
@@ -186,10 +249,15 @@ Simpan Berita
 
 
 
+
 <p id="message"></p>
 
 
+
 </div>
+
+
+
 
 
 
@@ -208,10 +276,13 @@ Preview
 
 Belum ada data
 
+
 </div>
 
 
 </div>
+
+
 
 
 
@@ -223,12 +294,22 @@ Belum ada data
 
 
 
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script src="js/supabase.js"></script>
 
 
 <script src="js/auth.js"></script>
 
+
+<script src="js/upload.js"></script>
+
+
 <script src="js/news.js"></script>
+
+
 
 
 
@@ -237,6 +318,7 @@ Belum ada data
 checkLogin();
 
 </script>
+
 
 
 </body>

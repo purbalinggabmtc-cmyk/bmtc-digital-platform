@@ -3,7 +3,6 @@
 // ======================================
 
 
-
 async function uploadImage(file, folder){
 
 
@@ -18,9 +17,7 @@ async function uploadImage(file, folder){
 
 
 
-
-
-    const fileExt =
+    const ext =
 
     file.name
 
@@ -31,8 +28,7 @@ async function uploadImage(file, folder){
 
 
 
-
-    const fileName =
+    const filename =
 
     Date.now()
 
@@ -43,7 +39,9 @@ async function uploadImage(file, folder){
     +
 
     Math.random()
+
     .toString(36)
+
     .substring(2)
 
     +
@@ -52,13 +50,13 @@ async function uploadImage(file, folder){
 
     +
 
-    fileExt;
+    ext;
 
 
 
 
 
-    const filePath =
+    const filepath =
 
     folder
 
@@ -68,7 +66,7 @@ async function uploadImage(file, folder){
 
     +
 
-    fileName;
+    filename;
 
 
 
@@ -76,7 +74,7 @@ async function uploadImage(file, folder){
 
 
 
-    const {data,error} =
+    const {error} =
 
     await client
 
@@ -86,7 +84,7 @@ async function uploadImage(file, folder){
 
     .upload(
 
-        filePath,
+        filepath,
 
         file
 
@@ -96,19 +94,9 @@ async function uploadImage(file, folder){
 
 
 
-
-
     if(error){
 
-
-        console.error(
-            "UPLOAD ERROR:",
-            error
-        );
-
-
         throw error;
-
 
     }
 
@@ -116,9 +104,7 @@ async function uploadImage(file, folder){
 
 
 
-
-
-    const {data:urlData}=
+    const {data} =
 
     client
 
@@ -128,7 +114,7 @@ async function uploadImage(file, folder){
 
     .getPublicUrl(
 
-        filePath
+        filepath
 
     );
 
@@ -136,8 +122,7 @@ async function uploadImage(file, folder){
 
 
 
-
-    return urlData.publicUrl;
+    return data.publicUrl;
 
 
 

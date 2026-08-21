@@ -21,79 +21,173 @@ function createSlug(text){
 
 
 
+
 async function saveNews(){
 
 
+
     const title =
+
     document.getElementById("title").value;
 
 
 
     const summary =
+
     document.getElementById("summary").value;
 
 
 
     const content =
+
     document.getElementById("content").value;
 
 
 
-    const image_url =
-    document.getElementById("image_url").value;
-
-
-
     const status =
+
     document.getElementById("status").value;
 
 
 
-    const {data:userData} =
-    await client.auth.getUser();
+
+
+    const file =
+
+    document
+
+    .getElementById("image_file")
+
+    .files[0];
 
 
 
 
-    const user =
-    userData.user;
+
+    let image_url = "";
 
 
 
 
-    const {error} =
 
-    await client
+    try {
 
-    .from("news")
 
-    .insert([
 
-        {
+        if(file){
 
-            title:title,
 
-            slug:createSlug(title),
+            image_url =
 
-            summary:summary,
+            await uploadImage(
 
-            content:content,
+                file,
 
-            image_url:image_url,
+                "news"
 
-            status:status,
+            );
 
-            created_by:user.id
 
         }
 
-    ]);
 
 
 
 
 
-    if(error){
+
+        const {data:userData} =
+
+        await client.auth.getUser();
+
+
+
+
+        const user =
+
+        userData.user;
+
+
+
+
+
+
+
+        const {error} =
+
+        await client
+
+        .from("news")
+
+        .insert([
+
+
+            {
+
+
+                title:title,
+
+
+                slug:createSlug(title),
+
+
+                summary:summary,
+
+
+                content:content,
+
+
+                image_url:image_url,
+
+
+                status:status,
+
+
+                created_by:user.id
+
+
+            }
+
+
+        ]);
+
+
+
+
+
+
+
+
+        if(error){
+
+
+            throw error;
+
+
+        }
+
+
+
+
+
+
+
+        document.getElementById("message").innerHTML =
+
+        "Berita berhasil disimpan";
+
+
+
+        clearForm();
+
+
+
+
+    }
+
+
+    catch(error){
+
 
 
         document.getElementById("message").innerHTML =
@@ -101,23 +195,14 @@ async function saveNews(){
         "Gagal menyimpan: " + error.message;
 
 
-        return;
 
     }
 
 
 
-
-    document.getElementById("message").innerHTML =
-
-    "Berita berhasil disimpan";
-
-
-
-    clearForm();
-
-
 }
+
+
 
 
 
@@ -128,13 +213,77 @@ async function saveNews(){
 function clearForm(){
 
 
+
     document.getElementById("title").value="";
+
 
     document.getElementById("summary").value="";
 
+
     document.getElementById("content").value="";
 
-    document.getElementById("image_url").value="";
+
+    document.getElementById("image_file").value="";
+
+
+
+    document.getElementById("image-preview").style.display="none";
+
 
 
 }
+
+
+
+
+
+
+
+
+
+// IMAGE PREVIEW
+
+
+document
+
+.getElementById("image_file")
+
+.addEventListener(
+
+"change",
+
+function(){
+
+
+
+    const file = this.files[0];
+
+
+
+    if(file){
+
+
+
+        const preview =
+
+        document.getElementById("image-preview");
+
+
+
+        preview.src =
+
+        URL.createObjectURL(file);
+
+
+
+        preview.style.display="block";
+
+
+
+    }
+
+
+
+}
+
+);

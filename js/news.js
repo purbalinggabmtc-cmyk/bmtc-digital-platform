@@ -53,6 +53,7 @@ document.getElementById("status").value;
 
 
 
+
 const file =
 
 document
@@ -77,7 +78,6 @@ let image_url="";
 if(file){
 
 
-
 image_url =
 
 await uploadImage(
@@ -89,8 +89,8 @@ file,
 );
 
 
-
 }
+
 
 
 
@@ -112,7 +112,6 @@ userData.user;
 
 
 
-
 const {error}=
 
 await client
@@ -120,6 +119,7 @@ await client
 .from("news")
 
 .insert([
+
 
 {
 
@@ -166,6 +166,7 @@ throw error;
 
 
 
+
 document.getElementById("message").innerHTML=
 
 "Berita berhasil disimpan";
@@ -178,9 +179,13 @@ clearForm();
 
 
 
+loadAdminNews();
+
 
 
 }
+
+
 
 catch(error){
 
@@ -209,7 +214,9 @@ error.message;
 
 
 
+
 function clearForm(){
+
 
 
 document.getElementById("title").value="";
@@ -224,7 +231,9 @@ document.getElementById("content").value="";
 document.getElementById("image_file").value="";
 
 
+
 document.getElementById("image-preview").style.display="none";
+
 
 
 }
@@ -234,6 +243,12 @@ document.getElementById("image-preview").style.display="none";
 
 
 
+
+
+
+// ======================================
+// IMAGE PREVIEW
+// ======================================
 
 
 
@@ -272,6 +287,7 @@ URL.createObjectURL(file);
 preview.style.display="block";
 
 
+
 }
 
 
@@ -279,3 +295,183 @@ preview.style.display="block";
 }
 
 );
+
+
+
+
+
+
+
+
+
+// ======================================
+// LOAD ADMIN NEWS
+// ======================================
+
+
+
+async function loadAdminNews(){
+
+
+
+const {data,error}=
+
+await client
+
+.from("news")
+
+.select("*")
+
+.order(
+
+"created_at",
+
+{
+
+ascending:false
+
+}
+
+);
+
+
+
+
+
+
+if(error){
+
+
+
+console.log(error);
+
+
+return;
+
+
+}
+
+
+
+
+
+let html="";
+
+
+
+
+
+data.forEach(news=>{
+
+
+
+html += `
+
+
+<tr>
+
+
+
+<td>
+
+
+<img
+
+src="${news.image_url}"
+
+style="width:80px;height:60px;object-fit:cover;border-radius:8px"
+
+>
+
+
+</td>
+
+
+
+
+<td>
+
+${news.title}
+
+</td>
+
+
+
+
+<td>
+
+${news.status}
+
+</td>
+
+
+
+
+<td>
+
+${new Date(news.created_at).toLocaleDateString("id-ID")}
+
+</td>
+
+
+
+
+<td>
+
+
+<button>
+
+Edit
+
+</button>
+
+
+
+<button>
+
+Hapus
+
+</button>
+
+
+
+</td>
+
+
+
+</tr>
+
+
+
+`;
+
+
+
+});
+
+
+
+
+
+
+document
+
+.getElementById("news-table")
+
+.innerHTML = html;
+
+
+
+}
+
+
+
+
+
+
+
+
+// LOAD DATA SAAT HALAMAN DIBUKA
+
+
+loadAdminNews();

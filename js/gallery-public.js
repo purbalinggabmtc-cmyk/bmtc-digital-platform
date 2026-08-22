@@ -25,10 +25,7 @@ ascending:false
 
 if(error){
 
-console.log(
-"Gallery Error:",
-error.message
-);
+console.log(error.message);
 
 return;
 
@@ -41,25 +38,6 @@ let html="";
 
 
 
-if(!data || data.length === 0){
-
-
-html = `
-
-<p style="text-align:center">
-
-Belum ada dokumentasi galeri.
-
-</p>
-
-`;
-
-
-}
-
-else{
-
-
 data.forEach(item=>{
 
 
@@ -69,12 +47,16 @@ html += `
 <div class="gallery-card">
 
 
-
 <img
 
 src="${item.image_url}"
 
 alt="${item.title}"
+
+onclick="openGallery(
+'${item.image_url}',
+'${item.title}'
+)"
 
 >
 
@@ -85,30 +67,6 @@ alt="${item.title}"
 ${item.title}
 
 </h3>
-
-
-${item.description ? `
-
-<p>
-
-${item.description}
-
-</p>
-
-` : ""}
-
-
-
-${item.category ? `
-
-<span>
-
-${item.category}
-
-</span>
-
-` : ""}
-
 
 
 </div>
@@ -122,15 +80,60 @@ ${item.category}
 });
 
 
+
+document.getElementById(
+"gallery-container"
+).innerHTML=html;
+
+
+
 }
+
+
+
+
+
+
+
+
+function openGallery(image,title){
+
+
+document.getElementById(
+"gallery-modal"
+).style.display="flex";
+
+
+
+document.getElementById(
+"gallery-modal-image"
+).src=image;
+
+
+
+document.getElementById(
+"gallery-modal-title"
+).innerHTML=title;
+
+
+
+}
+
+
+
+
 
 
 
 
 document.getElementById(
-"gallery-container"
-).innerHTML = html;
+"close-gallery"
+).onclick=function(){
 
+
+document.getElementById(
+"gallery-modal"
+).style.display="none";
 
 
 }
@@ -140,7 +143,25 @@ document.getElementById(
 
 
 
+document.getElementById(
+"gallery-modal"
+).onclick=function(e){
 
-// jalankan saat halaman selesai dibuka
+
+if(
+e.target.id==="gallery-modal"
+){
+
+this.style.display="none";
+
+}
+
+
+}
+
+
+
+
+
 
 loadPublicGallery();

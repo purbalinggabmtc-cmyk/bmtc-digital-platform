@@ -53,7 +53,6 @@ document.getElementById("status").value;
 
 
 
-
 const file =
 
 document
@@ -106,6 +105,7 @@ await client.auth.getUser();
 const user=
 
 userData.user;
+
 
 
 
@@ -469,7 +469,7 @@ document
 
 
 // ======================================
-// DELETE NEWS
+// DELETE NEWS + STORAGE IMAGE
 // ======================================
 
 
@@ -500,7 +500,9 @@ return;
 
 
 
-// hapus database
+// ================================
+// HAPUS DATABASE
+// ================================
 
 
 const {error}=
@@ -550,9 +552,81 @@ return;
 
 
 
+// ================================
+// HAPUS FILE STORAGE
+// ================================
+
+
+
+if(image_url){
+
+
+
+const path =
+
+image_url
+
+.split(
+
+"/bmtc media/"
+
+)[1];
+
+
+
+
+
+if(path){
+
+
+
+const {error:storageError}=
+
+await client
+
+.storage
+
+.from("bmtc media")
+
+.remove([
+
+path
+
+]);
+
+
+
+
+
+if(storageError){
+
+console.log(
+
+"Gagal hapus gambar:",
+
+storageError
+
+);
+
+}
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+
 alert(
 
-"Berita berhasil dihapus"
+"Berita dan foto berhasil dihapus"
 
 );
 

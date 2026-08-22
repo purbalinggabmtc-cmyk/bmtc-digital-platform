@@ -419,15 +419,11 @@ ${new Date(news.created_at).toLocaleDateString("id-ID")}
 <td>
 
 
-<button>
+<button
 
-Edit
+onclick="deleteNews('${news.id}','${news.image_url}')"
 
-</button>
-
-
-
-<button>
+>
 
 Hapus
 
@@ -471,7 +467,113 @@ document
 
 
 
-// LOAD DATA SAAT HALAMAN DIBUKA
+
+// ======================================
+// DELETE NEWS
+// ======================================
+
+
+
+async function deleteNews(id,image_url){
+
+
+
+const confirmDelete =
+
+confirm(
+
+"Yakin ingin menghapus berita ini?"
+
+);
+
+
+
+
+if(!confirmDelete){
+
+return;
+
+}
+
+
+
+
+
+
+// hapus database
+
+
+const {error}=
+
+await client
+
+.from("news")
+
+.delete()
+
+.eq(
+
+"id",
+
+id
+
+);
+
+
+
+
+
+if(error){
+
+
+
+alert(
+
+"Gagal hapus berita: "
+
++
+
+error.message
+
+);
+
+
+
+return;
+
+
+}
+
+
+
+
+
+
+
+alert(
+
+"Berita berhasil dihapus"
+
+);
+
+
+
+
+loadAdminNews();
+
+
+
+}
+
+
+
+
+
+
+
+
+
+// LOAD SAAT HALAMAN DIBUKA
 
 
 loadAdminNews();

@@ -3,9 +3,7 @@
 // ======================================
 
 
-
 function createSlug(text){
-
 
 return text
 
@@ -15,8 +13,8 @@ return text
 
 .replace(/^-+|-+$/g,'');
 
-
 }
+
 
 
 
@@ -30,6 +28,12 @@ async function saveNews(){
 const id =
 
 document.getElementById("news_id").value;
+
+
+
+const old_image_url =
+
+document.getElementById("old_image_url").value;
 
 
 
@@ -65,11 +69,12 @@ document.getElementById("image_file").files[0];
 
 
 
+
 try {
 
 
 
-let image_url = "";
+let new_image_url = old_image_url;
 
 
 
@@ -78,7 +83,8 @@ let image_url = "";
 if(file){
 
 
-image_url =
+
+new_image_url =
 
 await uploadImage(
 
@@ -89,8 +95,8 @@ file,
 );
 
 
-}
 
+}
 
 
 
@@ -101,42 +107,6 @@ file,
 if(id){
 
 
-// UPDATE BERITA
-
-
-
-let updateData = {
-
-
-title:title,
-
-summary:summary,
-
-content:content,
-
-status:status,
-
-slug:createSlug(title)
-
-};
-
-
-
-
-
-if(image_url){
-
-
-updateData.image_url=image_url;
-
-
-}
-
-
-
-
-
-
 
 const {error}=
 
@@ -144,9 +114,38 @@ await client
 
 .from("news")
 
-.update(updateData)
+.update({
 
-.eq("id",id);
+
+title:title,
+
+
+slug:createSlug(title),
+
+
+summary:summary,
+
+
+content:content,
+
+
+status:status,
+
+
+image_url:new_image_url
+
+
+
+})
+
+.eq(
+
+"id",
+
+id
+
+);
+
 
 
 
@@ -164,12 +163,39 @@ throw error;
 
 
 
+// hapus foto lama jika diganti
+
+
+if(
+
+file &&
+
+old_image_url &&
+
+old_image_url !== new_image_url
+
+){
+
+
+
+await deleteStorageImage(
+
+old_image_url
+
+);
+
+
+
+}
+
+
+
+
+
 }
 
 else{
 
-
-// INSERT BERITA
 
 
 
@@ -180,8 +206,8 @@ await client.auth.getUser();
 
 
 
-
 const user=userData.user;
+
 
 
 
@@ -196,23 +222,33 @@ await client
 
 .insert([
 
+
 {
+
 
 title:title,
 
+
 slug:createSlug(title),
+
 
 summary:summary,
 
+
 content:content,
 
-image_url:image_url,
+
+image_url:new_image_url,
+
 
 status:status,
 
+
 created_by:user.id
 
+
 }
+
 
 ]);
 
@@ -235,18 +271,18 @@ throw error;
 
 
 
-
 document.getElementById("message").innerHTML=
 
 "Berita berhasil disimpan";
 
 
 
-
 clearForm();
 
 
+
 loadAdminNews();
+
 
 
 
@@ -254,9 +290,8 @@ loadAdminNews();
 
 
 
-
-
 catch(error){
+
 
 
 document.getElementById("message").innerHTML=
@@ -266,6 +301,7 @@ document.getElementById("message").innerHTML=
 +
 
 error.message;
+
 
 
 }
@@ -285,8 +321,10 @@ error.message;
 function clearForm(){
 
 
-
 document.getElementById("news_id").value="";
+
+
+document.getElementById("old_image_url").value="";
 
 
 document.getElementById("title").value="";
@@ -315,11 +353,6 @@ document.getElementById("form-title").innerHTML="Tambah Berita";
 
 
 
-
-
-// ======================================
-// LOAD ADMIN NEWS
-// ======================================
 
 
 async function loadAdminNews(){
@@ -362,7 +395,9 @@ return;
 
 
 
+
 let html="";
+
 
 
 
@@ -374,17 +409,17 @@ data.forEach(news=>{
 html += `
 
 
+
 <tr>
 
 
 <td>
 
-
 <img
 
 src="${news.image_url}"
 
-style="width:80px;height:60px;object-fit:cover;border-radius:8px"
+style="width:80px;height:60px;object-fit:cover"
 
 >
 
@@ -435,11 +470,12 @@ Hapus
 </button>
 
 
+
 </td>
 
 
-
 </tr>
+
 
 
 `;
@@ -447,6 +483,7 @@ Hapus
 
 
 });
+
 
 
 
@@ -464,11 +501,6 @@ document.getElementById("news-table").innerHTML=html;
 
 
 
-
-
-// ======================================
-// EDIT NEWS
-// ======================================
 
 
 async function editNews(newsId){
@@ -493,11 +525,9 @@ await client
 
 if(error){
 
-
 alert(error.message);
 
 return;
-
 
 }
 
@@ -505,8 +535,10 @@ return;
 
 
 
-
 document.getElementById("news_id").value=data.id;
+
+
+document.getElementById("old_image_url").value=data.image_url;
 
 
 document.getElementById("title").value=data.title;
@@ -522,23 +554,25 @@ document.getElementById("status").value=data.status;
 
 
 
+
+
 if(data.image_url){
 
 
-
-const preview=
+let img=
 
 document.getElementById("image-preview");
 
 
+img.src=data.image_url;
 
-preview.src=data.image_url;
 
-
-preview.style.display="block";
+img.style.display="block";
 
 
 }
+
+
 
 
 
@@ -557,6 +591,7 @@ behavior:"smooth"
 });
 
 
+
 }
 
 
@@ -565,11 +600,6 @@ behavior:"smooth"
 
 
 
-
-
-// ======================================
-// DELETE NEWS
-// ======================================
 
 
 async function deleteNews(id,image_url){
@@ -585,62 +615,28 @@ return;
 
 
 
-
-const {error}=
-
 await client
 
 .from("news")
 
 .delete()
 
-.eq("id",id);
+.eq(
 
+"id",
 
+id
 
-
-
-if(error){
-
-
-alert(error.message);
-
-return;
-
-
-}
-
-
+);
 
 
 
 
 if(image_url){
 
-
-const path=
-
-image_url.split("/bmtc media/")[1];
-
-
-
-if(path){
-
-
-await client
-
-.storage
-
-.from("bmtc media")
-
-.remove([path]);
-
+await deleteStorageImage(image_url);
 
 }
-
-
-}
-
 
 
 
@@ -650,6 +646,52 @@ loadAdminNews();
 
 
 }
+
+
+
+
+
+
+
+
+
+async function deleteStorageImage(url){
+
+
+
+const path =
+
+url.split("/bmtc media/")[1];
+
+
+
+
+
+if(path){
+
+
+
+await client
+
+.storage
+
+.from("bmtc media")
+
+.remove([
+
+path
+
+]);
+
+
+
+}
+
+
+
+}
+
+
 
 
 

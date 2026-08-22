@@ -1,411 +1,72 @@
-/* =====================================
-   BMTC DIGITAL PLATFORM
-   GLOBAL STYLE
-===================================== */
+/* ===========================
+   BMTC GALLERY
+=========================== */
 
 
-/* =====================================
-   RESET
-===================================== */
+.gallery-grid{
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+display:grid;
 
+grid-template-columns:
+repeat(3,1fr);
 
-html {
-    scroll-behavior: smooth;
-}
-
-
-body {
-
-    font-family: Arial, Helvetica, sans-serif;
-
-    background: #111111;
-
-    color: #ffffff;
-
-    line-height: 1.6;
-
-}
-
-
-/* =====================================
-   HEADER BRAND
-===================================== */
-
-
-.site-header {
-
-    background: #000000;
-
-    padding: 25px 8%;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    gap: 30px;
+gap:25px;
 
 }
 
 
 
-.brand-main {
+.gallery-card{
 
-    display: flex;
+background:#111;
 
-    align-items: center;
+border-radius:15px;
 
-    gap: 20px;
+overflow:hidden;
 
-}
-
-
-
-.main-logo {
-
-    width: 95px;
-
-    height: 95px;
-
-    object-fit: contain;
+cursor:pointer;
 
 }
 
 
 
-.brand-title h1 {
+.gallery-card img{
 
-    font-size: 38px;
 
-    font-weight: 900;
+width:100%;
 
-    letter-spacing: 2px;
+height:220px;
 
-    color: #D4AF37;
+object-fit:cover;
 
-    line-height: 1.1;
+transition:.3s;
+
 
 }
 
 
 
-.brand-title p {
+.gallery-card img:hover{
 
-    margin-top: 8px;
 
-    color: #dddddd;
+transform:scale(1.05);
 
-    font-size: 17px;
 
 }
 
 
 
-/* =====================================
-   NAVIGATION
-===================================== */
+.gallery-card h3{
 
 
-.main-nav {
+padding:15px;
 
-    display: flex;
+margin:0;
 
-    align-items: center;
+color:white;
 
-    gap: 20px;
+font-size:18px;
 
-}
-
-
-
-.main-nav a {
-
-    color: white;
-
-    text-decoration: none;
-
-    font-size: 15px;
-
-    transition: .3s;
-
-}
-
-
-
-.main-nav a:hover {
-
-    color: #C8102E;
-
-}
-
-
-
-/* =====================================
-   HERO
-===================================== */
-
-
-.hero {
-
-    height: 45vh;
-
-
-    background:
-
-    linear-gradient(
-
-        rgba(0,0,0,.45),
-
-        rgba(0,0,0,.75)
-
-    ),
-
-    url("https://yrvnmmascklkuzpjkwxn.supabase.co/storage/v1/object/public/bmtc%20media/hero.jpg");
-
-
-    background-size: cover;
-
-    background-position: center;
-
-    background-repeat: no-repeat;
-
-}
-
-
-
-/* =====================================
-   FEATURE HOMEPAGE
-===================================== */
-
-
-.feature {
-
-    display: grid;
-
-    grid-template-columns: repeat(3,1fr);
-
-    gap: 25px;
-
-    padding: 45px 8%;
-
-}
-
-
-
-.card {
-
-    background: #1c1c1c;
-
-    border: 1px solid #333;
-
-    border-radius: 12px;
-
-    padding: 30px;
-
-}
-
-
-
-.card h3 {
-
-    color: #C8102E;
-
-    margin-bottom: 12px;
-
-}
-
-
-
-.card p {
-
-    color: #cccccc;
-
-}
-
-
-
-/* =====================================
-   PAGE HEADER
-===================================== */
-
-
-.page-header {
-
-    padding: 80px 8%;
-
-    text-align: center;
-
-    background: #0b0b0b;
-
-}
-
-
-
-.page-header h1 {
-
-    color: #D4AF37;
-
-    font-size: 45px;
-
-}
-
-
-
-.page-header p {
-
-    color: #cccccc;
-
-}
-
-
-
-/* =====================================
-   PROFILE
-===================================== */
-
-
-.profile-section {
-
-    padding: 60px 8%;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 30px;
-
-}
-
-
-
-.profile-card {
-
-    background: #1c1c1c;
-
-    border: 1px solid #333;
-
-    border-radius: 12px;
-
-    padding: 35px;
-
-}
-
-
-
-.profile-card h2 {
-
-    color: #D4AF37;
-
-    margin-bottom: 15px;
-
-}
-
-
-
-.profile-card p {
-
-    color: #dddddd;
-
-}
-
-
-
-/* =====================================
-   ACTIVITY
-===================================== */
-
-
-.activity-section {
-
-    padding: 60px 8%;
-
-    display: grid;
-
-    grid-template-columns: repeat(2,1fr);
-
-    gap: 25px;
-
-}
-
-
-
-.activity-card {
-
-    background:#1c1c1c;
-
-    border:1px solid #333;
-
-    border-radius:12px;
-
-    padding:35px;
-
-}
-
-
-
-.activity-card h2 {
-
-    color:#C8102E;
-
-}
-
-
-
-/* =====================================
-   GALLERY
-===================================== */
-
-
-.gallery-section {
-
-    padding:60px 8%;
-
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:25px;
-
-}
-
-
-
-.gallery-card {
-
-    background:#1c1c1c;
-
-    border-radius:12px;
-
-    overflow:hidden;
-
-}
-
-
-
-.gallery-card img {
-
-    width:100%;
-
-    height:260px;
-
-    object-fit:cover;
-
-}
-
-
-
-.gallery-card h3 {
-
-    padding:15px;
-
-    color:#D4AF37;
 
 }
 
@@ -413,413 +74,82 @@ body {
 
 
 
-/* =====================================
-   CONTACT
-===================================== */
+
+/* LIGHTBOX */
 
 
-.contact-section {
+.gallery-modal{
 
-    padding:60px 8%;
 
-    display:grid;
+display:none;
 
-    grid-template-columns:repeat(3,1fr);
+position:fixed;
 
-    gap:25px;
+z-index:9999;
+
+left:0;
+
+top:0;
+
+width:100%;
+
+height:100%;
+
+background:rgba(0,0,0,.85);
+
+align-items:center;
+
+justify-content:center;
+
+flex-direction:column;
+
 
 }
 
 
 
-.contact-card {
+.gallery-modal-image{
 
-    background:#1c1c1c;
 
-    border:1px solid #333;
+max-width:85%;
 
-    border-radius:12px;
+max-height:80%;
 
-    padding:35px;
+border-radius:15px;
+
 
 }
 
 
 
-.contact-card h2 {
+.gallery-modal h3{
 
-    color:#D4AF37;
+
+color:white;
+
+margin-top:20px;
+
+font-size:24px;
+
 
 }
 
 
 
+.close-gallery{
 
 
-/* =====================================
-   NEWS HOMEPAGE
-===================================== */
+position:absolute;
 
+top:30px;
 
-.latest-news {
+right:50px;
 
-    padding:60px 8%;
+font-size:45px;
 
-}
+color:white;
 
-
-
-.latest-news h2 {
-
-    color:#D4AF37;
-
-    font-size:32px;
-
-    margin-bottom:35px;
-
-}
-
-
-
-#news-container {
-
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:30px;
-
-}
-
-
-
-.news-card {
-
-    background:#1c1c1c;
-
-    border-radius:14px;
-
-    overflow:hidden;
-
-    border:1px solid #333;
-
-    transition:.3s;
-
-}
-
-
-
-.news-card:hover {
-
-    transform:translateY(-8px);
-
-    border-color:#D4AF37;
-
-}
-
-
-
-.news-card img {
-
-    width:100%;
-
-    height:240px;
-
-    object-fit:cover;
-
-}
-
-
-
-.news-content {
-
-    padding:25px;
-
-}
-
-
-
-.news-content small {
-
-    color:#999;
-
-}
-
-
-
-.news-content h3 {
-
-    color:#D4AF37;
-
-    margin:10px 0;
-
-}
-
-
-
-.news-content p {
-
-    color:#cccccc;
-
-}
-
-
-
-.news-button {
-
-    display:inline-block;
-
-    margin-top:15px;
-
-    padding:10px 20px;
-
-    background:#C8102E;
-
-    color:white;
-
-    text-decoration:none;
-
-    border-radius:6px;
-
-}
-
-
-
-/* =====================================
-   DETAIL NEWS
-===================================== */
-
-
-.news-detail {
-
-    max-width:900px;
-
-    margin:auto;
-
-    padding:70px 8%;
-
-}
-
-
-
-.news-detail img {
-
-    width:100%;
-
-    height:450px;
-
-    object-fit:cover;
-
-    border-radius:15px;
-
-}
-
-
-
-.news-detail h1 {
-
-    color:#D4AF37;
-
-    font-size:42px;
-
-    margin-top:30px;
-
-}
-
-
-
-.news-detail p {
-
-    margin-top:30px;
-
-    color:#dddddd;
-
-    font-size:18px;
-
-    line-height:1.8;
-
-}
-
-
-
-/* =====================================
-   LOGIN
-===================================== */
-
-
-.login-section {
-
-    min-height:100vh;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    padding:20px;
-
-}
-
-
-
-.login-card {
-
-    width:400px;
-
-    background:#1c1c1c;
-
-    padding:40px;
-
-    border-radius:15px;
-
-    text-align:center;
-
-}
-
-
-
-.login-logo {
-
-    width:100px;
-
-    height:100px;
-
-    object-fit:contain;
-
-}
-
-
-
-.login-card input {
-
-    width:100%;
-
-    padding:14px;
-
-    margin-top:15px;
-
-    background:#333;
-
-    border:none;
-
-    color:white;
-
-}
-
-
-
-.login-card button {
-
-    width:100%;
-
-    padding:14px;
-
-    margin-top:15px;
-
-    background:#C8102E;
-
-    color:white;
-
-    border:none;
-
-}
-
-
-
-
-
-/* =====================================
-   ADMIN
-===================================== */
-
-
-.admin-header {
-
-    padding:70px 8%;
-
-    text-align:center;
-
-}
-
-
-
-.admin-header h1 {
-
-    color:#D4AF37;
-
-}
-
-
-
-.admin-menu {
-
-    padding:50px 8%;
-
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:25px;
-
-}
-
-
-
-.admin-card {
-
-    background:#1c1c1c;
-
-    padding:30px;
-
-    border-radius:12px;
-
-}
-
-
-
-
-
-/* =====================================
-   FOOTER
-===================================== */
-
-
-footer {
-
-    padding:30px;
-
-    background:#000;
-
-    text-align:center;
-
-}
-
-
-
-
-
-/* =====================================
-   RESPONSIVE
-===================================== */
-
-
-@media(max-width:1100px){
-
-
-.site-header {
-
-    flex-direction:column;
-
-}
-
-
-
-.main-nav {
-
-    justify-content:center;
-
-}
+cursor:pointer;
 
 
 }
@@ -829,289 +159,25 @@ footer {
 @media(max-width:768px){
 
 
-.brand-main {
+.gallery-grid{
 
-    flex-direction:column;
-
-    text-align:center;
-
-}
-
-
-
-.main-logo {
-
-    width:80px;
-
-    height:80px;
-
-}
-
-
-
-.brand-title h1 {
-
-    font-size:26px;
-
-}
-
-
-
-.main-nav {
-
-    flex-wrap:wrap;
-
-    justify-content:center;
-
-}
-
-
-
-.hero {
-
-    height:35vh;
-
-}
-
-
-
-.feature {
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.activity-section {
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.gallery-section {
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.contact-section {
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-#news-container {
-
-    grid-template-columns:1fr;
-
-}
-
-
-
-.news-detail img {
-
-    height:250px;
-
-}
-
-
-
-.news-detail h1 {
-
-    font-size:30px;
+grid-template-columns:
+repeat(2,1fr);
 
 }
 
 
 }
 
-/* =====================================
-   ADMIN DASHBOARD
-===================================== */
 
 
-.admin-header {
+@media(max-width:480px){
 
-    padding:70px 8%;
 
-    text-align:center;
+.gallery-grid{
 
-    background:#0b0b0b;
-
-}
-
-
-.admin-header h1 {
-
-    color:#D4AF37;
-
-    font-size:42px;
-
-    margin-bottom:10px;
-
-}
-
-
-.admin-header p {
-
-    color:#cccccc;
-
-    font-size:18px;
-
-}
-
-
-
-
-.admin-dashboard {
-
-
-    padding:50px 8%;
-
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:30px;
-
-
-}
-
-
-
-
-
-.admin-card {
-
-
-    background:#1c1c1c;
-
-    border:1px solid #333;
-
-    border-radius:15px;
-
-    padding:35px;
-
-    transition:.3s;
-
-
-}
-
-
-
-.admin-card:hover {
-
-
-    transform:translateY(-8px);
-
-    border-color:#D4AF37;
-
-
-}
-
-
-
-
-
-.admin-card h2 {
-
-
-    color:#D4AF37;
-
-    margin-bottom:15px;
-
-
-}
-
-
-
-
-.admin-card p {
-
-
-    color:#cccccc;
-
-    margin-bottom:25px;
-
-
-}
-
-
-
-
-.admin-card a {
-
-
-    display:inline-block;
-
-    padding:10px 25px;
-
-    background:#C8102E;
-
-    color:white;
-
-    text-decoration:none;
-
-    border-radius:6px;
-
-    transition:.3s;
-
-
-}
-
-
-
-
-.admin-card a:hover {
-
-
-    background:#950c22;
-
-
-}
-
-
-
-
-
-
-@media(max-width:768px){
-
-
-.admin-dashboard {
-
-
-    grid-template-columns:1fr;
-
-    padding:35px 5%;
-
-
-}
-
-
-
-.admin-header {
-
-
-    padding:50px 5%;
-
-
-}
-
-
-
-.admin-header h1 {
-
-
-    font-size:32px;
-
+grid-template-columns:
+1fr;
 
 }
 

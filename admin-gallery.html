@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+CMS Gallery BMTC
+</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+
+<body>
+
+
+<header class="site-header">
+
+<div class="brand-main">
+
+<img 
+src="https://yrvnmmascklkuzpjkwxn.supabase.co/storage/v1/object/public/bmtc%20media/logo/logo-bmtc.png"
+class="main-logo"
+alt="Logo BMTC">
+
+
+<div class="brand-title">
+
+<h1>
+BMTC ADMIN
+</h1>
+
+<p>
+Gallery Management
+</p>
+
+</div>
+
+</div>
+
+
+<nav class="main-nav">
+
+<a href="admin.html">
+Dashboard
+</a>
+
+<a href="#" onclick="logout()">
+Logout
+</a>
+
+</nav>
+
+
+</header>
+
+
+
+
+
+<section class="admin-header">
+
+<h1>
+Kelola Gallery BMTC
+</h1>
+
+<p>
+Publikasi dokumentasi kegiatan organisasi
+</p>
+
+</section>
+
+
+
+
+
+
+<section class="news-admin-container">
+
+
+
+<div class="news-form-card">
+
+
+<h2 id="form-title">
+Tambah Foto
+</h2>
+
+
+
+<label>
+Judul Foto
+</label>
+
+<input 
+type="text"
+id="title">
+
+
+
+<label>
+Deskripsi
+</label>
+
+<textarea 
+id="description"></textarea>
+
+
+
+
+<label>
+Kategori
+</label>
+
+
+<select id="category">
+
+<option value="touring">
+Touring
+</option>
+
+<option value="kegiatan">
+Kegiatan
+</option>
+
+<option value="sosial">
+Sosial
+</option>
+
+<option value="lainnya">
+Lainnya
+</option>
+
+</select>
+
+
+
+
+
+<label>
+Upload Foto
+</label>
+
+
+<input 
+type="file"
+id="image_file"
+accept="image/*">
+
+
+
+
+
+<img
+id="image-preview"
+style="
+width:220px;
+margin-top:15px;
+border-radius:10px;
+display:none;
+">
+
+
+
+
+
+<button onclick="saveGallery()">
+
+Simpan Foto
+
+</button>
+
+
+
+
+<input 
+type="hidden"
+id="gallery_id">
+
+
+<input
+type="hidden"
+id="old_image_url">
+
+
+<p id="message"></p>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="news-preview-card">
+
+
+<h2>
+Daftar Gallery
+</h2>
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>
+Foto
+</th>
+
+<th>
+Judul
+</th>
+
+<th>
+Kategori
+</th>
+
+<th>
+Aksi
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+<tbody id="gallery-table">
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/supabase.js"></script>
+
+<script src="js/auth.js"></script>
+
+<script src="js/upload.js"></script>
+
+<script src="js/gallery.js"></script>
+
+
+
+<script>
+
+checkLogin();
+
+</script>
+
+
+</body>
+
+</html>

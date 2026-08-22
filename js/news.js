@@ -23,8 +23,13 @@ return text
 
 
 
-
 async function saveNews(){
+
+
+
+const id =
+
+document.getElementById("news_id").value;
 
 
 
@@ -52,14 +57,9 @@ document.getElementById("status").value;
 
 
 
-
 const file =
 
-document
-
-.getElementById("image_file")
-
-.files[0];
+document.getElementById("image_file").files[0];
 
 
 
@@ -69,7 +69,8 @@ try {
 
 
 
-let image_url="";
+let image_url = "";
+
 
 
 
@@ -95,16 +96,41 @@ file,
 
 
 
-const {data:userData}=
-
-await client.auth.getUser();
 
 
+if(id){
 
 
-const user=
+// UPDATE BERITA
 
-userData.user;
+
+
+let updateData = {
+
+
+title:title,
+
+summary:summary,
+
+content:content,
+
+status:status,
+
+slug:createSlug(title)
+
+};
+
+
+
+
+
+if(image_url){
+
+
+updateData.image_url=image_url;
+
+
+}
 
 
 
@@ -118,39 +144,9 @@ await client
 
 .from("news")
 
-.insert([
+.update(updateData)
 
-
-{
-
-
-title:title,
-
-
-slug:createSlug(title),
-
-
-summary:summary,
-
-
-content:content,
-
-
-image_url:image_url,
-
-
-status:status,
-
-
-created_by:user.id
-
-
-}
-
-
-]);
-
-
+.eq("id",id);
 
 
 
@@ -167,6 +163,79 @@ throw error;
 
 
 
+
+}
+
+else{
+
+
+// INSERT BERITA
+
+
+
+
+const {data:userData}=
+
+await client.auth.getUser();
+
+
+
+
+const user=userData.user;
+
+
+
+
+
+
+const {error}=
+
+await client
+
+.from("news")
+
+.insert([
+
+{
+
+title:title,
+
+slug:createSlug(title),
+
+summary:summary,
+
+content:content,
+
+image_url:image_url,
+
+status:status,
+
+created_by:user.id
+
+}
+
+]);
+
+
+
+
+
+if(error){
+
+throw error;
+
+}
+
+
+
+}
+
+
+
+
+
+
+
 document.getElementById("message").innerHTML=
 
 "Berita berhasil disimpan";
@@ -174,9 +243,7 @@ document.getElementById("message").innerHTML=
 
 
 
-
 clearForm();
-
 
 
 loadAdminNews();
@@ -187,8 +254,9 @@ loadAdminNews();
 
 
 
-catch(error){
 
+
+catch(error){
 
 
 document.getElementById("message").innerHTML=
@@ -198,7 +266,6 @@ document.getElementById("message").innerHTML=
 +
 
 error.message;
-
 
 
 }
@@ -219,6 +286,9 @@ function clearForm(){
 
 
 
+document.getElementById("news_id").value="";
+
+
 document.getElementById("title").value="";
 
 
@@ -231,70 +301,13 @@ document.getElementById("content").value="";
 document.getElementById("image_file").value="";
 
 
-
 document.getElementById("image-preview").style.display="none";
 
 
-
-}
-
-
-
-
-
-
-
-
-
-// ======================================
-// IMAGE PREVIEW
-// ======================================
-
-
-
-document
-
-.getElementById("image_file")
-
-.addEventListener(
-
-"change",
-
-function(){
-
-
-
-const file=this.files[0];
-
-
-
-if(file){
-
-
-
-const preview=
-
-document.getElementById("image-preview");
-
-
-
-preview.src=
-
-URL.createObjectURL(file);
-
-
-
-preview.style.display="block";
-
+document.getElementById("form-title").innerHTML="Tambah Berita";
 
 
 }
-
-
-
-}
-
-);
 
 
 
@@ -307,7 +320,6 @@ preview.style.display="block";
 // ======================================
 // LOAD ADMIN NEWS
 // ======================================
-
 
 
 async function loadAdminNews(){
@@ -338,16 +350,11 @@ ascending:false
 
 
 
-
 if(error){
-
-
 
 console.log(error);
 
-
 return;
-
 
 }
 
@@ -360,7 +367,6 @@ let html="";
 
 
 
-
 data.forEach(news=>{
 
 
@@ -369,7 +375,6 @@ html += `
 
 
 <tr>
-
 
 
 <td>
@@ -388,13 +393,11 @@ style="width:80px;height:60px;object-fit:cover;border-radius:8px"
 
 
 
-
 <td>
 
 ${news.title}
 
 </td>
-
 
 
 
@@ -406,7 +409,6 @@ ${news.status}
 
 
 
-
 <td>
 
 ${new Date(news.created_at).toLocaleDateString("id-ID")}
@@ -415,20 +417,22 @@ ${new Date(news.created_at).toLocaleDateString("id-ID")}
 
 
 
-
 <td>
 
 
-<button
+<button onclick="editNews('${news.id}')">
 
-onclick="deleteNews('${news.id}','${news.image_url}')"
+Edit
 
->
+</button>
+
+
+
+<button onclick="deleteNews('${news.id}','${news.image_url}')">
 
 Hapus
 
 </button>
-
 
 
 </td>
@@ -436,7 +440,6 @@ Hapus
 
 
 </tr>
-
 
 
 `;
@@ -449,12 +452,7 @@ Hapus
 
 
 
-
-document
-
-.getElementById("news-table")
-
-.innerHTML = html;
+document.getElementById("news-table").innerHTML=html;
 
 
 
@@ -469,27 +467,116 @@ document
 
 
 // ======================================
-// DELETE NEWS + STORAGE IMAGE
+// EDIT NEWS
 // ======================================
 
+
+async function editNews(newsId){
+
+
+
+const {data,error}=
+
+await client
+
+.from("news")
+
+.select("*")
+
+.eq("id",newsId)
+
+.single();
+
+
+
+
+
+if(error){
+
+
+alert(error.message);
+
+return;
+
+
+}
+
+
+
+
+
+
+document.getElementById("news_id").value=data.id;
+
+
+document.getElementById("title").value=data.title;
+
+
+document.getElementById("summary").value=data.summary;
+
+
+document.getElementById("content").value=data.content;
+
+
+document.getElementById("status").value=data.status;
+
+
+
+if(data.image_url){
+
+
+
+const preview=
+
+document.getElementById("image-preview");
+
+
+
+preview.src=data.image_url;
+
+
+preview.style.display="block";
+
+
+}
+
+
+
+document.getElementById("form-title").innerHTML=
+
+"Edit Berita";
+
+
+
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
+
+}
+
+
+
+
+
+
+
+
+
+// ======================================
+// DELETE NEWS
+// ======================================
 
 
 async function deleteNews(id,image_url){
 
 
 
-const confirmDelete =
-
-confirm(
-
-"Yakin ingin menghapus berita ini?"
-
-);
-
-
-
-
-if(!confirmDelete){
+if(!confirm("Yakin ingin menghapus berita ini?")){
 
 return;
 
@@ -497,12 +584,6 @@ return;
 
 
 
-
-
-
-// ================================
-// HAPUS DATABASE
-// ================================
 
 
 const {error}=
@@ -513,13 +594,7 @@ await client
 
 .delete()
 
-.eq(
-
-"id",
-
-id
-
-);
+.eq("id",id);
 
 
 
@@ -528,18 +603,7 @@ id
 if(error){
 
 
-
-alert(
-
-"Gagal hapus berita: "
-
-+
-
-error.message
-
-);
-
-
+alert(error.message);
 
 return;
 
@@ -551,36 +615,17 @@ return;
 
 
 
-
-// ================================
-// HAPUS FILE STORAGE
-// ================================
-
-
-
 if(image_url){
 
 
+const path=
 
-const path =
-
-image_url
-
-.split(
-
-"/bmtc media/"
-
-)[1];
-
-
+image_url.split("/bmtc media/")[1];
 
 
 
 if(path){
 
-
-
-const {error:storageError}=
 
 await client
 
@@ -588,47 +633,14 @@ await client
 
 .from("bmtc media")
 
-.remove([
+.remove([path]);
 
-path
-
-]);
-
-
-
-
-
-if(storageError){
-
-console.log(
-
-"Gagal hapus gambar:",
-
-storageError
-
-);
 
 }
 
 
 }
 
-
-
-}
-
-
-
-
-
-
-
-
-alert(
-
-"Berita dan foto berhasil dihapus"
-
-);
 
 
 
@@ -643,11 +655,6 @@ loadAdminNews();
 
 
 
-
-
-
-
-// LOAD SAAT HALAMAN DIBUKA
 
 
 loadAdminNews();

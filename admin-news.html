@@ -40,6 +40,7 @@ alt="Logo BMTC"
 >
 
 
+
 <div class="brand-title">
 
 
@@ -61,7 +62,6 @@ Management Dashboard
 
 
 
-
 <nav class="main-nav">
 
 
@@ -79,8 +79,6 @@ Logout
 
 
 </header>
-
-
 
 
 
@@ -110,6 +108,7 @@ Publikasi informasi resmi organisasi
 
 
 
+
 <section class="news-admin-container">
 
 
@@ -127,6 +126,7 @@ Tambah Berita
 
 
 
+
 <label>
 Judul Berita
 </label>
@@ -138,10 +138,7 @@ type="text"
 
 id="title"
 
-placeholder="Judul berita"
-
 >
-
 
 
 
@@ -157,10 +154,7 @@ Ringkasan
 
 id="summary"
 
-placeholder="Ringkasan berita"
-
 ></textarea>
-
 
 
 
@@ -176,8 +170,6 @@ Isi Berita
 
 id="content"
 
-placeholder="Isi lengkap berita"
-
 rows="8"
 
 ></textarea>
@@ -189,7 +181,7 @@ rows="8"
 
 
 <label>
-Upload Foto Berita
+Upload Foto Baru
 </label>
 
 
@@ -214,6 +206,7 @@ id="image-preview"
 style="width:220px;margin-top:15px;border-radius:10px;display:none"
 
 >
+
 
 
 
@@ -255,6 +248,8 @@ Simpan Berita
 
 
 
+
+
 <input
 
 type="hidden"
@@ -263,6 +258,16 @@ id="news_id"
 
 >
 
+
+
+
+<input
+
+type="hidden"
+
+id="old_image_url"
+
+>
 
 
 
@@ -299,6 +304,8 @@ Belum ada data
 
 
 
+
+
 </section>
 
 
@@ -318,8 +325,6 @@ Daftar Berita BMTC
 
 
 
-
-
 <table>
 
 
@@ -328,31 +333,25 @@ Daftar Berita BMTC
 
 <tr>
 
-
 <th>
 Foto
 </th>
-
 
 <th>
 Judul
 </th>
 
-
 <th>
 Status
 </th>
-
 
 <th>
 Tanggal
 </th>
 
-
 <th>
 Aksi
 </th>
-
 
 </tr>
 
@@ -364,24 +363,11 @@ Aksi
 <tbody id="news-table">
 
 
-<tr>
-
-<td colspan="5">
-
-Memuat berita...
-
-</td>
-
-
-</tr>
-
-
 </tbody>
 
 
 
 </table>
-
 
 
 </section>
@@ -404,7 +390,6 @@ Memuat berita...
 <script src="js/upload.js"></script>
 
 <script src="js/news.js"></script>
-
 
 
 

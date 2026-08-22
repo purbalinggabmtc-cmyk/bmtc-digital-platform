@@ -112,8 +112,6 @@ Pengurus
 
 
 
-
-
 <section class="page-header">
 
 
@@ -136,14 +134,12 @@ Dokumentasi perjalanan dan kegiatan organisasi
 
 
 
-
 <section class="gallery-section">
 
 
-<div id="gallery-container">
-
-
-<!-- Data gallery dari Supabase akan dimuat otomatis -->
+<div 
+class="gallery-grid"
+id="gallery-container">
 
 
 </div>
@@ -151,6 +147,41 @@ Dokumentasi perjalanan dan kegiatan organisasi
 
 </section>
 
+
+
+
+
+
+
+
+<!-- LIGHTBOX -->
+
+<div 
+id="gallery-modal"
+class="gallery-modal">
+
+
+<span 
+id="close-gallery"
+class="close-gallery">
+
+&times;
+
+</span>
+
+
+<img 
+id="gallery-modal-image"
+class="gallery-modal-image">
+
+
+<h3 
+id="gallery-modal-title">
+
+</h3>
+
+
+</div>
 
 
 
@@ -174,12 +205,12 @@ Dokumentasi perjalanan dan kegiatan organisasi
 
 
 
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="js/supabase.js"></script>
 
 <script src="js/gallery-public.js"></script>
-
 
 
 

@@ -8,7 +8,6 @@
    RESET
 ===================================== */
 
-
 * {
 
     margin:0;
@@ -20,13 +19,11 @@
 }
 
 
-
 html {
 
     scroll-behavior:smooth;
 
 }
-
 
 
 body {
@@ -46,8 +43,6 @@ body {
 
 
 
-
-
 /* =====================================
    HEADER BRAND
 ===================================== */
@@ -59,7 +54,7 @@ body {
     background:#000000;
 
 
-    padding:15px 8%;
+    padding:12px 6%;
 
 
     display:flex;
@@ -71,10 +66,11 @@ body {
     align-items:center;
 
 
-    gap:25px;
+    gap:20px;
 
 
 }
+
 
 
 
@@ -100,10 +96,10 @@ body {
 .main-logo {
 
 
-    width:70px;
+    width:60px;
 
 
-    height:70px;
+    height:60px;
 
 
     object-fit:contain;
@@ -115,11 +111,10 @@ body {
 
 
 
-
 .brand-title h1 {
 
 
-    font-size:28px;
+    font-size:26px;
 
 
     font-weight:800;
@@ -143,13 +138,13 @@ body {
 .brand-title p {
 
 
-    margin-top:5px;
+    margin-top:4px;
 
 
     color:#dddddd;
 
 
-    font-size:14px;
+    font-size:13px;
 
 
 }
@@ -165,7 +160,6 @@ body {
 ===================================== */
 
 
-
 .main-nav {
 
 
@@ -175,10 +169,11 @@ body {
     align-items:center;
 
 
-    gap:22px;
+    gap:20px;
 
 
 }
+
 
 
 
@@ -192,13 +187,15 @@ body {
     text-decoration:none;
 
 
-    font-size:15px;
+    font-size:14px;
 
 
     transition:.3s;
 
 
 }
+
+
 
 
 
@@ -221,14 +218,13 @@ body {
 ===================================== */
 
 
-
 .hero {
 
 
-    height:38vh;
+    height:35vh;
 
 
-    min-height:280px;
+    min-height:250px;
 
 
     background:
@@ -342,7 +338,7 @@ body {
 .page-header {
 
 
-    padding:50px 8%;
+    padding:45px 8%;
 
 
     text-align:center;
@@ -363,7 +359,7 @@ body {
     color:#D4AF37;
 
 
-    font-size:36px;
+    font-size:34px;
 
 
 }
@@ -389,7 +385,6 @@ body {
 /* =====================================
    PROFILE
 ===================================== */
-
 
 
 .profile-section {
@@ -533,7 +528,7 @@ body {
 .gallery-section {
 
 
-    padding:50px 8%;
+    padding:45px 8%;
 
 
 }
@@ -649,7 +644,6 @@ body {
 ===================================== */
 
 
-
 .gallery-modal {
 
 
@@ -675,6 +669,7 @@ body {
 
 
     background:
+
     rgba(0,0,0,.9);
 
 
@@ -1010,7 +1005,6 @@ body {
 
 
 
-
 /* =====================================
    DETAIL NEWS
 ===================================== */
@@ -1224,7 +1218,7 @@ body {
 
 
 /* =====================================
-   ADMIN
+   ADMIN DASHBOARD
 ===================================== */
 
 
@@ -1458,6 +1452,7 @@ footer {
 
 
 }
+
 
 
 

@@ -1,219 +1,271 @@
-<!DOCTYPE html>
-<html lang="id">
+/* =====================================
+   BMTC GALLERY SMALL THUMBNAIL
+===================================== */
 
-<head>
 
-<meta charset="UTF-8">
+.gallery-section{
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+width:100%;
 
+padding:40px 60px;
 
-<title>
-Galeri BMTC | Bralink Motor Tiger Club
-</title>
+}
 
 
-<link rel="stylesheet" href="css/style.css">
 
 
-</head>
 
+.gallery-grid{
 
-<body>
+display:grid;
 
+grid-template-columns:
+repeat(6, 1fr);
 
+gap:12px;
 
-<header class="site-header">
+max-width:1100px;
 
+margin:auto;
 
+}
 
-<div class="brand-main">
 
 
 
-<img
 
-src="https://yrvnmmascklkuzpjkwxn.supabase.co/storage/v1/object/public/bmtc%20media/logo/logo-bmtc.png"
+.gallery-card{
 
-alt="Logo BMTC"
+width:100%;
 
-class="main-logo"
+background:#111;
 
->
+border-radius:8px;
 
+overflow:hidden;
 
+cursor:pointer;
 
+}
 
-<div class="brand-title">
 
 
-<h1>
-BRALINK MOTOR TIGER CLUB
-</h1>
 
 
-<p>
-Brotherhood, Solidarity, and Automotive Culture
-</p>
+.gallery-card img{
 
 
-</div>
+width:100%;
 
+height:90px;
 
-</div>
+object-fit:cover;
 
+display:block;
 
 
+}
 
 
 
-<nav class="main-nav">
 
 
-<a href="index.html">
-Home
-</a>
+.gallery-card h3{
 
 
-<a href="profil.html">
-Profil
-</a>
+font-size:12px;
 
+padding:8px;
 
-<a href="kegiatan.html">
-Kegiatan
-</a>
+margin:0;
 
+color:white;
 
-<a href="galeri.html">
-Galeri
-</a>
+text-align:center;
 
+font-weight:normal;
 
-<a href="kontak.html">
-Kontak
-</a>
 
+}
 
-<a href="login.html">
-Pengurus
-</a>
 
 
-</nav>
 
 
 
-</header>
+.gallery-card:hover img{
 
 
+opacity:.8;
 
+transform:scale(1.05);
 
+transition:.3s;
 
 
+}
 
-<section class="page-header">
 
 
-<h1>
-Galeri BMTC
-</h1>
 
 
-<p>
-Dokumentasi perjalanan dan kegiatan organisasi
-</p>
 
 
-</section>
+/* LIGHTBOX */
 
 
+.gallery-modal{
 
 
+display:none;
 
+position:fixed;
 
+z-index:9999;
 
+top:0;
 
-<section class="gallery-section">
+left:0;
 
+width:100%;
 
-<div 
-class="gallery-grid"
-id="gallery-container">
+height:100%;
 
+background:
+rgba(0,0,0,.9);
 
-</div>
 
+align-items:center;
 
-</section>
+justify-content:center;
 
+flex-direction:column;
 
 
+}
 
 
 
 
 
-<!-- LIGHTBOX -->
+.gallery-modal-image{
 
-<div 
-id="gallery-modal"
-class="gallery-modal">
 
+max-width:90%;
 
-<span 
-id="close-gallery"
-class="close-gallery">
+max-height:85%;
 
-&times;
+object-fit:contain;
 
-</span>
+border-radius:10px;
 
 
-<img 
-id="gallery-modal-image"
-class="gallery-modal-image">
+}
 
 
-<h3 
-id="gallery-modal-title">
 
-</h3>
 
 
-</div>
+.gallery-modal h3{
 
 
+color:white;
 
+font-size:20px;
 
+margin-top:15px;
 
 
+}
 
 
-<footer>
 
 
-<p>
-© BMTC Digital Platform
-</p>
 
+.close-gallery{
 
-</footer>
 
+position:absolute;
 
+right:30px;
 
+top:20px;
 
+font-size:40px;
 
+color:white;
 
+cursor:pointer;
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="js/supabase.js"></script>
+}
 
-<script src="js/gallery-public.js"></script>
 
 
 
-</body>
 
-</html>
+
+
+@media(max-width:1200px){
+
+
+.gallery-grid{
+
+grid-template-columns:
+repeat(5,1fr);
+
+}
+
+
+}
+
+
+
+
+
+@media(max-width:900px){
+
+
+.gallery-grid{
+
+grid-template-columns:
+repeat(4,1fr);
+
+}
+
+
+}
+
+
+
+
+
+@media(max-width:600px){
+
+
+.gallery-grid{
+
+grid-template-columns:
+repeat(3,1fr);
+
+}
+
+
+}
+
+
+
+
+
+@media(max-width:400px){
+
+
+.gallery-grid{
+
+grid-template-columns:
+repeat(2,1fr);
+
+}
+
+
+}

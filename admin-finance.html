@@ -9,17 +9,123 @@
 
 
 <title>
-Keuangan BMTC | Dashboard
+Keuangan BMTC
 </title>
 
 
 <link rel="stylesheet" href="css/style.css">
 
 
+<style>
+
+.finance-modal{
+
+display:none;
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
+
+background:rgba(0,0,0,.8);
+
+z-index:9999;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+
+
+.finance-modal-box{
+
+background:#1c1c1c;
+
+padding:30px;
+
+border-radius:15px;
+
+width:400px;
+
+max-width:90%;
+
+}
+
+
+
+.finance-modal-box h2{
+
+color:#D4AF37;
+
+}
+
+
+
+.finance-modal-box input,
+
+.finance-modal-box select,
+
+.finance-modal-box textarea{
+
+width:100%;
+
+margin-bottom:15px;
+
+padding:10px;
+
+background:#333;
+
+border:none;
+
+color:white;
+
+}
+
+
+
+.finance-modal-box button{
+
+padding:10px 20px;
+
+border:none;
+
+cursor:pointer;
+
+background:#C8102E;
+
+color:white;
+
+}
+
+
+
+.close-modal{
+
+float:right;
+
+cursor:pointer;
+
+font-size:25px;
+
+}
+
+
+
+</style>
+
+
 </head>
 
 
 <body>
+
 
 
 
@@ -33,8 +139,6 @@ Keuangan BMTC | Dashboard
 
 src="https://yrvnmmascklkuzpjkwxn.supabase.co/storage/v1/object/public/bmtc%20media/logo/logo-bmtc.png"
 
-alt="Logo BMTC"
-
 class="main-logo"
 
 >
@@ -42,8 +146,9 @@ class="main-logo"
 
 <div class="brand-title">
 
+
 <h1>
-BMTC KEUANGAN
+BMTC FINANCE
 </h1>
 
 
@@ -80,7 +185,6 @@ Logout
 </nav>
 
 
-
 </header>
 
 
@@ -100,7 +204,7 @@ Dashboard Keuangan BMTC
 
 
 <p>
-Pengelolaan pemasukan, pengeluaran, dan laporan kas organisasi
+Pengelolaan transaksi organisasi
 </p>
 
 
@@ -117,12 +221,11 @@ Pengelolaan pemasukan, pengeluaran, dan laporan kas organisasi
 <section class="admin-dashboard">
 
 
-
 <div class="admin-card">
 
 
 <h2>
-Saldo Saat Ini
+Saldo
 </h2>
 
 
@@ -136,12 +239,11 @@ Rp 0
 
 
 
-
 <div class="admin-card">
 
 
 <h2>
-Total Pemasukan
+Pemasukan
 </h2>
 
 
@@ -155,12 +257,11 @@ Rp 0
 
 
 
-
 <div class="admin-card">
 
 
 <h2>
-Total Pengeluaran
+Pengeluaran
 </h2>
 
 
@@ -195,29 +296,19 @@ Tambah Transaksi
 
 
 
-
-
 <form id="finance-form">
 
 
 
-<label>
-Jenis Transaksi
-</label>
-
-
 <select id="transaction-type" required>
 
-
 <option value="">
-Pilih Jenis
+Jenis Transaksi
 </option>
-
 
 <option value="income">
 Pemasukan
 </option>
-
 
 <option value="expense">
 Pengeluaran
@@ -229,33 +320,15 @@ Pengeluaran
 
 
 
-
-
-
-<label>
-Kategori
-</label>
-
-
 <select id="category-id" required>
-
 
 <option value="">
 Pilih Kategori
 </option>
 
-
 </select>
 
 
-
-
-
-
-
-<label>
-Tanggal
-</label>
 
 
 <input
@@ -271,21 +344,13 @@ required
 
 
 
-
-
-
-<label>
-Nominal
-</label>
-
-
 <input
 
 type="number"
 
 id="amount"
 
-placeholder="Masukkan nominal"
+placeholder="Nominal"
 
 required
 
@@ -294,31 +359,15 @@ required
 
 
 
-
-
-
-<label>
-Deskripsi
-</label>
-
-
 <textarea
 
 id="description"
 
-placeholder="Keterangan transaksi"
+placeholder="Deskripsi"
 
 ></textarea>
 
 
-
-
-
-
-
-<label>
-Bukti Transaksi
-</label>
 
 
 <input
@@ -330,9 +379,6 @@ id="proof-file"
 accept="image/*,.pdf"
 
 >
-
-
-
 
 
 
@@ -374,8 +420,6 @@ Riwayat Transaksi
 
 
 
-
-
 <table width="100%">
 
 
@@ -387,26 +431,21 @@ Riwayat Transaksi
 Tanggal
 </th>
 
-
 <th>
 Kategori
 </th>
-
 
 <th>
 Deskripsi
 </th>
 
-
 <th>
 Nominal
 </th>
 
-
 <th>
 Jenis
 </th>
-
 
 <th>
 Aksi
@@ -414,7 +453,6 @@ Aksi
 
 
 </tr>
-
 
 </thead>
 
@@ -426,9 +464,7 @@ Aksi
 </tbody>
 
 
-
 </table>
-
 
 
 </div>
@@ -444,13 +480,116 @@ Aksi
 
 
 
-<footer>
+<!-- MODAL EDIT -->
 
+
+<div id="edit-modal" class="finance-modal">
+
+
+<div class="finance-modal-box">
+
+
+<span
+
+class="close-modal"
+
+onclick="closeEditModal()"
+
+>
+
+×
+
+</span>
+
+
+<h2>
+Edit Transaksi
+</h2>
+
+
+
+
+<input type="hidden" id="edit-id">
+
+
+
+<select id="edit-category">
+
+
+</select>
+
+
+
+<input
+
+type="date"
+
+id="edit-date"
+
+>
+
+
+
+
+<input
+
+type="number"
+
+id="edit-amount"
+
+>
+
+
+
+
+<textarea
+
+id="edit-description"
+
+></textarea>
+
+
+
+
+<input
+
+type="file"
+
+id="edit-proof"
+
+accept="image/*,.pdf"
+
+>
+
+
+
+
+<button onclick="updateTransaction()">
+
+Simpan Perubahan
+
+</button>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<footer>
 
 <p>
 © BMTC Digital Platform
 </p>
-
 
 </footer>
 
@@ -463,7 +602,6 @@ Aksi
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 
 <script src="js/supabase.js"></script>
 
@@ -482,6 +620,5 @@ checkLogin();
 
 
 </body>
-
 
 </html>

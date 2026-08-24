@@ -1,31 +1,116 @@
-// =====================================
-// BMTC FINANCE MANAGEMENT
-// =====================================
+// ======================================
+// BMTC FINANCE SYSTEM V2
+// WITH AUDIT LOG
+// ======================================
 
 
 
-let categories = [];
+let currentUser = null;
+
+
+
+// ======================================
+// CHECK FINANCE ACCESS
+// ======================================
+
+
+async function checkFinanceAccess(){
+
+
+    const {
+
+        data
+
+    } = await client.auth.getUser();
+
+
+
+    if(!data.user){
+
+        window.location.href="login.html";
+
+        return false;
+
+    }
+
+
+
+    currentUser = data.user;
+
+
+
+    const {data:profile,error} =
+
+    await client
+
+    .from("profiles")
+
+    .select("finance_role")
+
+    .eq(
+        "id",
+        currentUser.id
+    )
+
+    .single();
 
 
 
 
-// =====================================
-// LOAD CATEGORIES
-// =====================================
+    if(error || !profile || profile.finance_role !== "finance_admin"){
 
 
-async function loadCategories(type = null){
+        alert(
+            "Anda tidak memiliki akses keuangan"
+        );
 
 
-    let query = client
-        .from("categories")
-        .select("*")
-        .order("id");
+        window.location.href="admin.html";
+
+
+        return false;
+
+
+    }
+
+
+
+    return true;
+
+
+}
+
+
+
+
+
+
+
+// ======================================
+// LOAD CATEGORY
+// ======================================
+
+
+async function loadCategories(type=null, target="category-id"){
+
+
+
+    let query =
+
+    client
+
+    .from("categories")
+
+    .select("*")
+
+    .order("id");
+
+
 
 
     if(type){
 
-        query = query.eq(
+        query=query.eq(
             "type",
             type
         );
@@ -34,13 +119,15 @@ async function loadCategories(type = null){
 
 
 
-    const {data,error} = await query;
+    const {data,error}=
+
+    await query;
 
 
 
     if(error){
 
-        console.log(error.message);
+        console.log(error);
 
         return;
 
@@ -48,23 +135,13 @@ async function loadCategories(type = null){
 
 
 
-    categories = data;
+    const select =
+
+    document.getElementById(target);
 
 
 
-    const select = document.getElementById(
-        "category-id"
-    );
-
-
-
-    select.innerHTML = `
-
-    <option value="">
-    Pilih Kategori
-    </option>
-
-    `;
+    select.innerHTML="";
 
 
 
@@ -93,16 +170,14 @@ async function loadCategories(type = null){
 
 
 
-// =====================================
-// CHANGE TRANSACTION TYPE
-// =====================================
+// ======================================
+// TYPE CHANGE
+// ======================================
 
 
 document
-.getElementById(
-"transaction-type"
-)
-.addEventListener(
+.getElementById("transaction-type")
+?.addEventListener(
 "change",
 function(){
 
@@ -120,9 +195,41 @@ function(){
 
 
 
-// =====================================
-// LOAD FINANCE SUMMARY
-// =====================================
+// ======================================
+// FORMAT MONEY
+// ======================================
+
+
+function formatMoney(value){
+
+
+return new Intl.NumberFormat(
+"id-ID",
+{
+
+style:"currency",
+
+currency:"IDR"
+
+}
+
+)
+
+.format(value);
+
+
+
+}
+
+
+
+
+
+
+
+// ======================================
+// SUMMARY
+// ======================================
 
 
 async function loadFinanceSummary(){
@@ -150,12 +257,11 @@ type
 
 if(error){
 
-console.log(error.message);
+console.log(error);
 
 return;
 
 }
-
 
 
 
@@ -169,30 +275,19 @@ let expense=0;
 data.forEach(item=>{
 
 
-if(
-item.categories.type==="income"
-){
+if(item.categories.type==="income"){
 
-income += Number(
-item.amount
-);
-
+income += Number(item.amount);
 
 }
 
 
 
-if(
-item.categories.type==="expense"
-){
+if(item.categories.type==="expense"){
 
-expense += Number(
-item.amount
-);
-
+expense += Number(item.amount);
 
 }
-
 
 
 });
@@ -200,35 +295,26 @@ item.amount
 
 
 
-const balance =
-income-expense;
-
-
-
 document
-.getElementById(
-"total-income"
-)
+.getElementById("total-income")
 .innerHTML =
 formatMoney(income);
 
 
 
 document
-.getElementById(
-"total-expense"
-)
+.getElementById("total-expense")
 .innerHTML =
 formatMoney(expense);
 
 
 
 document
-.getElementById(
-"current-balance"
-)
+.getElementById("current-balance")
 .innerHTML =
-formatMoney(balance);
+formatMoney(
+income-expense
+);
 
 
 
@@ -240,16 +326,14 @@ formatMoney(balance);
 
 
 
-// =====================================
-// SUBMIT TRANSACTION
-// =====================================
+// ======================================
+// ADD TRANSACTION
+// ======================================
 
 
 document
-.getElementById(
-"finance-form"
-)
-.addEventListener(
+.getElementById("finance-form")
+?.addEventListener(
 "submit",
 async function(e){
 
@@ -259,45 +343,25 @@ e.preventDefault();
 
 
 
-const user =
-await client.auth.getUser();
-
-
-
-
-const userId =
-user.data.user.id;
-
-
-
-
-
-let proofUrl = null;
-
-
-
 const file =
+
 document
-.getElementById(
-"proof-file"
-)
+.getElementById("proof-file")
 .files[0];
 
 
 
+let proofUrl=null;
 
 
-// UPLOAD FILE
 
 
 if(file){
 
 
-
 const filename =
 
 `finance/${Date.now()}-${file.name}`;
-
 
 
 
@@ -307,9 +371,7 @@ await client
 
 .storage
 
-.from(
-"bmtc media"
-)
+.from("bmtc media")
 
 .upload(
 filename,
@@ -318,13 +380,9 @@ file
 
 
 
-
-
 if(upload.error){
 
-alert(
-upload.error.message
-);
+alert(upload.error.message);
 
 return;
 
@@ -339,19 +397,14 @@ client
 
 .storage
 
-.from(
-"bmtc media"
-)
+.from("bmtc media")
 
-.getPublicUrl(
-filename
-);
+.getPublicUrl(filename);
 
 
 
 proofUrl =
 url.data.publicUrl;
-
 
 
 }
@@ -361,25 +414,17 @@ url.data.publicUrl;
 
 
 
-
-// INSERT TRANSACTION
-
+const transaction={
 
 
-const transaction = {
-
-
-created_by:userId,
+created_by:
+currentUser.id,
 
 
 category_id:
 
 document
-
-.getElementById(
-"category-id"
-)
-
+.getElementById("category-id")
 .value,
 
 
@@ -387,11 +432,7 @@ document
 transaction_date:
 
 document
-
-.getElementById(
-"transaction-date"
-)
-
+.getElementById("transaction-date")
 .value,
 
 
@@ -399,15 +440,9 @@ document
 amount:
 
 Number(
-
 document
-
-.getElementById(
-"amount"
-)
-
+.getElementById("amount")
 .value
-
 ),
 
 
@@ -415,11 +450,7 @@ document
 description:
 
 document
-
-.getElementById(
-"description"
-)
-
+.getElementById("description")
 .value,
 
 
@@ -431,13 +462,11 @@ proofUrl,
 
 
 status:
-
 "approved"
 
 
+
 };
-
-
 
 
 
@@ -447,39 +476,26 @@ const {error}=
 
 await client
 
-.from(
-"transactions"
-)
+.from("transactions")
 
-.insert(
-transaction
-);
-
+.insert(transaction);
 
 
 
 
 if(error){
 
-
-alert(
-error.message
-);
-
+alert(error.message);
 
 return;
-
 
 }
 
 
 
-
-
 alert(
-"Transaksi berhasil disimpan"
+"Transaksi berhasil"
 );
-
 
 
 
@@ -488,7 +504,6 @@ this.reset();
 
 
 loadFinanceSummary();
-
 
 loadTransactions();
 
@@ -502,10 +517,9 @@ loadTransactions();
 
 
 
-// =====================================
-// LOAD TRANSACTION LIST
-// =====================================
-
+// ======================================
+// LOAD TRANSACTIONS
+// ======================================
 
 
 async function loadTransactions(){
@@ -530,7 +544,7 @@ type
 `)
 
 .order(
-"transaction_date",
+"created_at",
 {
 ascending:false
 }
@@ -542,7 +556,7 @@ ascending:false
 
 if(error){
 
-console.log(error.message);
+console.log(error);
 
 return;
 
@@ -551,16 +565,10 @@ return;
 
 
 
-
 const table =
 
 document
-
-.getElementById(
-"transaction-list"
-);
-
-
+.getElementById("transaction-list");
 
 
 
@@ -569,9 +577,7 @@ table.innerHTML="";
 
 
 
-
 data.forEach(item=>{
-
 
 
 table.innerHTML += `
@@ -580,53 +586,39 @@ table.innerHTML += `
 <tr>
 
 
-<td>
-
-${item.transaction_date}
-
-</td>
+<td>${item.transaction_date}</td>
 
 
-<td>
-
-${item.categories.name}
-
-</td>
+<td>${item.categories.name}</td>
 
 
-<td>
-
-${item.description ?? "-"}
-
-</td>
+<td>${item.description ?? "-"}</td>
 
 
-<td>
-
-${formatMoney(item.amount)}
-
-</td>
+<td>${formatMoney(item.amount)}</td>
 
 
-<td>
+<td>${item.categories.type}</td>
 
-${item.categories.type}
-
-</td>
 
 
 <td>
 
 
-<button
+<button onclick="openEditModal(${item.id})">
 
-onclick="deleteTransaction(${item.id})"
+Edit
 
->
+</button>
+
+
+
+<button onclick="deleteTransaction(${item.id})">
 
 Hapus
 
 </button>
+
 
 
 </td>
@@ -651,22 +643,146 @@ Hapus
 
 
 
-// =====================================
-// DELETE TRANSACTION
-// =====================================
+// ======================================
+// OPEN EDIT MODAL
+// ======================================
+
+
+async function openEditModal(id){
 
 
 
-async function deleteTransaction(id){
+const {data,error}=
+
+await client
+
+.from("transactions")
+
+.select("*")
+
+.eq("id",id)
+
+.single();
 
 
 
-if(
-!confirm(
-"Hapus transaksi ini?"
-)
 
-){
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+
+
+document
+.getElementById("edit-id")
+.value=id;
+
+
+
+document
+.getElementById("edit-date")
+.value=data.transaction_date;
+
+
+
+document
+.getElementById("edit-amount")
+.value=data.amount;
+
+
+
+document
+.getElementById("edit-description")
+.value=data.description;
+
+
+
+await loadCategories(
+null,
+"edit-category"
+);
+
+
+
+document
+.getElementById("edit-category")
+.value=data.category_id;
+
+
+
+document
+.getElementById("edit-modal")
+.style.display="flex";
+
+
+
+}
+
+
+
+
+
+
+
+function closeEditModal(){
+
+
+document
+.getElementById("edit-modal")
+.style.display="none";
+
+
+}
+
+
+
+
+
+
+
+// ======================================
+// UPDATE TRANSACTION + LOG
+// ======================================
+
+
+async function updateTransaction(){
+
+
+
+const id =
+
+document
+.getElementById("edit-id")
+.value;
+
+
+
+
+
+const {data:old,error}=
+
+await client
+
+.from("transactions")
+
+.select("*")
+
+.eq("id",id)
+
+.single();
+
+
+
+
+
+if(error){
+
+alert(error.message);
 
 return;
 
@@ -675,13 +791,248 @@ return;
 
 
 
+
+// SAVE LOG FIRST
+
+
+await client
+
+.from("transaction_logs")
+
+.insert({
+
+transaction_id:id,
+
+changed_by:currentUser.id,
+
+old_category_id:old.category_id,
+
+new_category_id:
+
+document
+.getElementById("edit-category")
+.value,
+
+old_amount:old.amount,
+
+new_amount:
+
+Number(
+document
+.getElementById("edit-amount")
+.value
+),
+
+
+old_description:old.description,
+
+new_description:
+
+document
+.getElementById("edit-description")
+.value,
+
+
+old_transaction_date:
+old.transaction_date,
+
+
+new_transaction_date:
+
+document
+.getElementById("edit-date")
+.value
+
+
+});
+
+
+
+
+
+
+
+let proofUrl=old.proof_url;
+
+
+
+
+
+const file=
+
+document
+.getElementById("edit-proof")
+.files[0];
+
+
+
+
+if(file){
+
+
+
+const filename=
+
+`finance/${Date.now()}-${file.name}`;
+
+
+
+const upload=
+
+await client
+
+.storage
+
+.from("bmtc media")
+
+.upload(
+filename,
+file
+);
+
+
+
+if(upload.error){
+
+alert(upload.error.message);
+
+return;
+
+}
+
+
+
+
+const url=
+
+client
+
+.storage
+
+.from("bmtc media")
+
+.getPublicUrl(filename);
+
+
+
+proofUrl=url.data.publicUrl;
+
+
+}
+
+
+
+
+
+
+
+const {error:updateError}=
+
+await client
+
+.from("transactions")
+
+.update({
+
+category_id:
+
+document
+.getElementById("edit-category")
+.value,
+
+
+transaction_date:
+
+document
+.getElementById("edit-date")
+.value,
+
+
+amount:
+
+Number(
+document
+.getElementById("edit-amount")
+.value
+),
+
+
+description:
+
+document
+.getElementById("edit-description")
+.value,
+
+
+proof_url:proofUrl
+
+
+})
+
+.eq(
+"id",
+id
+);
+
+
+
+
+
+
+if(updateError){
+
+alert(updateError.message);
+
+return;
+
+}
+
+
+
+alert(
+"Transaksi diperbarui"
+);
+
+
+
+closeEditModal();
+
+
+loadFinanceSummary();
+
+loadTransactions();
+
+
+
+}
+
+
+
+
+
+
+
+// ======================================
+// DELETE
+// ======================================
+
+
+async function deleteTransaction(id){
+
+
+
+if(!confirm(
+"Hapus transaksi ini?"
+)) return;
+
+
+
+
 const {error}=
 
 await client
 
-.from(
-"transactions"
-)
+.from("transactions")
 
 .delete()
 
@@ -695,9 +1046,7 @@ id
 
 if(error){
 
-alert(
-error.message
-);
+alert(error.message);
 
 return;
 
@@ -710,7 +1059,6 @@ loadFinanceSummary();
 loadTransactions();
 
 
-
 }
 
 
@@ -719,48 +1067,31 @@ loadTransactions();
 
 
 
-// =====================================
-// FORMAT MONEY
-// =====================================
-
-
-
-function formatMoney(value){
-
-
-
-return new Intl.NumberFormat(
-"id-ID",
-{
-
-style:"currency",
-
-currency:"IDR"
-
-}
-
-)
-
-.format(value);
-
-
-
-}
-
-
-
-
-
-
-
-// =====================================
+// ======================================
 // INIT
-// =====================================
+// ======================================
 
 
+(async()=>{
+
+
+const access =
+await checkFinanceAccess();
+
+
+
+if(access){
+
+
+loadCategories();
 
 loadFinanceSummary();
 
 loadTransactions();
 
-loadCategories();
+
+}
+
+
+
+})();

@@ -3,28 +3,6 @@
 // ======================================
 
 
-// Supabase Configuration
-
-const SUPABASE_URL =
-"https://yrvnmmascklkuzpjkwxn.supabase.co";
-
-
-const SUPABASE_KEY =
-"sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
-
-
-
-// Create Supabase Client
-
-const client =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
-
-
-
-
 
 // ======================================
 // LOGIN
@@ -34,18 +12,27 @@ supabase.createClient(
 async function login(){
 
 
+
     const email =
-    document.getElementById("email").value;
+
+    document
+    .getElementById("email")
+    .value;
 
 
 
     const password =
-    document.getElementById("password").value;
+
+    document
+    .getElementById("password")
+    .value;
+
 
 
 
 
     const { data, error } =
+
     await client.auth.signInWithPassword({
 
         email: email,
@@ -61,7 +48,9 @@ async function login(){
     if(error){
 
 
-        document.getElementById("message").innerHTML =
+        document
+        .getElementById("message")
+        .innerHTML =
 
         "Login gagal: " + error.message;
 
@@ -74,17 +63,23 @@ async function login(){
 
 
 
-    document.getElementById("message").innerHTML =
+
+
+    document
+    .getElementById("message")
+    .innerHTML =
 
     "Login berhasil";
 
 
 
 
-    setTimeout(function(){
+
+    setTimeout(()=>{
 
 
-        window.location.href="admin.html";
+        window.location.href =
+        "admin.html";
 
 
     },1000);
@@ -92,6 +87,8 @@ async function login(){
 
 
 }
+
+
 
 
 
@@ -107,14 +104,19 @@ async function login(){
 async function logout(){
 
 
+
     await client.auth.signOut();
 
 
 
-    window.location.href="login.html";
+    window.location.href =
+    "login.html";
+
 
 
 }
+
+
 
 
 
@@ -131,9 +133,14 @@ async function checkLogin(){
 
 
 
-    const { data } =
+    const {
+
+        data
+
+    } =
 
     await client.auth.getSession();
+
 
 
 
@@ -142,13 +149,52 @@ async function checkLogin(){
     if(!data.session){
 
 
-        window.location.href="login.html";
+
+        window.location.href =
+        "login.html";
+
 
 
         return;
 
 
+
     }
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+// ======================================
+// GET CURRENT USER
+// ======================================
+
+
+async function getCurrentUser(){
+
+
+
+    const {
+
+        data
+
+    } =
+
+    await client.auth.getUser();
+
+
+
+
+    return data.user;
 
 
 

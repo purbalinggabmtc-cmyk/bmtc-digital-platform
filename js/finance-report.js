@@ -1,10 +1,12 @@
 // ======================================
-// BMTC FINANCE REPORT SYSTEM
+// BMTC FINANCE REPORT SYSTEM V2
+// WITH PDF EXPORT
 // ======================================
 
 
 let reportUser = null;
 
+let currentReportData = [];
 
 
 
@@ -17,11 +19,9 @@ let reportUser = null;
 async function checkReportAccess(){
 
 
-    const {
+    const {data} =
 
-        data
-
-    } = await client.auth.getUser();
+    await client.auth.getUser();
 
 
 
@@ -57,7 +57,12 @@ async function checkReportAccess(){
 
 
 
-    if(error || !profile || profile.finance_role !== "finance_admin"){
+
+    if(
+        error ||
+        !profile ||
+        profile.finance_role !== "finance_admin"
+    ){
 
 
         alert(
@@ -87,9 +92,8 @@ async function checkReportAccess(){
 
 
 
-
 // ======================================
-// FORMAT RUPIAH
+// FORMAT MONEY
 // ======================================
 
 
@@ -109,7 +113,6 @@ function formatMoney(value){
     ).format(value);
 
 
-
 }
 
 
@@ -119,9 +122,8 @@ function formatMoney(value){
 
 
 
-
 // ======================================
-// LOAD FILTER YEAR
+// LOAD YEAR FILTER
 // ======================================
 
 
@@ -129,88 +131,88 @@ async function loadYearFilter(){
 
 
 
-const {data,error}=
+    const {data,error}=
 
-await client
+    await client
 
-.from("transactions")
+    .from("transactions")
 
-.select("transaction_date");
-
-
-
-
-if(error){
-
-console.log(error);
-
-return;
-
-}
+    .select(
+        "transaction_date"
+    );
 
 
 
 
+    if(error){
 
-const years = [];
+        console.log(error);
 
+        return;
 
-
-data.forEach(item=>{
-
-
-const year =
-
-new Date(
-item.transaction_date
-)
-
-.getFullYear();
-
-
-
-if(!years.includes(year)){
-
-years.push(year);
-
-}
-
-
-});
+    }
 
 
 
 
-
-const select =
-
-document.getElementById(
-"year-filter"
-);
+    let years=[];
 
 
 
 
-years
-
-.sort((a,b)=>b-a)
-
-.forEach(year=>{
+    data.forEach(item=>{
 
 
-select.innerHTML += `
+        const year =
 
-<option value="${year}">
-
-${year}
-
-</option>
-
-`;
+        new Date(
+            item.transaction_date
+        )
+        .getFullYear();
 
 
-});
 
+        if(!years.includes(year)){
+
+            years.push(year);
+
+        }
+
+
+    });
+
+
+
+
+
+    const select =
+
+    document.getElementById(
+        "year-filter"
+    );
+
+
+
+
+    years
+
+    .sort(
+        (a,b)=>b-a
+    )
+
+    .forEach(year=>{
+
+
+        select.innerHTML += `
+
+        <option value="${year}">
+        ${year}
+        </option>
+
+        `;
+
+
+    });
 
 
 }
@@ -232,319 +234,508 @@ async function loadReport(){
 
 
 
-let query =
+    let query =
 
-client
+    client
 
-.from("transactions")
+    .from("transactions")
 
-.select(`
+    .select(`
 
-*,
+        *,
 
-categories(
+        categories(
+            name,
+            type
+        )
 
-name,
+    `)
 
-type
+    .order(
+        "transaction_date",
+        {
+            ascending:false
+        }
+    );
 
-)
 
-`)
 
-.order(
-"transaction_date",
-{
-ascending:false
+
+
+    const month =
+
+    document
+
+    .getElementById(
+        "month-filter"
+    )
+    .value;
+
+
+
+
+
+    const year =
+
+    document
+
+    .getElementById(
+        "year-filter"
+    )
+    .value;
+
+
+
+
+
+
+    if(year){
+
+
+        query = query
+
+        .gte(
+            "transaction_date",
+            `${year}-01-01`
+        )
+
+        .lte(
+            "transaction_date",
+            `${year}-12-31`
+        );
+
+
+    }
+
+
+
+
+
+
+    if(
+        month &&
+        year
+    ){
+
+
+
+        const lastDay =
+
+        new Date(
+            year,
+            month,
+            0
+        )
+
+        .getDate();
+
+
+
+
+        query = query
+
+        .gte(
+            "transaction_date",
+            `${year}-${month}-01`
+        )
+
+        .lte(
+            "transaction_date",
+            `${year}-${month}-${lastDay}`
+        );
+
+
+    }
+
+
+
+
+
+
+    const {data,error}=
+
+    await query;
+
+
+
+
+
+    if(error){
+
+        console.log(error);
+
+        return;
+
+    }
+
+
+
+
+
+    currentReportData = data;
+
+
+
+
+    let income = 0;
+
+    let expense = 0;
+
+
+
+
+    const table =
+
+    document
+
+    .getElementById(
+        "report-table"
+    );
+
+
+
+    table.innerHTML="";
+
+
+
+
+
+    data.forEach(item=>{
+
+
+
+        let masuk="-";
+
+        let keluar="-";
+
+
+
+
+        if(
+            item.categories.type === "income"
+        ){
+
+
+            income += Number(
+                item.amount
+            );
+
+
+            masuk =
+            formatMoney(
+                item.amount
+            );
+
+
+        }
+
+
+
+
+
+        if(
+            item.categories.type === "expense"
+        ){
+
+
+            expense += Number(
+                item.amount
+            );
+
+
+            keluar =
+            formatMoney(
+                item.amount
+            );
+
+
+        }
+
+
+
+
+
+
+        table.innerHTML += `
+
+        <tr>
+
+        <td>
+        ${item.transaction_date}
+        </td>
+
+
+        <td>
+        ${item.categories.name}
+        </td>
+
+
+        <td>
+        ${item.description ?? "-"}
+        </td>
+
+
+        <td>
+        ${masuk}
+        </td>
+
+
+        <td>
+        ${keluar}
+        </td>
+
+
+        </tr>
+
+
+        `;
+
+
+
+    });
+
+
+
+
+
+
+
+    document
+
+    .getElementById(
+        "report-income"
+    )
+
+    .innerHTML =
+
+    formatMoney(
+        income
+    );
+
+
+
+
+
+
+    document
+
+    .getElementById(
+        "report-expense"
+    )
+
+    .innerHTML =
+
+    formatMoney(
+        expense
+    );
+
+
+
+
+
+
+    document
+
+    .getElementById(
+        "report-balance"
+    )
+
+    .innerHTML =
+
+    formatMoney(
+        income-expense
+    );
+
+
+
+
+
 }
 
-);
 
 
 
 
 
-const month =
 
-document
 
-.getElementById(
-"month-filter"
-)
 
-.value;
+// ======================================
+// EXPORT PDF
+// ======================================
 
 
+function exportPDF(){
 
 
-const year =
 
-document
+    if(
+        currentReportData.length === 0
+    ){
 
-.getElementById(
-"year-filter"
-)
+        alert(
+            "Tidak ada data laporan"
+        );
 
-.value;
+        return;
 
+    }
 
 
 
 
 
 
-if(year){
+    const {
+        jsPDF
+    } = window.jspdf;
 
 
-query=query
 
-.gte(
-"transaction_date",
-`${year}-01-01`
-)
 
-.lte(
-"transaction_date",
-`${year}-12-31`
-);
 
+    const doc =
 
+    new jsPDF();
 
-}
 
 
 
 
+    doc.setFontSize(16);
 
 
-if(month && year){
+    doc.text(
+        "Laporan Keuangan BMTC",
+        14,
+        20
+    );
 
 
 
-const lastDay =
 
-new Date(
-year,
-month,
-0
-)
 
-.getDate();
+    doc.setFontSize(11);
 
 
+    doc.text(
+        "Bralink Motor Tiger Club",
+        14,
+        28
+    );
 
-query=query
 
-.gte(
-"transaction_date",
-`${year}-${month}-01`
-)
 
-.lte(
-"transaction_date",
-`${year}-${month}-${lastDay}`
-);
 
 
 
-}
 
+    let rows=[];
 
 
 
+    currentReportData.forEach(item=>{
 
 
-const {data,error}=
+        let income="";
 
-await query;
+        let expense="";
 
 
 
 
+        if(
+            item.categories.type==="income"
+        ){
 
-if(error){
+            income =
+            item.amount.toLocaleString(
+                "id-ID"
+            );
 
-console.log(error);
 
-return;
+        }
 
-}
 
 
+        if(
+            item.categories.type==="expense"
+        ){
 
+            expense =
+            item.amount.toLocaleString(
+                "id-ID"
+            );
 
 
+        }
 
-let income=0;
 
-let expense=0;
 
 
 
+        rows.push([
 
+            item.transaction_date,
 
-const table =
+            item.categories.name,
 
-document
+            item.description ?? "-",
 
-.getElementById(
-"report-table"
-);
+            income,
 
+            expense
 
+        ]);
 
-table.innerHTML="";
 
 
+    });
 
 
 
-data.forEach(item=>{
 
 
 
-let masuk="-";
 
-let keluar="-";
+    doc.autoTable({
 
 
+        startY:40,
 
 
+        head:[
 
-if(item.categories.type==="income"){
+            [
 
+            "Tanggal",
 
-income += Number(item.amount);
+            "Kategori",
 
+            "Deskripsi",
 
-masuk = formatMoney(
-item.amount
-);
+            "Masuk",
 
+            "Keluar"
 
-}
+            ]
 
+        ],
 
 
+        body:rows
 
 
-if(item.categories.type==="expense"){
+    });
 
 
-expense += Number(item.amount);
 
 
-keluar = formatMoney(
-item.amount
-);
 
 
-}
-
-
-
-
-
-
-
-table.innerHTML += `
-
-
-<tr>
-
-
-<td>
-
-${item.transaction_date}
-
-</td>
-
-
-<td>
-
-${item.categories.name}
-
-</td>
-
-
-<td>
-
-${item.description ?? "-"}
-
-</td>
-
-
-<td>
-
-${masuk}
-
-</td>
-
-
-<td>
-
-${keluar}
-
-</td>
-
-
-</tr>
-
-
-`;
-
-
-
-});
-
-
-
-
-
-
-document
-
-.getElementById(
-"report-income"
-)
-
-.innerHTML =
-
-formatMoney(
-income
-);
-
-
-
-
-
-document
-
-.getElementById(
-"report-expense"
-)
-
-.innerHTML =
-
-formatMoney(
-expense
-);
-
-
-
-
-
-document
-
-.getElementById(
-"report-balance"
-)
-
-.innerHTML =
-
-formatMoney(
-income-expense
-);
+    doc.save(
+        "Laporan-Keuangan-BMTC.pdf"
+    );
 
 
 
@@ -567,26 +758,23 @@ income-expense
 
 
 
-const access =
+    const access =
 
-await checkReportAccess();
-
-
+    await checkReportAccess();
 
 
 
-if(access){
+
+    if(access){
 
 
-
-await loadYearFilter();
-
-
-loadReport();
+        await loadYearFilter();
 
 
+        loadReport();
 
-}
+
+    }
 
 
 

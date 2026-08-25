@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+
+
+<head>
+
+
+<meta charset="UTF-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>
+Audit Keuangan BMTC
+</title>
+
+
+<link rel="stylesheet" href="css/style.css">
+
+
+</head>
+
+
+
+<body>
+
+
+
+
+<header class="site-header">
+
+
+
+<div class="brand-main">
+
+
+
+<img
+
+src="https://yrvnmmascklkuzpjkwxn.supabase.co/storage/v1/object/public/bmtc%20media/logo/logo-bmtc.png"
+
+class="main-logo"
+
+>
+
+
+
+<div class="brand-title">
+
+
+<h1>
+BMTC FINANCE AUDIT
+</h1>
+
+
+<p>
+Transaction History Monitoring
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<nav class="main-nav">
+
+
+<a href="admin.html">
+Dashboard
+</a>
+
+
+<a href="admin-finance.html">
+Keuangan
+</a>
+
+
+<a href="admin-finance-report.html">
+Laporan
+</a>
+
+
+<a href="#" onclick="logout()">
+Logout
+</a>
+
+
+</nav>
+
+
+
+</header>
+
+
+
+
+
+
+
+
+
+<section class="admin-header">
+
+
+<h1>
+Audit Log Transaksi
+</h1>
+
+
+<p>
+Riwayat perubahan data keuangan BMTC
+</p>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="profile-section">
+
+
+<div class="profile-card">
+
+
+<h2>
+Histori Perubahan
+</h2>
+
+
+
+<table width="100%">
+
+
+
+<thead>
+
+
+<tr>
+
+
+<th>
+Waktu
+</th>
+
+
+<th>
+Transaksi
+</th>
+
+
+<th>
+Perubahan
+</th>
+
+
+<th>
+Oleh
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody id="audit-table">
+
+
+</tbody>
+
+
+
+</table>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<footer>
+
+
+<p>
+© BMTC Digital Platform
+</p>
+
+
+</footer>
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script src="js/supabase.js"></script>
+
+
+<script src="js/auth.js"></script>
+
+
+<script src="js/finance-audit.js"></script>
+
+
+
+<script>
+
+checkLogin();
+
+</script>
+
+
+
+</body>
+
+
+</html>

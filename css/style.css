@@ -1,7 +1,6 @@
 /* =====================================
    BMTC DIGITAL PLATFORM
    GLOBAL STYLE v2
-   PART 1
 ===================================== */
 
 
@@ -9,8 +8,7 @@
    RESET
 ===================================== */
 
-
-*{
+* {
 
     margin:0;
 
@@ -21,35 +19,25 @@
 }
 
 
-
-html{
+html {
 
     scroll-behavior:smooth;
 
 }
 
 
-
-
-body{
-
+body {
 
     font-family:
     Arial, Helvetica, sans-serif;
 
-
     background:#111111;
-
 
     color:#ffffff;
 
-
     line-height:1.6;
 
-
 }
-
-
 
 
 
@@ -60,7 +48,7 @@ body{
 ===================================== */
 
 
-.site-header{
+.site-header {
 
 
     background:#000000;
@@ -87,7 +75,7 @@ body{
 
 
 
-.brand-main{
+.brand-main {
 
 
     display:flex;
@@ -105,7 +93,7 @@ body{
 
 
 
-.main-logo{
+.main-logo {
 
 
     width:60px;
@@ -123,7 +111,7 @@ body{
 
 
 
-.brand-title h1{
+.brand-title h1 {
 
 
     font-size:26px;
@@ -147,7 +135,7 @@ body{
 
 
 
-.brand-title p{
+.brand-title p {
 
 
     margin-top:4px;
@@ -167,14 +155,12 @@ body{
 
 
 
-
-
 /* =====================================
    NAVIGATION
 ===================================== */
 
 
-.main-nav{
+.main-nav {
 
 
     display:flex;
@@ -192,7 +178,7 @@ body{
 
 
 
-.main-nav a{
+.main-nav a {
 
 
     color:white;
@@ -213,7 +199,7 @@ body{
 
 
 
-.main-nav a:hover{
+.main-nav a:hover {
 
 
     color:#C8102E;
@@ -227,14 +213,12 @@ body{
 
 
 
-
-
 /* =====================================
    HERO
 ===================================== */
 
 
-.hero{
+.hero {
 
 
     height:35vh;
@@ -269,28 +253,18 @@ body{
 
 
 }
-
-
-
-
-
-
-
-
-
 /* =====================================
    HOMEPAGE FEATURE
 ===================================== */
 
 
-.feature{
+.feature {
 
 
     display:grid;
 
 
     grid-template-columns:
-
     repeat(3,1fr);
 
 
@@ -306,7 +280,7 @@ body{
 
 
 
-.card{
+.card {
 
 
     background:#1c1c1c;
@@ -327,7 +301,7 @@ body{
 
 
 
-.card h3{
+.card h3 {
 
 
     color:#C8102E;
@@ -342,19 +316,26 @@ body{
 
 
 
-.card p{
+.card p {
 
 
     color:#cccccc;
 
 
 }
+
+
+
+
+
+
+
 /* =====================================
    PAGE HEADER
 ===================================== */
 
 
-.page-header{
+.page-header {
 
 
     padding:45px 8%;
@@ -372,7 +353,7 @@ body{
 
 
 
-.page-header h1{
+.page-header h1 {
 
 
     color:#D4AF37;
@@ -387,7 +368,7 @@ body{
 
 
 
-.page-header p{
+.page-header p {
 
 
     color:#cccccc;
@@ -401,14 +382,12 @@ body{
 
 
 
-
-
 /* =====================================
    PROFILE
 ===================================== */
 
 
-.profile-section{
+.profile-section {
 
 
     padding:50px 8%;
@@ -429,7 +408,7 @@ body{
 
 
 
-.profile-card{
+.profile-card {
 
 
     background:#1c1c1c;
@@ -450,7 +429,7 @@ body{
 
 
 
-.profile-card h2{
+.profile-card h2 {
 
 
     color:#D4AF37;
@@ -465,7 +444,7 @@ body{
 
 
 
-.profile-card p{
+.profile-card p {
 
 
     color:#dddddd;
@@ -479,14 +458,12 @@ body{
 
 
 
-
-
 /* =====================================
    ACTIVITY
 ===================================== */
 
 
-.activity-section{
+.activity-section {
 
 
     padding:50px 8%;
@@ -496,8 +473,6 @@ body{
 
 
     grid-template-columns:
-
-
     repeat(2,1fr);
 
 
@@ -510,7 +485,7 @@ body{
 
 
 
-.activity-card{
+.activity-card {
 
 
     background:#1c1c1c;
@@ -531,7 +506,7 @@ body{
 
 
 
-.activity-card h2{
+.activity-card h2 {
 
 
     color:#C8102E;
@@ -545,14 +520,12 @@ body{
 
 
 
-
-
 /* =====================================
    GALLERY THUMBNAIL
 ===================================== */
 
 
-.gallery-section{
+.gallery-section {
 
 
     padding:45px 8%;
@@ -564,15 +537,13 @@ body{
 
 
 
-.gallery-grid{
+.gallery-grid {
 
 
     display:grid;
 
 
     grid-template-columns:
-
-
     repeat(6,140px);
 
 
@@ -588,7 +559,7 @@ body{
 
 
 
-.gallery-card{
+.gallery-card {
 
 
     background:#1c1c1c;
@@ -612,7 +583,7 @@ body{
 
 
 
-.gallery-card:hover{
+.gallery-card:hover {
 
 
     transform:translateY(-5px);
@@ -624,7 +595,7 @@ body{
 
 
 
-.gallery-card img{
+.gallery-card img {
 
 
     width:140px;
@@ -645,7 +616,7 @@ body{
 
 
 
-.gallery-card h3{
+.gallery-card h3 {
 
 
     padding:10px;
@@ -668,14 +639,12 @@ body{
 
 
 
-
-
 /* =====================================
    LIGHTBOX GALLERY
 ===================================== */
 
 
-.gallery-modal{
+.gallery-modal {
 
 
     display:none;
@@ -701,7 +670,6 @@ body{
 
     background:
 
-
     rgba(0,0,0,.9);
 
 
@@ -720,7 +688,7 @@ body{
 
 
 
-.gallery-modal-image{
+.gallery-modal-image {
 
 
     max-width:85%;
@@ -741,7 +709,7 @@ body{
 
 
 
-.gallery-modal h3{
+.gallery-modal h3 {
 
 
     color:white;
@@ -759,7 +727,7 @@ body{
 
 
 
-.close-gallery{
+.close-gallery {
 
 
     position:absolute;
@@ -788,14 +756,12 @@ body{
 
 
 
-
-
 /* =====================================
    CONTACT
 ===================================== */
 
 
-.contact-section{
+.contact-section {
 
 
     padding:50px 8%;
@@ -805,8 +771,6 @@ body{
 
 
     grid-template-columns:
-
-
     repeat(3,1fr);
 
 
@@ -819,7 +783,7 @@ body{
 
 
 
-.contact-card{
+.contact-card {
 
 
     background:#1c1c1c;
@@ -840,28 +804,19 @@ body{
 
 
 
-.contact-card h2{
+.contact-card h2 {
 
 
     color:#D4AF37;
 
 
 }
-
-
-
-
-
-
-
-
-
 /* =====================================
    NEWS HOMEPAGE
 ===================================== */
 
 
-.latest-news{
+.latest-news {
 
 
     padding:50px 8%;
@@ -873,7 +828,7 @@ body{
 
 
 
-.latest-news h2{
+.latest-news h2 {
 
 
     color:#D4AF37;
@@ -891,15 +846,13 @@ body{
 
 
 
-#news-container{
+#news-container {
 
 
     display:grid;
 
 
     grid-template-columns:
-
-
     repeat(3,1fr);
 
 
@@ -912,7 +865,7 @@ body{
 
 
 
-.news-card{
+.news-card {
 
 
     background:#1c1c1c;
@@ -936,7 +889,7 @@ body{
 
 
 
-.news-card:hover{
+.news-card:hover {
 
 
     transform:translateY(-5px);
@@ -951,7 +904,7 @@ body{
 
 
 
-.news-card img{
+.news-card img {
 
 
     width:100%;
@@ -969,7 +922,7 @@ body{
 
 
 
-.news-content{
+.news-content {
 
 
     padding:20px;
@@ -981,7 +934,7 @@ body{
 
 
 
-.news-content small{
+.news-content small {
 
 
     color:#999;
@@ -993,7 +946,7 @@ body{
 
 
 
-.news-content h3{
+.news-content h3 {
 
 
     color:#D4AF37;
@@ -1008,7 +961,7 @@ body{
 
 
 
-.news-content p{
+.news-content p {
 
 
     color:#cccccc;
@@ -1020,7 +973,7 @@ body{
 
 
 
-.news-button{
+.news-button {
 
 
     display:inline-block;
@@ -1052,14 +1005,12 @@ body{
 
 
 
-
-
 /* =====================================
    DETAIL NEWS
 ===================================== */
 
 
-.news-detail{
+.news-detail {
 
 
     max-width:900px;
@@ -1077,7 +1028,7 @@ body{
 
 
 
-.news-detail img{
+.news-detail img {
 
 
     width:100%;
@@ -1098,7 +1049,7 @@ body{
 
 
 
-.news-detail h1{
+.news-detail h1 {
 
 
     color:#D4AF37;
@@ -1116,7 +1067,7 @@ body{
 
 
 
-.news-detail p{
+.news-detail p {
 
 
     margin-top:25px;
@@ -1132,12 +1083,19 @@ body{
 
 
 }
+
+
+
+
+
+
+
 /* =====================================
    LOGIN
 ===================================== */
 
 
-.login-section{
+.login-section {
 
 
     min-height:100vh;
@@ -1161,7 +1119,7 @@ body{
 
 
 
-.login-card{
+.login-card {
 
 
     width:380px;
@@ -1185,7 +1143,7 @@ body{
 
 
 
-.login-logo{
+.login-logo {
 
 
     width:80px;
@@ -1203,7 +1161,7 @@ body{
 
 
 
-.login-card input{
+.login-card input {
 
 
     width:100%;
@@ -1230,7 +1188,7 @@ body{
 
 
 
-.login-card button{
+.login-card button {
 
 
     width:100%;
@@ -1251,24 +1209,7 @@ body{
     border:none;
 
 
-    cursor:pointer;
-
-
 }
-
-
-
-
-
-.login-card button:hover{
-
-
-    background:#a90022;
-
-
-}
-
-
 
 
 
@@ -1281,7 +1222,7 @@ body{
 ===================================== */
 
 
-.admin-header{
+.admin-header {
 
 
     padding:50px 8%;
@@ -1299,7 +1240,7 @@ body{
 
 
 
-.admin-header h1{
+.admin-header h1 {
 
 
     color:#D4AF37;
@@ -1314,7 +1255,7 @@ body{
 
 
 
-.admin-header p{
+.admin-header p {
 
 
     color:#cccccc;
@@ -1326,11 +1267,7 @@ body{
 
 
 
-
-
-
-
-.admin-dashboard{
+.admin-dashboard {
 
 
     padding:40px 8%;
@@ -1340,8 +1277,6 @@ body{
 
 
     grid-template-columns:
-
-
     repeat(2,1fr);
 
 
@@ -1354,7 +1289,7 @@ body{
 
 
 
-.admin-card{
+.admin-card {
 
 
     background:#1c1c1c;
@@ -1378,7 +1313,7 @@ body{
 
 
 
-.admin-card:hover{
+.admin-card:hover {
 
 
     transform:translateY(-5px);
@@ -1393,7 +1328,7 @@ body{
 
 
 
-.admin-card h2{
+.admin-card h2 {
 
 
     color:#D4AF37;
@@ -1408,7 +1343,7 @@ body{
 
 
 
-.admin-card p{
+.admin-card p {
 
 
     color:#cccccc;
@@ -1423,7 +1358,7 @@ body{
 
 
 
-.admin-card a{
+.admin-card a {
 
 
     display:inline-block;
@@ -1450,20 +1385,6 @@ body{
 
 
 
-.admin-card a:hover{
-
-
-    background:#a90022;
-
-
-}
-
-
-
-
-
-
-
 
 
 /* =====================================
@@ -1471,7 +1392,7 @@ body{
 ===================================== */
 
 
-footer{
+footer {
 
 
     padding:25px;
@@ -1489,20 +1410,6 @@ footer{
 
 
 
-footer p{
-
-
-    color:#cccccc;
-
-
-}
-
-
-
-
-
-
-
 
 
 /* =====================================
@@ -1510,12 +1417,10 @@ footer p{
 ===================================== */
 
 
-
 @media(max-width:1100px){
 
 
-
-.site-header{
+.site-header {
 
 
     flex-direction:column;
@@ -1525,7 +1430,7 @@ footer p{
 
 
 
-.main-nav{
+.main-nav {
 
 
     justify-content:center;
@@ -1535,12 +1440,10 @@ footer p{
 
 
 
-.gallery-grid{
+.gallery-grid {
 
 
     grid-template-columns:
-
-
     repeat(4,140px);
 
 
@@ -1554,15 +1457,11 @@ footer p{
 
 
 
-
-
-
-
 @media(max-width:768px){
 
 
 
-.brand-main{
+.brand-main {
 
 
     flex-direction:column;
@@ -1577,7 +1476,7 @@ footer p{
 
 
 
-.main-logo{
+.main-logo {
 
 
     width:65px;
@@ -1592,7 +1491,7 @@ footer p{
 
 
 
-.brand-title h1{
+.brand-title h1 {
 
 
     font-size:22px;
@@ -1604,7 +1503,7 @@ footer p{
 
 
 
-.main-nav{
+.main-nav {
 
 
     flex-wrap:wrap;
@@ -1619,7 +1518,7 @@ footer p{
 
 
 
-.hero{
+.hero {
 
 
     height:35vh;
@@ -1631,7 +1530,7 @@ footer p{
 
 
 
-.feature{
+.feature {
 
 
     grid-template-columns:1fr;
@@ -1643,7 +1542,7 @@ footer p{
 
 
 
-.activity-section{
+.activity-section {
 
 
     grid-template-columns:1fr;
@@ -1655,12 +1554,10 @@ footer p{
 
 
 
-.gallery-grid{
+.gallery-grid {
 
 
     grid-template-columns:
-
-
     repeat(3,120px);
 
 
@@ -1670,7 +1567,7 @@ footer p{
 
 
 
-.contact-section{
+.contact-section {
 
 
     grid-template-columns:1fr;
@@ -1682,7 +1579,7 @@ footer p{
 
 
 
-#news-container{
+#news-container {
 
 
     grid-template-columns:1fr;
@@ -1694,7 +1591,7 @@ footer p{
 
 
 
-.news-detail img{
+.news-detail img {
 
 
     height:250px;
@@ -1706,7 +1603,7 @@ footer p{
 
 
 
-.news-detail h1{
+.news-detail h1 {
 
 
     font-size:30px;
@@ -1718,7 +1615,7 @@ footer p{
 
 
 
-.admin-dashboard{
+.admin-dashboard {
 
 
     grid-template-columns:1fr;
@@ -1728,9 +1625,9 @@ footer p{
 
 
 
-
-
 }
+
+
 
 
 
@@ -1738,445 +1635,136 @@ footer p{
 
 
 
-.gallery-grid{
+.gallery-grid {
 
 
     grid-template-columns:
-
-
     repeat(2,120px);
 
 
 }
 
 
-
 }
-/* =====================================
-   BOLD RIDERS HOMEPAGE
-===================================== */
-
-
-.bold-riders-section{
-
-
-    width:100%;
-
-
-    padding:60px 8%;
-
-
-}
-
-
-
-
-
-.bold-riders-card{
-
-
-    background:
-
-
-    linear-gradient(
-
-        135deg,
-
-        #050505,
-
-        #1a1a1a
-
-    );
-
-
-
-    border:
-
-    2px solid #C8102E;
-
-
-
-    border-radius:18px;
-
-
-
-    padding:55px 40px;
-
-
-
-    text-align:center;
-
-
-
-    position:relative;
-
-
-
-    overflow:hidden;
-
-
-
-    box-shadow:
-
-
-    0 15px 35px rgba(0,0,0,.5);
-
-
-
-}
-
-
-
-
-
-
-.bold-riders-card::before{
-
-
-    content:"";
-
-
-    position:absolute;
-
-
-    top:0;
-
-
-    left:0;
-
-
-    width:100%;
-
-
-    height:5px;
-
-
-    background:#C8102E;
-
-
-}
-
-
-
-
-
-
-
-.bold-riders-card::after{
-
-
-    content:"";
-
-
-    position:absolute;
-
-
-    bottom:0;
-
-
-    right:0;
-
-
-    width:120px;
-
-
-    height:120px;
-
-
-    background:#C8102E;
-
-
-    opacity:.08;
-
-
-    border-radius:50%;
-
-
-    transform:translate(40px,40px);
-
-
-}
-
-
-
-
-
-
-
-.bold-riders-card h2{
-
-
-    position:relative;
-
-
-    z-index:2;
-
-
-
-    color:white;
-
-
-
-    font-size:42px;
-
-
-
-    font-weight:800;
-
-
-
-    letter-spacing:5px;
-
-
-
-    margin-bottom:15px;
-
-
-
-}
-
-
-
-
-
-
-
-.bold-riders-card p{
-
-
-    position:relative;
-
-
-    z-index:2;
-
-
-
-    max-width:650px;
-
-
-
-    margin:auto;
-
-
-
-    color:#cccccc;
-
-
-
-    font-size:16px;
-
-
-
-    line-height:1.7;
-
-
-
-}
-
-
-
-
-
-
-
-.bold-riders-card a{
-
-
-    position:relative;
-
-
-    z-index:2;
-
-
-
-    display:inline-block;
-
-
-
-    margin-top:30px;
-
-
-
-    padding:14px 40px;
-
-
-
-    background:#C8102E;
-
-
-
-    color:white;
-
-
-
-    text-decoration:none;
-
-
-
-    font-weight:bold;
-
-
-
-    letter-spacing:1px;
-
-
-
-    border-radius:8px;
-
-
-
-    transition:.3s;
-
-
-
-}
-
-
-
-
-
-
-
-.bold-riders-card a:hover{
-
-
-    background:white;
-
-
-
-    color:#C8102E;
-
-
-
-    transform:translateY(-5px);
-
-
-
-}
-
-
-
-
-
-
-
-
 
 /* =====================================
-   HOMEPAGE SPACING FINAL
+   BOLD RIDERS HOMEPAGE - COMPACT
 ===================================== */
 
-
-.feature{
-
-
-    margin-bottom:20px;
-
-
+.bold-riders-section {
+    width: 100%;
+    padding: 35px 8%;
 }
 
-
-
-
-
-.bold-riders-section{
-
-
-    margin-top:10px;
-
-
-    margin-bottom:20px;
-
-
+.bold-riders-card {
+    background: linear-gradient(135deg, #050505, #1a1a1a);
+    border: 1px solid #C8102E;
+    border-radius: 12px;
+    padding: 28px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,.35);
 }
 
-
-
-
-
-.latest-news{
-
-
-    padding-top:60px;
-
-
+.bold-riders-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #C8102E;
 }
 
-
-
-
-
-
-
-
-
-/* =====================================
-   BOLD RIDERS RESPONSIVE
-===================================== */
-
-
-@media(max-width:768px){
-
-
-
-.bold-riders-section{
-
-
-    padding:40px 5%;
-
-
+.bold-riders-card h2 {
+    position: relative;
+    z-index: 2;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
 }
 
-
-
-
-.bold-riders-card{
-
-
-    padding:40px 20px;
-
-
+.bold-riders-card p {
+    position: relative;
+    z-index: 2;
+    max-width: 520px;
+    margin: auto;
+    color: #cccccc;
+    font-size: 14px;
+    line-height: 1.6;
 }
 
-
-
-
-
-.bold-riders-card h2{
-
-
-    font-size:30px;
-
-
-    letter-spacing:3px;
-
-
+.bold-riders-actions {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
 }
 
-
-
-
-
-.bold-riders-card p{
-
-
-    font-size:14px;
-
-
+.bold-riders-card a {
+    display: inline-block;
+    padding: 10px 24px;
+    background: #C8102E;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .7px;
+    border-radius: 6px;
+    transition: .3s;
+    border: 1px solid #C8102E;
 }
 
-
-
-
-
-.bold-riders-card a{
-
-
-    padding:12px 25px;
-
-
+.bold-riders-card a:hover {
+    background: #ffffff;
+    color: #C8102E;
+    transform: translateY(-2px);
 }
 
+.bold-registration-button {
+    background: #111111 !important;
+    color: #ffffff !important;
+    border: 1px solid #C8102E !important;
+}
 
+.bold-registration-button:hover {
+    background: #C8102E !important;
+    color: #ffffff !important;
+}
 
+@media (max-width: 768px) {
+    .bold-riders-section {
+        padding: 28px 5%;
+    }
+
+    .bold-riders-card {
+        padding: 25px 18px;
+    }
+
+    .bold-riders-card h2 {
+        font-size: 23px;
+        letter-spacing: 2px;
+    }
+
+    .bold-riders-card p {
+        font-size: 13px;
+    }
+
+    .bold-riders-actions {
+        flex-direction: column;
+    }
+
+    .bold-riders-card a {
+        width: 100%;
+        max-width: 260px;
+        text-align: center;
+        font-size: 12px;
+    }
 }

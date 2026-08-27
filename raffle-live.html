@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BMTC — LIVE RAFFLE</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --red: #e00000;
+      --bg: #050505;
+      --card: #111111;
+      --text: #ffffff;
+      --muted: #888888;
+      --green: #22c66f;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(
+          circle at top,
+          #280000 0%,
+          #0b0b0b 38%,
+          #050505 72%,
+          #000000 100%
+        );
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .live-wrap {
+      width: 100%;
+      max-width: 1100px;
+      text-align: center;
+    }
+
+    .brand {
+      margin-bottom: 8px;
+      font-size: clamp(30px, 5vw, 64px);
+      font-weight: 900;
+      letter-spacing: 6px;
+    }
+
+    .brand .red {
+      color: var(--red);
+    }
+
+    .subtitle {
+      margin-bottom: 28px;
+      color: #aaaaaa;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 4px;
+    }
+
+    .live-card {
+      padding: clamp(24px, 5vw, 54px);
+      border: 1px solid #303030;
+      border-radius: 24px;
+      background: rgba(17, 17, 17, 0.95);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 26px;
+      padding: 9px 14px;
+      border: 1px solid #343434;
+      border-radius: 999px;
+      background: #161616;
+      color: #bbbbbb;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #666666;
+    }
+
+    .status.running .status-dot {
+      background: var(--red);
+      box-shadow: 0 0 18px rgba(224, 0, 0, 0.75);
+      animation: pulse 0.8s ease-in-out infinite alternate;
+    }
+
+    .status.winner .status-dot {
+      background: var(--green);
+      box-shadow: 0 0 18px rgba(34, 198, 111, 0.6);
+    }
+
+    @keyframes pulse {
+      from {
+        opacity: 0.4;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .label {
+      margin-bottom: 12px;
+      color: #777777;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 3px;
+    }
+
+    .number {
+      min-height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: clamp(64px, 14vw, 150px);
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: clamp(4px, 1vw, 14px);
+      word-break: break-word;
+    }
+
+    .number.running {
+      text-shadow:
+        0 0 18px rgba(224, 0, 0, 0.45),
+        0 0 55px rgba(224, 0, 0, 0.18);
+    }
+
+    .winner-title {
+      margin-bottom: 8px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .winner-name {
+      min-height: 34px;
+      font-size: clamp(20px, 4vw, 34px);
+      font-weight: 900;
+    }
+
+    .hint {
+      margin-top: 24px;
+      color: #666666;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 14px;
+      }
+
+      .brand {
+        letter-spacing: 3px;
+      }
+
+      .subtitle {
+        letter-spacing: 2px;
+      }
+
+      .number {
+        min-height: 110px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="live-wrap">
+
+    <div class="brand">
+      BMTC <span class="red">LIVE</span> RAFFLE
+    </div>
+
+    <div class="subtitle">
+      BOLD AFTER DARK
+    </div>
+
+    <section class="live-card">
+
+      <div
+        id="statusBadge"
+        class="status"
+      >
+        <span class="status-dot"></span>
+        <span id="statusText">MENUNGGU</span>
+      </div>
+
+      <div class="label">
+        NOMOR UNDIAN
+      </div>
+
+      <div
+        id="drawNumber"
+        class="number"
+      >
+        -----
+      </div>
+
+      <div
+        id="winnerTitle"
+        class="winner-title"
+        style="visibility:hidden;"
+      >
+        PEMENANG
+      </div>
+
+      <div
+        id="winnerName"
+        class="winner-name"
+      >
+        Menunggu pengundian dimulai.
+      </div>
+
+      <div class="hint">
+        Tampilan ini diperbarui otomatis dari sistem pengundian admin.
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+    "use strict";
+
+    const SUPABASE_URL =
+      "https://yrvnmmascklkuzpjkwxn.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
+
+    const RAFFLE_SERVICE_URL =
+      SUPABASE_URL +
+      "/functions/v1/raffle-service";
+
+
+    const statusBadge =
+      document.getElementById("statusBadge");
+
+    const statusText =
+      document.getElementById("statusText");
+
+    const drawNumber =
+      document.getElementById("drawNumber");
+
+    const winnerTitle =
+      document.getElementById("winnerTitle");
+
+    const winnerName =
+      document.getElementById("winnerName");
+
+
+    let currentState =
+      "IDLE";
+
+    let visualTimer =
+      null;
+
+    let pollingTimer =
+      null;
+
+
+    function startVisualAnimation() {
+      if (visualTimer) {
+        return;
+      }
+
+      visualTimer =
+        setInterval(
+          function() {
+            const fakeNumber =
+              String(
+                Math.floor(
+                  10000 +
+                  Math.random() *
+                  90000
+                )
+              );
+
+            drawNumber.textContent =
+              fakeNumber;
+          },
+          75
+        );
+    }
+
+
+    function stopVisualAnimation() {
+      if (!visualTimer) {
+        return;
+      }
+
+      clearInterval(
+        visualTimer
+      );
+
+      visualTimer =
+        null;
+    }
+
+
+    function renderLiveState(
+      data
+    ) {
+      const live =
+        data &&
+        data.live
+          ? data.live
+          : {};
+
+      currentState =
+        String(
+          live.status || "IDLE"
+        ).toUpperCase();
+
+      statusBadge.className =
+        "status";
+
+      winnerTitle.style.visibility =
+        "hidden";
+
+      drawNumber.classList.remove(
+        "running"
+      );
+
+
+      if (
+        currentState ===
+        "RUNNING"
+      ) {
+        statusBadge.classList.add(
+          "running"
+        );
+
+        statusText.textContent =
+          "PENGUNDIAN BERJALAN";
+
+        winnerName.textContent =
+          "Menentukan nomor pemenang...";
+
+        drawNumber.classList.add(
+          "running"
+        );
+
+        startVisualAnimation();
+
+        return;
+      }
+
+
+      stopVisualAnimation();
+
+
+      if (
+        currentState ===
+        "WINNER"
+      ) {
+        statusBadge.classList.add(
+          "winner"
+        );
+
+        statusText.textContent =
+          "PEMENANG TERPILIH";
+
+        drawNumber.textContent =
+          live.winnerCouponCode ||
+          "-----";
+
+        winnerTitle.style.visibility =
+          "visible";
+
+        winnerName.textContent =
+          live.winnerBuyerName ||
+          "Pemenang";
+
+        return;
+      }
+
+
+      statusText.textContent =
+        "MENUNGGU";
+
+      drawNumber.textContent =
+        "-----";
+
+      winnerName.textContent =
+        "Menunggu pengundian dimulai.";
+    }
+
+
+    async function fetchLiveState() {
+      const response =
+        await fetch(
+          RAFFLE_SERVICE_URL +
+          "?action=state",
+          {
+            method:
+              "GET",
+            cache:
+              "no-store",
+            headers: {
+              "Accept":
+                "application/json",
+              "apikey":
+                SUPABASE_PUBLISHABLE_KEY,
+              "Authorization":
+                "Bearer " +
+                SUPABASE_PUBLISHABLE_KEY
+            }
+          }
+        );
+
+      const raw =
+        await response.text();
+
+      let data;
+
+      try {
+        data =
+          JSON.parse(
+            raw
+          );
+      } catch {
+        throw new Error(
+          "Response live raffle tidak valid."
+        );
+      }
+
+      if (
+        !response.ok ||
+        !data ||
+        data.success !== true
+      ) {
+        throw new Error(
+          data &&
+          (
+            data.message ||
+            data.detail
+          )
+            ? (
+                data.message ||
+                data.detail
+              )
+            : "Tidak dapat membaca live raffle."
+        );
+      }
+
+      return data;
+    }
+
+
+    async function refreshLiveState() {
+      try {
+        const data =
+          await fetchLiveState();
+
+        renderLiveState(
+          data
+        );
+
+      } catch (error) {
+        console.error(
+          "LIVE RAFFLE ERROR:",
+          error
+        );
+
+        stopVisualAnimation();
+
+        statusBadge.className =
+          "status";
+
+        statusText.textContent =
+          "KONEKSI TERPUTUS";
+
+        drawNumber.textContent =
+          "-----";
+
+        winnerTitle.style.visibility =
+          "hidden";
+
+        winnerName.textContent =
+          "Mencoba menghubungkan kembali...";
+      }
+    }
+
+
+    function startPolling() {
+      refreshLiveState();
+
+      if (
+        pollingTimer
+      ) {
+        clearInterval(
+          pollingTimer
+        );
+      }
+
+      pollingTimer =
+        setInterval(
+          refreshLiveState,
+          1000
+        );
+    }
+
+
+    document.addEventListener(
+      "visibilitychange",
+      function() {
+        if (
+          document.hidden
+        ) {
+          return;
+        }
+
+        refreshLiveState();
+      }
+    );
+
+
+    startPolling();
+
+  </script>
+
+</body>
+</html>

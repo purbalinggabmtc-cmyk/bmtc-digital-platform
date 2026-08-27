@@ -13,6 +13,146 @@ BMTC | Bralink Motor Tiger Club
 
 <link rel="stylesheet" href="css/style.css">
 
+<style>
+.live-raffle-section {
+  padding: 48px 20px;
+  background:
+    radial-gradient(circle at top, #280000 0%, #0b0b0b 45%, #050505 100%);
+  color: #ffffff;
+}
+
+.live-raffle-card {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 28px;
+  border: 1px solid #2f2f2f;
+  border-radius: 18px;
+  background: rgba(17, 17, 17, 0.96);
+  text-align: center;
+  box-shadow: 0 22px 60px rgba(0,0,0,0.45);
+}
+
+.live-raffle-title {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.live-raffle-subtitle {
+  margin: 0 0 24px;
+  color: #9a9a9a;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+.live-raffle-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 8px 13px;
+  border: 1px solid #333;
+  border-radius: 999px;
+  background: #171717;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.live-raffle-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #666;
+}
+
+.live-raffle-status.running .live-raffle-dot {
+  background: #e00000;
+  box-shadow: 0 0 14px rgba(224,0,0,.75);
+  animation: liveRafflePulse .8s ease-in-out infinite alternate;
+}
+
+.live-raffle-status.winner .live-raffle-dot {
+  background: #22c66f;
+  box-shadow: 0 0 14px rgba(34,198,111,.6);
+}
+
+@keyframes liveRafflePulse {
+  from { opacity: .4; }
+  to { opacity: 1; }
+}
+
+.live-raffle-label {
+  margin-bottom: 8px;
+  color: #777;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.live-raffle-number {
+  min-height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  font-size: clamp(52px, 11vw, 104px);
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: 8px;
+}
+
+.live-raffle-number.running {
+  text-shadow:
+    0 0 18px rgba(224,0,0,.45),
+    0 0 55px rgba(224,0,0,.18);
+}
+
+.live-raffle-winner-label {
+  visibility: hidden;
+  margin-bottom: 6px;
+  color: #22c66f;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.live-raffle-winner-name {
+  min-height: 28px;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.live-raffle-link {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 11px 16px;
+  border-radius: 8px;
+  background: #e00000;
+  color: #fff;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+@media (max-width: 600px) {
+  .live-raffle-section {
+    padding: 32px 12px;
+  }
+
+  .live-raffle-card {
+    padding: 22px 16px;
+  }
+
+  .live-raffle-number {
+    letter-spacing: 4px;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -152,6 +292,62 @@ REGISTRASI BOLD AFTER DARK
 
 </section>
 
+<section class="live-raffle-section">
+
+<div class="live-raffle-card">
+
+<h2 class="live-raffle-title">
+LIVE RAFFLE
+</h2>
+
+<p class="live-raffle-subtitle">
+BOLD AFTER DARK
+</p>
+
+<div
+id="liveRaffleStatus"
+class="live-raffle-status"
+>
+<span class="live-raffle-dot"></span>
+<span id="liveRaffleStatusText">MENUNGGU</span>
+</div>
+
+<div class="live-raffle-label">
+NOMOR UNDIAN
+</div>
+
+<div
+id="liveRaffleNumber"
+class="live-raffle-number"
+>
+-----
+</div>
+
+<div
+id="liveRaffleWinnerLabel"
+class="live-raffle-winner-label"
+>
+PEMENANG
+</div>
+
+<div
+id="liveRaffleWinnerName"
+class="live-raffle-winner-name"
+>
+Menunggu pengundian dimulai.
+</div>
+
+<a
+href="raffle-live.html"
+class="live-raffle-link"
+>
+BUKA LIVE RAFFLE FULLSCREEN
+</a>
+
+</div>
+
+</section>
+
 <section class="latest-news">
 
 <h2>
@@ -185,6 +381,223 @@ Memuat berita...
 <script>
 
 loadNews();
+
+</script>
+
+<script>
+"use strict";
+
+const BMTC_RAFFLE_SERVICE_URL =
+  "https://yrvnmmascklkuzpjkwxn.supabase.co/functions/v1/raffle-service";
+
+const BMTC_RAFFLE_PUBLISHABLE_KEY =
+  "sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
+
+const liveRaffleStatus =
+  document.getElementById("liveRaffleStatus");
+
+const liveRaffleStatusText =
+  document.getElementById("liveRaffleStatusText");
+
+const liveRaffleNumber =
+  document.getElementById("liveRaffleNumber");
+
+const liveRaffleWinnerLabel =
+  document.getElementById("liveRaffleWinnerLabel");
+
+const liveRaffleWinnerName =
+  document.getElementById("liveRaffleWinnerName");
+
+let liveRaffleVisualTimer = null;
+
+function startHomeRaffleAnimation() {
+  if (liveRaffleVisualTimer) {
+    return;
+  }
+
+  liveRaffleVisualTimer =
+    setInterval(
+      function() {
+        liveRaffleNumber.textContent =
+          String(
+            Math.floor(
+              10000 +
+              Math.random() *
+              90000
+            )
+          );
+      },
+      80
+    );
+}
+
+function stopHomeRaffleAnimation() {
+  if (!liveRaffleVisualTimer) {
+    return;
+  }
+
+  clearInterval(
+    liveRaffleVisualTimer
+  );
+
+  liveRaffleVisualTimer = null;
+}
+
+function renderHomeRaffle(data) {
+  const live =
+    data && data.live
+      ? data.live
+      : {};
+
+  const status =
+    String(
+      live.status || "IDLE"
+    ).toUpperCase();
+
+  liveRaffleStatus.className =
+    "live-raffle-status";
+
+  liveRaffleNumber.classList.remove(
+    "running"
+  );
+
+  liveRaffleWinnerLabel.style.visibility =
+    "hidden";
+
+  if (status === "RUNNING") {
+    liveRaffleStatus.classList.add(
+      "running"
+    );
+
+    liveRaffleStatusText.textContent =
+      "PENGUNDIAN BERJALAN";
+
+    liveRaffleWinnerName.textContent =
+      "Menentukan nomor pemenang...";
+
+    liveRaffleNumber.classList.add(
+      "running"
+    );
+
+    startHomeRaffleAnimation();
+    return;
+  }
+
+  stopHomeRaffleAnimation();
+
+  if (status === "WINNER") {
+    liveRaffleStatus.classList.add(
+      "winner"
+    );
+
+    liveRaffleStatusText.textContent =
+      "PEMENANG TERPILIH";
+
+    liveRaffleNumber.textContent =
+      live.winnerCouponCode ||
+      "-----";
+
+    liveRaffleWinnerLabel.style.visibility =
+      "visible";
+
+    liveRaffleWinnerName.textContent =
+      live.winnerBuyerName ||
+      "Pemenang";
+
+    return;
+  }
+
+  liveRaffleStatusText.textContent =
+    "MENUNGGU";
+
+  liveRaffleNumber.textContent =
+    "-----";
+
+  liveRaffleWinnerName.textContent =
+    "Menunggu pengundian dimulai.";
+}
+
+async function refreshHomeRaffle() {
+  try {
+    const response =
+      await fetch(
+        BMTC_RAFFLE_SERVICE_URL +
+        "?action=state",
+        {
+          method: "GET",
+          cache: "no-store",
+          headers: {
+            "Accept":
+              "application/json",
+            "apikey":
+              BMTC_RAFFLE_PUBLISHABLE_KEY,
+            "Authorization":
+              "Bearer " +
+              BMTC_RAFFLE_PUBLISHABLE_KEY
+          }
+        }
+      );
+
+    const raw =
+      await response.text();
+
+    const data =
+      JSON.parse(raw);
+
+    if (
+      !response.ok ||
+      !data ||
+      data.success !== true
+    ) {
+      throw new Error(
+        data &&
+        (
+          data.message ||
+          data.detail
+        )
+          ? (
+              data.message ||
+              data.detail
+            )
+          : "Live raffle tidak tersedia."
+      );
+    }
+
+    renderHomeRaffle(
+      data
+    );
+
+  } catch (error) {
+    console.error(
+      "HOME LIVE RAFFLE ERROR:",
+      error
+    );
+
+    stopHomeRaffleAnimation();
+
+    liveRaffleStatus.className =
+      "live-raffle-status";
+
+    liveRaffleStatusText.textContent =
+      "KONEKSI TERPUTUS";
+
+    liveRaffleNumber.textContent =
+      "-----";
+
+    liveRaffleWinnerLabel.style.visibility =
+      "hidden";
+
+    liveRaffleWinnerName.textContent =
+      "Mencoba menghubungkan kembali...";
+  }
+}
+
+refreshHomeRaffle();
+
+setInterval(
+  refreshHomeRaffle,
+  1000
+);
 
 </script>
 

@@ -146,6 +146,36 @@
       border: 1px solid #444;
     }
 
+    .btn-danger {
+      background: #3a0000;
+      color: #ff8a8a;
+      border: 1px solid #8c0000;
+    }
+
+    .danger-zone {
+      border-color: #5a1010;
+      background: rgba(45, 0, 0, 0.45);
+    }
+
+    .danger-help {
+      margin-top: 8px;
+      color: #b77;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .danger-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    @media (max-width: 620px) {
+      .danger-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .message {
       display: none;
       margin-bottom: 14px;
@@ -470,6 +500,40 @@
         <div id="winnerHistory"></div>
       </div>
 
+      <div class="card danger-zone">
+        <div class="section-title">
+          PENGELOLAAN DATA PENGUNDIAN
+        </div>
+
+        <div
+          id="maintenanceMessage"
+          class="message"
+        ></div>
+
+        <div class="danger-actions">
+          <button
+            id="clearHistoryButton"
+            class="btn btn-danger"
+            type="button"
+          >
+            HAPUS RIWAYAT PEMENANG
+          </button>
+
+          <button
+            id="resetTestButton"
+            class="btn btn-danger"
+            type="button"
+          >
+            RESET DATA TEST
+          </button>
+        </div>
+
+        <div class="danger-help">
+          Hapus Riwayat hanya membersihkan daftar pemenang dan tampilan live. Nomor yang sudah pernah menang tetap berstatus USED.
+          RESET DATA TEST menghapus riwayat dan mengembalikan kupon yang dipakai oleh LIVE RAFFLE menjadi UNUSED agar dapat diuji ulang.
+        </div>
+      </div>
+
     </section>
 
   </div>
@@ -533,6 +597,15 @@
 
     const winnerHistory =
       document.getElementById("winnerHistory");
+
+    const maintenanceMessage =
+      document.getElementById("maintenanceMessage");
+
+    const clearHistoryButton =
+      document.getElementById("clearHistoryButton");
+
+    const resetTestButton =
+      document.getElementById("resetTestButton");
 
 
     let adminSecret =
@@ -1022,6 +1095,141 @@
     }
 
 
+    async function runMaintenanceAction(
+      action
+    ) {
+      hideMessage(
+        maintenanceMessage
+      );
+
+      const isReset =
+        action ===
+        "resettest";
+
+      const confirmationText =
+        isReset
+          ? "Ketik RESET untuk menghapus riwayat dan mengembalikan kupon LIVE RAFFLE menjadi UNUSED."
+          : "Ketik HAPUS untuk menghapus seluruh riwayat pemenang.";
+
+      const expected =
+        isReset
+          ? "RESET"
+          : "HAPUS";
+
+      const typed =
+        window.prompt(
+          confirmationText
+        );
+
+      if (
+        String(
+          typed || ""
+        ).trim().toUpperCase() !==
+        expected
+      ) {
+        return;
+      }
+
+      clearHistoryButton.disabled =
+        true;
+
+      resetTestButton.disabled =
+        true;
+
+      try {
+        const response =
+          await fetch(
+            RAFFLE_SERVICE_URL +
+            "?action=" +
+            encodeURIComponent(
+              action
+            ),
+            {
+              method:
+                "POST",
+              headers: {
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY,
+                "x-admin-secret":
+                  adminSecret
+              }
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(
+              raw
+            );
+        } catch {
+          throw new Error(
+            "Server mengembalikan response yang tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "Pengelolaan data gagal."
+          );
+        }
+
+        showMessage(
+          maintenanceMessage,
+          "success",
+          data.message ||
+          "Data berhasil diperbarui."
+        );
+
+        await loadState();
+
+      } catch (error) {
+        console.error(
+          "RAFFLE MAINTENANCE ERROR:",
+          error
+        );
+
+        showMessage(
+          maintenanceMessage,
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Pengelolaan data gagal."
+        );
+
+      } finally {
+        clearHistoryButton.disabled =
+          false;
+
+        resetTestButton.disabled =
+          false;
+      }
+    }
+
+
     async function login() {
       hideMessage(
         loginMessage
@@ -1143,6 +1351,26 @@
     logoutButton.addEventListener(
       "click",
       logout
+    );
+
+
+    clearHistoryButton.addEventListener(
+      "click",
+      function() {
+        runMaintenanceAction(
+          "clearhistory"
+        );
+      }
+    );
+
+
+    resetTestButton.addEventListener(
+      "click",
+      function() {
+        runMaintenanceAction(
+          "resettest"
+        );
+      }
     );
 
 

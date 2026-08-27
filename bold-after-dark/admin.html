@@ -1,0 +1,2707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOLD AFTER DARK — Admin Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top,
+          #2a0000 0%,
+          #0b0b0b 42%,
+          #000000 100%
+        );
+      color: #ffffff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* ============================================================
+       LOGIN
+       ============================================================ */
+
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: #111111;
+      border: 1px solid #333333;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+    }
+
+    .brand {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      margin-bottom: 5px;
+      color: #ffffff;
+    }
+
+    .brand .red {
+      color: #e00000;
+    }
+
+    .brand .white {
+      color: #ffffff;
+    }
+
+    .login-subtitle {
+      text-align: center;
+      color: #888888;
+      font-size: 12px;
+      letter-spacing: 3px;
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #dddddd;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 9px;
+      border: 1px solid #3b3b3b;
+      background: #1b1b1b;
+      color: white;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #e00000;
+      box-shadow: 0 0 0 2px rgba(224, 0, 0, 0.12);
+    }
+
+    .primary-button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 9px;
+      background: #e00000;
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .primary-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .login-message {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .login-message.error {
+      display: block;
+      background: rgba(224, 0, 0, 0.12);
+      border: 1px solid rgba(224, 0, 0, 0.4);
+      color: #ff8f8f;
+    }
+
+    /* ============================================================
+       DASHBOARD
+       ============================================================ */
+
+    #dashboardScreen {
+      min-height: 100vh;
+      padding: 25px;
+    }
+
+    .dashboard {
+      width: 100%;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .topbar-brand {
+      font-size: 25px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #ffffff;
+    }
+
+    .topbar-brand .red {
+      color: #e00000;
+    }
+
+    .topbar-brand .white {
+      color: #ffffff;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-email {
+      color: #888888;
+      font-size: 12px;
+    }
+
+    .home-button,
+    .logout-button,
+    .refresh-button,
+    .report-button,
+    .delete-button,
+    .select-button {
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    /* HOME */
+
+    .home-button {
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #ffffff;
+      transition: 0.15s ease;
+    }
+
+    .home-button:hover {
+      background: #e00000;
+      color: #ffffff;
+      border-color: #e00000;
+    }
+
+    .logout-button {
+      background: #222222;
+      color: white;
+      border: 1px solid #444444;
+    }
+
+    .logout-button:hover {
+      background: #333333;
+    }
+
+    .refresh-button {
+      background: #e00000;
+      color: white;
+      border: none;
+    }
+
+    .refresh-button:hover:not(:disabled) {
+      background: #c00000;
+    }
+
+    /* REPORT BUTTON */
+
+    .report-button {
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #ffffff;
+      transition: 0.15s ease;
+    }
+
+    .report-button:hover {
+      background: #e00000;
+      color: #ffffff;
+      border-color: #e00000;
+    }
+
+    .delete-button {
+      background: #b00000;
+      color: white;
+      border: 1px solid #e00000;
+    }
+
+    .delete-button:hover:not(:disabled) {
+      background: #e00000;
+    }
+
+    .delete-button:disabled,
+    .refresh-button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .select-button {
+      background: #222222;
+      color: #dddddd;
+      border: 1px solid #444444;
+    }
+
+    .select-button:hover {
+      background: #333333;
+    }
+
+    /* ============================================================
+       STATISTICS
+       ============================================================ */
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      background: #111111;
+      border: 1px solid #2d2d2d;
+      border-radius: 13px;
+      padding: 18px;
+    }
+
+    .stat-label {
+      color: #888888;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 30px;
+      font-weight: 900;
+    }
+
+    /* ============================================================
+       CONTROLS
+       ============================================================ */
+
+    .controls {
+      background: #111111;
+      border: 1px solid #2d2d2d;
+      border-radius: 14px;
+      padding: 15px;
+      margin-bottom: 18px;
+    }
+
+    .controls-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .filter-select {
+      width: auto;
+      min-width: 140px;
+    }
+
+    select {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #3b3b3b;
+      background: #1b1b1b;
+      color: white;
+      outline: none;
+    }
+
+    .bulk-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #292929;
+    }
+
+    .selected-info {
+      color: #999999;
+      font-size: 13px;
+    }
+
+    .bulk-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* ============================================================
+       TABLE
+       ============================================================ */
+
+    .table-card {
+      background: #111111;
+      border: 1px solid #2d2d2d;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: 17px 18px;
+      border-bottom: 1px solid #2d2d2d;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .table-title {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .table-count {
+      color: #888888;
+      font-size: 12px;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1100px;
+    }
+
+    th {
+      text-align: left;
+      padding: 13px 15px;
+      background: #181818;
+      color: #999999;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 14px 15px;
+      border-top: 1px solid #242424;
+      color: #dddddd;
+      font-size: 13px;
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background: #151515;
+    }
+
+    .checkbox-cell {
+      width: 45px;
+      text-align: center;
+    }
+
+    .row-checkbox,
+    #selectAll {
+      width: 17px;
+      height: 17px;
+      cursor: pointer;
+      accent-color: #e00000;
+    }
+
+    .pass-id-cell {
+      font-weight: 800;
+      color: white;
+      letter-spacing: 0.5px;
+    }
+
+    .name-cell {
+      font-weight: 700;
+    }
+
+    .muted {
+      color: #777777;
+    }
+
+    /* ============================================================
+       BADGES
+       ============================================================ */
+
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.7px;
+    }
+
+    .badge-unused {
+      background: rgba(22, 199, 90, 0.12);
+      color: #55e88b;
+      border: 1px solid rgba(22, 199, 90, 0.3);
+    }
+
+    .badge-used {
+      background: rgba(224, 180, 0, 0.12);
+      color: #f0cf45;
+      border: 1px solid rgba(224, 180, 0, 0.3);
+    }
+
+    .badge-reguler {
+      background: rgba(100, 100, 100, 0.18);
+      color: #cccccc;
+      border: 1px solid #444444;
+    }
+
+    .badge-bold {
+      background: rgba(255, 136, 0, 0.12);
+      color: #ffad55;
+      border: 1px solid rgba(255, 136, 0, 0.35);
+    }
+
+    .table-message {
+      padding: 40px 20px;
+      text-align: center;
+      color: #777777;
+    }
+
+    /* ============================================================
+       MESSAGES
+       ============================================================ */
+
+    .error-banner {
+      margin-bottom: 18px;
+      padding: 13px 15px;
+      border-radius: 9px;
+      background: rgba(224, 0, 0, 0.10);
+      border: 1px solid rgba(224, 0, 0, 0.35);
+      color: #ff8f8f;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+
+    .success-banner {
+      margin-bottom: 18px;
+      padding: 13px 15px;
+      border-radius: 9px;
+      background: rgba(22, 199, 90, 0.10);
+      border: 1px solid rgba(22, 199, 90, 0.30);
+      color: #55e88b;
+      font-size: 13px;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+
+    @media (max-width: 1100px) {
+      .topbar-right {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      #dashboardScreen {
+        padding: 15px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .topbar-right {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
+      .topbar-right button {
+        flex: 1;
+        min-width: 100px;
+      }
+
+      .admin-email {
+        width: 100%;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stat-value {
+        font-size: 25px;
+      }
+
+      .controls-row {
+        flex-direction: column;
+      }
+
+      .search-box,
+      .filter-select {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-right {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .topbar-right button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       LOGIN
+       ============================================================ -->
+
+  <section id="loginScreen">
+
+    <div class="login-card">
+
+      <div class="brand">
+        BOLD <span class="red">AFTER</span> <span class="white">DARK</span>
+      </div>
+
+      <div class="login-subtitle">
+        ADMIN DASHBOARD
+      </div>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+          <label for="loginEmail">EMAIL</label>
+
+          <input
+            id="loginEmail"
+            type="email"
+            placeholder="admin@admin.com"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">PASSWORD</label>
+
+          <input
+            id="loginPassword"
+            type="password"
+            placeholder="Password"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button
+          id="loginButton"
+          class="primary-button"
+          type="submit"
+        >
+          LOGIN
+        </button>
+
+      </form>
+
+      <div
+        id="loginMessage"
+        class="login-message"
+      ></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================
+       DASHBOARD
+       ============================================================ -->
+
+  <section
+    id="dashboardScreen"
+    class="hidden"
+  >
+
+    <div class="dashboard">
+
+      <div class="topbar">
+
+        <div class="topbar-brand">
+          BOLD <span class="red">AFTER</span> <span class="white">DARK</span>
+        </div>
+
+        <div class="topbar-right">
+
+          <div
+            id="adminEmail"
+            class="admin-email"
+          ></div>
+
+          <!-- HOME BUTTON -->
+
+          <button
+            id="homeButton"
+            class="home-button"
+            type="button"
+          >
+            HOME
+          </button>
+
+          <!-- REPORT BUTTON -->
+
+          <button
+            id="reportButton"
+            class="report-button"
+            type="button"
+          >
+            LAPORAN
+          </button>
+
+          <button
+            id="refreshButton"
+            class="refresh-button"
+            type="button"
+          >
+            REFRESH
+          </button>
+
+          <button
+            id="logoutButton"
+            class="logout-button"
+            type="button"
+          >
+            LOGOUT
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- MESSAGES -->
+
+      <div
+        id="dashboardError"
+        class="error-banner hidden"
+      ></div>
+
+      <div
+        id="dashboardSuccess"
+        class="success-banner hidden"
+      ></div>
+
+
+      <!-- ========================================================
+           STATISTICS
+           ======================================================== -->
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <div class="stat-label">Total</div>
+          <div id="totalCount" class="stat-value">0</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">Check-In</div>
+          <div id="checkedInCount" class="stat-value">0</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">Remaining</div>
+          <div id="remainingCount" class="stat-value">0</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">REGULER</div>
+          <div id="regulerCount" class="stat-value">0</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">BOLD RIDERS</div>
+          <div id="boldRidersCount" class="stat-value">0</div>
+        </div>
+
+      </div>
+
+
+      <!-- ========================================================
+           SEARCH / FILTER
+           ======================================================== -->
+
+      <div class="controls">
+
+        <div class="controls-row">
+
+          <input
+            id="searchInput"
+            class="search-box"
+            type="search"
+            placeholder="Search name / WhatsApp / Pass ID..."
+            autocomplete="off"
+          >
+
+          <select
+            id="statusFilter"
+            class="filter-select"
+          >
+            <option value="ALL">ALL STATUS</option>
+            <option value="UNUSED">UNUSED</option>
+            <option value="USED">USED</option>
+          </select>
+
+          <select
+            id="accessFilter"
+            class="filter-select"
+          >
+            <option value="ALL">ALL ACCESS</option>
+            <option value="REGULER">REGULER</option>
+            <option value="BOLD RIDERS">BOLD RIDERS</option>
+          </select>
+
+        </div>
+
+
+        <div class="bulk-bar">
+
+          <div
+            id="selectedInfo"
+            class="selected-info"
+          >
+            0 selected
+          </div>
+
+          <div class="bulk-actions">
+
+            <button
+              id="selectAllButton"
+              class="select-button"
+              type="button"
+            >
+              SELECT ALL
+            </button>
+
+            <button
+              id="clearSelectionButton"
+              class="select-button"
+              type="button"
+            >
+              CLEAR
+            </button>
+
+            <button
+              id="deleteSelectedButton"
+              class="delete-button"
+              type="button"
+              disabled
+            >
+              DELETE SELECTED
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================================================
+           TABLE
+           ======================================================== -->
+
+      <div class="table-card">
+
+        <div class="table-header">
+
+          <div class="table-title">
+            REGISTRATIONS
+          </div>
+
+          <div
+            id="tableCount"
+            class="table-count"
+          >
+            0 records
+          </div>
+
+        </div>
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th class="checkbox-cell">
+                  <input
+                    id="selectAll"
+                    type="checkbox"
+                    title="Select all"
+                  >
+                </th>
+
+                <th>Name</th>
+                <th>WhatsApp</th>
+                <th>Pass ID</th>
+                <th>Access</th>
+                <th>Status</th>
+                <th>Registered</th>
+                <th>Check-In</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="registrationTableBody">
+
+              <tr>
+                <td
+                  colspan="8"
+                  class="table-message"
+                >
+                  Loading registrations...
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <script>
+
+    /* ============================================================
+       CONFIG
+       ============================================================ */
+
+    const SUPABASE_URL =
+      "https://yrvnmmascklkuzpjkwxn.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
+
+    const DYNAMIC_SERVICE_URL =
+      SUPABASE_URL +
+      "/functions/v1/dynamic-service";
+
+
+    /* ============================================================
+       ADMIN LOGIN
+       ============================================================ */
+
+    const ADMIN_EMAIL =
+      "admin@admin.com";
+
+    const ADMIN_PASSWORD =
+      "22Jun!2002";
+
+
+    /* ============================================================
+       ELEMENTS
+       ============================================================ */
+
+    const loginScreen =
+      document.getElementById("loginScreen");
+
+    const dashboardScreen =
+      document.getElementById("dashboardScreen");
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const loginEmail =
+      document.getElementById("loginEmail");
+
+    const loginPassword =
+      document.getElementById("loginPassword");
+
+    const loginButton =
+      document.getElementById("loginButton");
+
+    const loginMessage =
+      document.getElementById("loginMessage");
+
+    const adminEmail =
+      document.getElementById("adminEmail");
+
+    const homeButton =
+      document.getElementById("homeButton");
+
+    const logoutButton =
+      document.getElementById("logoutButton");
+
+    const refreshButton =
+      document.getElementById("refreshButton");
+
+    const reportButton =
+      document.getElementById("reportButton");
+
+    const dashboardError =
+      document.getElementById("dashboardError");
+
+    const dashboardSuccess =
+      document.getElementById("dashboardSuccess");
+
+    const searchInput =
+      document.getElementById("searchInput");
+
+    const statusFilter =
+      document.getElementById("statusFilter");
+
+    const accessFilter =
+      document.getElementById("accessFilter");
+
+    const tableBody =
+      document.getElementById("registrationTableBody");
+
+    const tableCount =
+      document.getElementById("tableCount");
+
+    const selectAll =
+      document.getElementById("selectAll");
+
+    const selectAllButton =
+      document.getElementById("selectAllButton");
+
+    const clearSelectionButton =
+      document.getElementById("clearSelectionButton");
+
+    const deleteSelectedButton =
+      document.getElementById("deleteSelectedButton");
+
+    const selectedInfo =
+      document.getElementById("selectedInfo");
+
+
+    /* ============================================================
+       DATA
+       ============================================================ */
+
+    let registrations = [];
+
+    let selectedIds = new Set();
+
+
+    /* ============================================================
+       LOGIN
+       ============================================================ */
+
+    function showLoginError(message) {
+
+      loginMessage.textContent =
+        message;
+
+      loginMessage.className =
+        "login-message error";
+
+    }
+
+
+    function clearLoginError() {
+
+      loginMessage.textContent =
+        "";
+
+      loginMessage.className =
+        "login-message";
+
+    }
+
+
+    loginForm.addEventListener(
+      "submit",
+      function(event) {
+
+        event.preventDefault();
+
+        clearLoginError();
+
+        const email =
+          loginEmail.value.trim();
+
+        const password =
+          loginPassword.value;
+
+        if (
+          email !== ADMIN_EMAIL ||
+          password !== ADMIN_PASSWORD
+        ) {
+
+          showLoginError(
+            "Email atau password admin salah."
+          );
+
+          return;
+
+        }
+
+        loginButton.disabled = true;
+
+        loginButton.textContent =
+          "LOGIN...";
+
+        setTimeout(
+          async function() {
+
+            loginScreen.classList.add(
+              "hidden"
+            );
+
+            dashboardScreen.classList.remove(
+              "hidden"
+            );
+
+            adminEmail.textContent =
+              ADMIN_EMAIL;
+
+            loginPassword.value =
+              "";
+
+            loginButton.disabled =
+              false;
+
+            loginButton.textContent =
+              "LOGIN";
+
+            await loadRegistrations();
+
+          },
+          150
+        );
+
+      }
+    );
+
+
+    /* ============================================================
+       CENTRAL NAVIGATION
+       ============================================================ */
+
+    /*
+     * navigation.js adalah satu-satunya sumber alamat halaman.
+     * File tersebut menggunakan:
+     *
+     *   const NAVIGATION = Object.freeze({...});
+     *
+     * Karena NAVIGATION dibuat sebagai const global, cara paling stabil
+     * adalah memuat file tersebut sebagai classic script terlebih dahulu,
+     * lalu membaca NAVIGATION dari global lexical environment.
+     *
+     * Tidak ada URL halaman yang ditulis ulang di tombol Home/Report.
+     */
+
+    const NAVIGATION_JS_URL =
+      "/config/navigation.js";
+
+    let navigationConfig = null;
+
+    let navigationScriptPromise = null;
+
+
+    function getNavigationFromGlobal() {
+
+      /* Format utama: const NAVIGATION = Object.freeze({...}); */
+      try {
+        if (
+          typeof NAVIGATION !== "undefined" &&
+          NAVIGATION &&
+          typeof NAVIGATION === "object"
+        ) {
+          return NAVIGATION;
+        }
+      } catch (error) {
+        console.warn(
+          "GLOBAL NAVIGATION CHECK ERROR:",
+          error
+        );
+      }
+
+      /* Dukungan tambahan untuk versi window.NAVIGATION */
+      if (
+        window.NAVIGATION &&
+        typeof window.NAVIGATION === "object"
+      ) {
+        return window.NAVIGATION;
+      }
+
+      /* Dukungan tambahan untuk nama konfigurasi alternatif */
+      if (
+        window.BOLD_AFTER_DARK_NAVIGATION &&
+        typeof window.BOLD_AFTER_DARK_NAVIGATION === "object"
+      ) {
+        return window.BOLD_AFTER_DARK_NAVIGATION;
+      }
+
+      return null;
+
+    }
+
+
+    function validateNavigationConfig(config) {
+
+      if (
+        !config ||
+        typeof config !== "object"
+      ) {
+        throw new Error(
+          "NAVIGATION tidak ditemukan."
+        );
+      }
+
+      const requiredPages = [
+        "home",
+        "admin",
+        "report",
+        "scanner"
+      ];
+
+      requiredPages.forEach(
+        function(page) {
+
+          if (
+            typeof config[page] !== "string" ||
+            !config[page].trim()
+          ) {
+            throw new Error(
+              "URL '" +
+              page +
+              "' tidak tersedia di navigation.js."
+            );
+          }
+
+          let url;
+
+          try {
+            url = new URL(
+              config[page],
+              window.location.origin
+            );
+          } catch (error) {
+            throw new Error(
+              "URL '" +
+              page +
+              "' tidak valid."
+            );
+          }
+
+          if (
+            url.protocol !== "https:" &&
+            url.protocol !== "http:"
+          ) {
+            throw new Error(
+              "URL '" +
+              page +
+              "' tidak valid."
+            );
+          }
+
+        }
+      );
+
+      return true;
+
+    }
+
+
+    async function loadNavigationConfig() {
+
+      /*
+       * Jika navigation.js sudah tersedia sebagai global, gunakan langsung.
+       */
+
+      const existingConfig =
+        getNavigationFromGlobal();
+
+      if (existingConfig) {
+
+        validateNavigationConfig(
+          existingConfig
+        );
+
+        navigationConfig =
+          existingConfig;
+
+        console.log(
+          "NAVIGATION CONFIG LOADED:",
+          navigationConfig
+        );
+
+        return navigationConfig;
+
+      }
+
+      /*
+       * Fallback: muat /config/navigation.js sebagai classic script.
+       * Ini menangani kasus ketika admin.html dibuka sebelum navigation.js
+       * pernah dimuat pada halaman tersebut.
+       */
+
+      if (!navigationScriptPromise) {
+
+        navigationScriptPromise =
+          new Promise(
+            function(resolve, reject) {
+
+              const script =
+                document.createElement(
+                  "script"
+                );
+
+              script.src =
+                NAVIGATION_JS_URL +
+                "?t=" +
+                Date.now();
+
+              script.async = false;
+
+              script.onload =
+                function() {
+                  resolve();
+                };
+
+              script.onerror =
+                function() {
+                  reject(
+                    new Error(
+                      "File /config/navigation.js tidak dapat dimuat."
+                    )
+                  );
+                };
+
+              document.head.appendChild(
+                script
+              );
+
+            }
+          );
+
+      }
+
+      try {
+
+        await navigationScriptPromise;
+
+        const loadedConfig =
+          getNavigationFromGlobal();
+
+        if (!loadedConfig) {
+          throw new Error(
+            "NAVIGATION tidak ditemukan."
+          );
+        }
+
+        validateNavigationConfig(
+          loadedConfig
+        );
+
+        navigationConfig =
+          loadedConfig;
+
+        console.log(
+          "NAVIGATION CONFIG LOADED:",
+          navigationConfig
+        );
+
+        return navigationConfig;
+
+      } catch (error) {
+
+        console.error(
+          "NAVIGATION LOAD ERROR:",
+          error
+        );
+
+        navigationConfig = null;
+
+        navigationScriptPromise = null;
+
+        throw new Error(
+          "Navigasi gagal. " +
+          (
+            error &&
+            error.message
+              ? error.message
+              : "Pastikan /config/navigation.js tersedia dan valid."
+          )
+        );
+
+      }
+
+    }
+
+
+    async function navigateTo(pageName) {
+
+      /*
+       * Selalu baca/validasi konfigurasi terlebih dahulu sebelum redirect.
+       */
+
+      const config =
+        await loadNavigationConfig();
+
+      const target =
+        config[pageName];
+
+      if (
+        typeof target !== "string" ||
+        !target.trim()
+      ) {
+        throw new Error(
+          "Alamat halaman '" +
+          pageName +
+          "' tidak tersedia di navigation.js."
+        );
+      }
+
+      const destination =
+        new URL(
+          target,
+          window.location.origin
+        ).href;
+
+      console.log(
+        "NAVIGATE:",
+        pageName,
+        destination
+      );
+
+      window.location.assign(
+        destination
+      );
+
+    }
+
+
+    /* ============================================================
+       HOME BUTTON
+       ============================================================ */
+
+    homeButton.addEventListener(
+      "click",
+      async function() {
+
+        const originalText =
+          homeButton.textContent;
+
+        homeButton.disabled =
+          true;
+
+        homeButton.textContent =
+          "LOADING...";
+
+        clearDashboardError();
+
+        try {
+
+          await navigateTo(
+            "home"
+          );
+
+        } catch (error) {
+
+          console.error(
+            "HOME NAVIGATION ERROR:",
+            error
+          );
+
+          showDashboardError(
+            error &&
+            error.message
+              ? error.message
+              : "Navigasi gagal."
+          );
+
+          homeButton.disabled =
+            false;
+
+          homeButton.textContent =
+            originalText;
+
+        }
+
+      }
+    );
+
+
+    /* ============================================================
+       REPORT BUTTON
+       ============================================================ */
+
+    reportButton.addEventListener(
+      "click",
+      async function() {
+
+        const originalText =
+          reportButton.textContent;
+
+        reportButton.disabled =
+          true;
+
+        reportButton.textContent =
+          "LOADING...";
+
+        clearDashboardError();
+
+        try {
+
+          await navigateTo(
+            "report"
+          );
+
+        } catch (error) {
+
+          console.error(
+            "REPORT NAVIGATION ERROR:",
+            error
+          );
+
+          showDashboardError(
+            error &&
+            error.message
+              ? error.message
+              : "Navigasi gagal."
+          );
+
+          reportButton.disabled =
+            false;
+
+          reportButton.textContent =
+            originalText;
+
+        }
+
+      }
+    );
+
+
+    /* ============================================================
+       LOGOUT
+       ============================================================ */
+
+    logoutButton.addEventListener(
+      "click",
+      function() {
+
+        registrations = [];
+
+        selectedIds.clear();
+
+        dashboardScreen.classList.add(
+          "hidden"
+        );
+
+        loginScreen.classList.remove(
+          "hidden"
+        );
+
+        loginPassword.value =
+          "";
+
+        clearDashboardError();
+
+        clearDashboardSuccess();
+
+        renderTable();
+
+      }
+    );
+
+
+    /* ============================================================
+       MESSAGE
+       ============================================================ */
+
+    function showDashboardError(message) {
+
+      dashboardError.textContent =
+        message;
+
+      dashboardError.classList.remove(
+        "hidden"
+      );
+
+    }
+
+
+    function clearDashboardError() {
+
+      dashboardError.textContent =
+        "";
+
+      dashboardError.classList.add(
+        "hidden"
+      );
+
+    }
+
+
+    function showDashboardSuccess(message) {
+
+      dashboardSuccess.textContent =
+        message;
+
+      dashboardSuccess.classList.remove(
+        "hidden"
+      );
+
+    }
+
+
+    function clearDashboardSuccess() {
+
+      dashboardSuccess.textContent =
+        "";
+
+      dashboardSuccess.classList.add(
+        "hidden"
+      );
+
+    }
+
+
+    /* ============================================================
+       DYNAMIC SERVICE REQUEST
+       ============================================================ */
+
+    async function dynamicService(
+      action,
+      options = {}
+    ) {
+
+      const method =
+        options.method || "GET";
+
+      const url =
+        DYNAMIC_SERVICE_URL +
+        "?action=" +
+        encodeURIComponent(action);
+
+      const fetchOptions = {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_PUBLISHABLE_KEY
+        }
+      };
+
+      if (
+        options.body !== undefined
+      ) {
+
+        fetchOptions.body =
+          JSON.stringify(options.body);
+
+      }
+
+      console.log(
+        "DYNAMIC SERVICE REQUEST:",
+        method,
+        url,
+        options.body || null
+      );
+
+      const response =
+        await fetch(
+          url,
+          fetchOptions
+        );
+
+      const raw =
+        await response.text();
+
+      console.log(
+        "DYNAMIC SERVICE RESPONSE:",
+        response.status,
+        raw
+      );
+
+      let data = null;
+
+      try {
+
+        data =
+          raw
+            ? JSON.parse(raw)
+            : null;
+
+      } catch (parseError) {
+
+        throw new Error(
+          "Response dynamic-service bukan JSON. HTTP " +
+          response.status +
+          ": " +
+          raw.slice(0, 500)
+        );
+
+      }
+
+      if (!response.ok) {
+
+        throw new Error(
+          data &&
+          (
+            data.message ||
+            data.detail
+          )
+            ? (
+                data.message ||
+                data.detail
+              )
+            : (
+                "HTTP " +
+                response.status
+              )
+        );
+
+      }
+
+      if (
+        data &&
+        data.success === false
+      ) {
+
+        throw new Error(
+          data.message ||
+          data.detail ||
+          "Dynamic service menolak request."
+        );
+
+      }
+
+      return data;
+
+    }
+
+
+    /* ============================================================
+       LOAD REGISTRATIONS
+       ============================================================ */
+
+    async function loadRegistrations() {
+
+      clearDashboardError();
+
+      clearDashboardSuccess();
+
+      refreshButton.disabled =
+        true;
+
+      refreshButton.textContent =
+        "LOADING...";
+
+      tableBody.innerHTML =
+        `
+          <tr>
+            <td colspan="8" class="table-message">
+              Loading registrations...
+            </td>
+          </tr>
+        `;
+
+      try {
+
+        const result =
+          await dynamicService(
+            "report"
+          );
+
+        console.log(
+          "REPORT RESULT:",
+          result
+        );
+
+        const data =
+          result &&
+          Array.isArray(
+            result.registrations
+          )
+            ? result.registrations
+            : [];
+
+        registrations =
+          data;
+
+        const validIds =
+          new Set(
+            registrations.map(
+              function(row) {
+
+                return String(
+                  row.id
+                );
+
+              }
+            )
+          );
+
+        selectedIds =
+          new Set(
+            Array.from(
+              selectedIds
+            ).filter(
+              function(id) {
+
+                return validIds.has(
+                  id
+                );
+
+              }
+            )
+          );
+
+        updateStatistics();
+
+        renderTable();
+
+        updateSelectionUI();
+
+      } catch (error) {
+
+        console.error(
+          "LOAD REGISTRATIONS ERROR:",
+          error
+        );
+
+        registrations = [];
+
+        selectedIds.clear();
+
+        updateStatistics();
+
+        renderTable();
+
+        updateSelectionUI();
+
+        showDashboardError(
+          error.message ||
+          "Gagal memuat registrasi."
+        );
+
+      } finally {
+
+        refreshButton.disabled =
+          false;
+
+        refreshButton.textContent =
+          "REFRESH";
+
+      }
+
+    }
+
+
+    /* ============================================================
+       STATISTICS
+       ============================================================ */
+
+    function updateStatistics() {
+
+      const total =
+        registrations.length;
+
+      const checkedIn =
+        registrations.filter(
+          function(row) {
+
+            return (
+              String(
+                row.pass_status || ""
+              ).toUpperCase() ===
+              "USED"
+            );
+
+          }
+        ).length;
+
+      const remaining =
+        total - checkedIn;
+
+      const reguler =
+        registrations.filter(
+          function(row) {
+
+            return (
+              String(
+                row.access_type || ""
+              ).toUpperCase() ===
+              "REGULER"
+            );
+
+          }
+        ).length;
+
+      const boldRiders =
+        registrations.filter(
+          function(row) {
+
+            return (
+              String(
+                row.access_type || ""
+              ).toUpperCase() ===
+              "BOLD RIDERS"
+            );
+
+          }
+        ).length;
+
+      document.getElementById(
+        "totalCount"
+      ).textContent =
+        total;
+
+      document.getElementById(
+        "checkedInCount"
+      ).textContent =
+        checkedIn;
+
+      document.getElementById(
+        "remainingCount"
+      ).textContent =
+        remaining;
+
+      document.getElementById(
+        "regulerCount"
+      ).textContent =
+        reguler;
+
+      document.getElementById(
+        "boldRidersCount"
+      ).textContent =
+        boldRiders;
+
+    }
+
+
+    /* ============================================================
+       FILTER
+       ============================================================ */
+
+    function getFilteredRegistrations() {
+
+      const search =
+        searchInput.value
+          .trim()
+          .toLowerCase();
+
+      const status =
+        statusFilter.value;
+
+      const access =
+        accessFilter.value;
+
+      return registrations.filter(
+        function(row) {
+
+          const name =
+            String(
+              row.name || ""
+            ).toLowerCase();
+
+          const whatsapp =
+            String(
+              row.whatsapp || ""
+            ).toLowerCase();
+
+          const passId =
+            String(
+              row.pass_id || ""
+            ).toLowerCase();
+
+          const rowStatus =
+            String(
+              row.pass_status || ""
+            ).toUpperCase();
+
+          const rowAccess =
+            String(
+              row.access_type || ""
+            ).toUpperCase();
+
+          const matchesSearch =
+            !search ||
+            name.includes(search) ||
+            whatsapp.includes(search) ||
+            passId.includes(search);
+
+          const matchesStatus =
+            status === "ALL" ||
+            rowStatus === status;
+
+          const matchesAccess =
+            access === "ALL" ||
+            rowAccess === access;
+
+          return (
+            matchesSearch &&
+            matchesStatus &&
+            matchesAccess
+          );
+
+        }
+      );
+
+    }
+
+
+    /* ============================================================
+       RENDER TABLE
+       ============================================================ */
+
+    function renderTable() {
+
+      const rows =
+        getFilteredRegistrations();
+
+      tableCount.textContent =
+        rows.length +
+        (
+          rows.length === 1
+            ? " record"
+            : " records"
+        );
+
+      if (rows.length === 0) {
+
+        tableBody.innerHTML =
+          `
+            <tr>
+              <td
+                colspan="9"
+                class="table-message"
+              >
+                Tidak ada data yang cocok.
+              </td>
+            </tr>
+          `;
+
+        selectAll.checked =
+          false;
+
+        return;
+
+      }
+
+      tableBody.innerHTML =
+        rows.map(
+          function(row) {
+
+            const id =
+              String(
+                row.id
+              );
+
+            const checked =
+              selectedIds.has(id)
+                ? "checked"
+                : "";
+
+            return `
+              <tr>
+
+                <td class="checkbox-cell">
+
+                  <input
+                    type="checkbox"
+                    class="row-checkbox"
+                    data-id="${escapeHtml(id)}"
+                    ${checked}
+                    aria-label="Select ${escapeHtml(
+                      row.name ||
+                      row.pass_id ||
+                      id
+                    )}"
+                  >
+
+                </td>
+
+                <td class="name-cell">
+                  ${escapeHtml(row.name)}
+                </td>
+
+                <td>
+                  ${escapeHtml(row.whatsapp)}
+                </td>
+
+                <td class="pass-id-cell">
+                  ${escapeHtml(row.pass_id)}
+                </td>
+
+                <td>
+                  ${accessBadge(row.access_type)}
+                </td>
+
+                <td>
+                  ${statusBadge(row.pass_status)}
+                </td>
+
+                <td>
+                  ${formatDate(row.created_at)}
+                </td>
+
+                <td>
+                  ${
+                    row.checked_in_at
+                      ? formatDate(
+                          row.checked_in_at
+                        )
+                      : '<span class="muted">—</span>'
+                  }
+                </td>
+
+              </tr>
+            `;
+
+          }
+        ).join("");
+
+      document
+        .querySelectorAll(
+          ".row-checkbox"
+        )
+        .forEach(
+          function(checkbox) {
+
+            checkbox.addEventListener(
+              "change",
+              function() {
+
+                const id =
+                  String(
+                    checkbox.dataset.id
+                  );
+
+                if (
+                  checkbox.checked
+                ) {
+
+                  selectedIds.add(
+                    id
+                  );
+
+                } else {
+
+                  selectedIds.delete(
+                    id
+                  );
+
+                }
+
+                updateSelectionUI();
+
+              }
+            );
+
+          }
+        );
+
+      updateSelectAllCheckbox();
+
+    }
+
+
+    /* ============================================================
+       SELECTION
+       ============================================================ */
+
+    function updateSelectionUI() {
+
+      const count =
+        selectedIds.size;
+
+      selectedInfo.textContent =
+        count +
+        " selected";
+
+      deleteSelectedButton.disabled =
+        count === 0;
+
+      updateSelectAllCheckbox();
+
+    }
+
+
+    function updateSelectAllCheckbox() {
+
+      const rows =
+        getFilteredRegistrations();
+
+      if (
+        rows.length === 0
+      ) {
+
+        selectAll.checked =
+          false;
+
+        selectAll.indeterminate =
+          false;
+
+        return;
+
+      }
+
+      const ids =
+        rows.map(
+          function(row) {
+
+            return String(
+              row.id
+            );
+
+          }
+        );
+
+      const selectedCount =
+        ids.filter(
+          function(id) {
+
+            return selectedIds.has(
+              id
+            );
+
+          }
+        ).length;
+
+      selectAll.checked =
+        selectedCount === ids.length;
+
+      selectAll.indeterminate =
+        selectedCount > 0 &&
+        selectedCount < ids.length;
+
+    }
+
+
+    selectAll.addEventListener(
+      "change",
+      function() {
+
+        const rows =
+          getFilteredRegistrations();
+
+        rows.forEach(
+          function(row) {
+
+            const id =
+              String(
+                row.id
+              );
+
+            if (
+              selectAll.checked
+            ) {
+
+              selectedIds.add(
+                id
+              );
+
+            } else {
+
+              selectedIds.delete(
+                id
+              );
+
+            }
+
+          }
+        );
+
+        renderTable();
+
+        updateSelectionUI();
+
+      }
+    );
+
+
+    selectAllButton.addEventListener(
+      "click",
+      function() {
+
+        const rows =
+          getFilteredRegistrations();
+
+        rows.forEach(
+          function(row) {
+
+            selectedIds.add(
+              String(
+                row.id
+              )
+            );
+
+          }
+        );
+
+        renderTable();
+
+        updateSelectionUI();
+
+      }
+    );
+
+
+    clearSelectionButton.addEventListener(
+      "click",
+      function() {
+
+        selectedIds.clear();
+
+        renderTable();
+
+        updateSelectionUI();
+
+      }
+    );
+
+
+    /* ============================================================
+       DELETE SELECTED
+       ============================================================ */
+
+    deleteSelectedButton.addEventListener(
+      "click",
+      async function() {
+
+        const ids =
+          Array.from(
+            selectedIds
+          );
+
+        if (
+          ids.length === 0
+        ) {
+
+          return;
+
+        }
+
+        const selectedRows =
+          registrations.filter(
+            function(row) {
+
+              return selectedIds.has(
+                String(
+                  row.id
+                )
+              );
+
+            }
+          );
+
+        const names =
+          selectedRows
+            .slice(0, 5)
+            .map(
+              function(row) {
+
+                return (
+                  row.name ||
+                  row.pass_id ||
+                  row.id
+                );
+
+              }
+            );
+
+        let confirmationText =
+          "Hapus " +
+          ids.length +
+          " registrasi terpilih?";
+
+        if (
+          names.length > 0
+        ) {
+
+          confirmationText +=
+            "\n\n" +
+            names.join("\n");
+
+        }
+
+        if (
+          selectedRows.length > 5
+        ) {
+
+          confirmationText +=
+            "\n... dan " +
+            (
+              selectedRows.length - 5
+            ) +
+            " lainnya.";
+
+        }
+
+        confirmationText +=
+          "\n\nData yang dihapus tidak dapat dikembalikan.";
+
+        const confirmed =
+          window.confirm(
+            confirmationText
+          );
+
+        if (!confirmed) {
+
+          return;
+
+        }
+
+        clearDashboardError();
+
+        clearDashboardSuccess();
+
+        deleteSelectedButton.disabled =
+          true;
+
+        deleteSelectedButton.textContent =
+          "DELETING...";
+
+        try {
+
+          const result =
+            await dynamicService(
+              "delete",
+              {
+                method: "POST",
+                body: {
+                  ids: ids
+                }
+              }
+            );
+
+          console.log(
+            "DELETE RESULT:",
+            result
+          );
+
+          const deletedCount =
+            Number(
+              result.deletedCount ??
+              result.count ??
+              ids.length
+            );
+
+          selectedIds.clear();
+
+          await loadRegistrations();
+
+          showDashboardSuccess(
+            "Berhasil menghapus " +
+            deletedCount +
+            " registrasi."
+          );
+
+        } catch (error) {
+
+          console.error(
+            "DELETE REGISTRATIONS ERROR:",
+            error
+          );
+
+          showDashboardError(
+            "Gagal menghapus registrasi.\n\n" +
+            (
+              error.message ||
+              "Unknown error."
+            )
+          );
+
+        } finally {
+
+          deleteSelectedButton.disabled =
+            selectedIds.size === 0;
+
+          deleteSelectedButton.textContent =
+            "DELETE SELECTED";
+
+          updateSelectionUI();
+
+        }
+
+      }
+    );
+
+
+    /* ============================================================
+       BADGES
+       ============================================================ */
+
+    function statusBadge(status) {
+
+      const value =
+        String(
+          status || ""
+        ).toUpperCase();
+
+      if (
+        value === "USED"
+      ) {
+
+        return `
+          <span class="badge badge-used">
+            USED
+          </span>
+        `;
+
+      }
+
+      return `
+        <span class="badge badge-unused">
+          ${escapeHtml(
+            value || "UNUSED"
+          )}
+        </span>
+      `;
+
+    }
+
+
+    function accessBadge(access) {
+
+      const value =
+        String(
+          access || ""
+        ).toUpperCase();
+
+      if (
+        value === "BOLD RIDERS"
+      ) {
+
+        return `
+          <span class="badge badge-bold">
+            BOLD RIDERS
+          </span>
+        `;
+
+      }
+
+      if (
+        value === "REGULER"
+      ) {
+
+        return `
+          <span class="badge badge-reguler">
+            REGULER
+          </span>
+        `;
+
+      }
+
+      return `
+        <span class="badge badge-reguler">
+          ${escapeHtml(
+            value || "—"
+          )}
+        </span>
+      `;
+
+    }
+
+
+    /* ============================================================
+       DATE
+       ============================================================ */
+
+    function formatDate(value) {
+
+      if (!value) {
+
+        return "—";
+
+      }
+
+      const date =
+        new Date(
+          value
+        );
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+
+        return escapeHtml(
+          value
+        );
+
+      }
+
+      return escapeHtml(
+        date.toLocaleString(
+          "id-ID",
+          {
+            dateStyle: "short",
+            timeStyle: "short"
+          }
+        )
+      );
+
+    }
+
+
+    /* ============================================================
+       HTML ESCAPE
+       ============================================================ */
+
+    function escapeHtml(value) {
+
+      return String(
+        value == null
+          ? ""
+          : value
+      )
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    /* ============================================================
+       REFRESH
+       ============================================================ */
+
+    refreshButton.addEventListener(
+      "click",
+      function() {
+
+        loadRegistrations();
+
+      }
+    );
+
+
+    /* ============================================================
+       LIVE SEARCH
+       ============================================================ */
+
+    searchInput.addEventListener(
+      "input",
+      function() {
+
+        renderTable();
+
+        updateSelectionUI();
+
+      }
+    );
+
+
+    statusFilter.addEventListener(
+      "change",
+      function() {
+
+        renderTable();
+
+        updateSelectionUI();
+
+      }
+    );
+
+
+    accessFilter.addEventListener(
+      "change",
+      function() {
+
+        renderTable();
+
+        updateSelectionUI();
+
+      }
+    );
+
+
+    /* ============================================================
+       START
+       ============================================================ */
+
+    renderTable();
+
+    updateStatistics();
+
+    updateSelectionUI();
+
+  </script>
+
+</body>
+</html>

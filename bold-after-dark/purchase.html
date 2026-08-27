@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BOLD AFTER DARK — PEMBELIAN MESRAN</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --red: #e00000;
+      --green: #20d96b;
+      --yellow: #e6c229;
+      --bg: #050505;
+      --card: #111111;
+      --card-2: #171717;
+      --border: #333333;
+      --text: #ffffff;
+      --muted: #999999;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top,
+          #250000 0%,
+          #0a0a0a 38%,
+          #000000 100%
+        );
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 4px;
+    }
+
+    .brand .white {
+      color: #ffffff;
+    }
+
+    .brand .red {
+      color: var(--red);
+    }
+
+    .subtitle {
+      margin-top: 7px;
+      color: #aaa;
+      font-size: 12px;
+      letter-spacing: 3px;
+    }
+
+    .card {
+      background: rgba(17, 17, 17, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.62);
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      margin-bottom: 18px;
+    }
+
+    .product-box {
+      border: 1px solid #333333;
+      border-radius: 12px;
+      background: #151515;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    .product-name {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+
+    .product-price {
+      color: #cccccc;
+      font-size: 13px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      color: #dddddd;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .required {
+      color: var(--red);
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 48px;
+      padding: 13px 14px;
+      border-radius: 9px;
+      border: 1px solid #444444;
+      background: #0d0d0d;
+      color: #ffffff;
+      outline: none;
+      font-size: 14px;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 2px rgba(224, 0, 0, 0.12);
+    }
+
+    input[type="file"] {
+      padding: 10px;
+      min-height: auto;
+    }
+
+    .field-help {
+      margin-top: 6px;
+      color: #777777;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .summary {
+      background: #151515;
+      border: 1px solid #333333;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 18px 0;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 9px;
+      font-size: 13px;
+    }
+
+    .summary-row:last-child {
+      margin-bottom: 0;
+      padding-top: 10px;
+      border-top: 1px solid #333333;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .payment-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .payment-item {
+      background: #151515;
+      border: 1px solid #333333;
+      border-radius: 10px;
+      padding: 13px;
+    }
+
+    .payment-label {
+      color: #888888;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+
+    .payment-number {
+      font-weight: 900;
+      font-size: 14px;
+      word-break: break-word;
+    }
+
+    .purchase-id-box {
+      background: #0c180f;
+      border: 1px solid #197a3f;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .purchase-id-label {
+      color: #888888;
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+    }
+
+    .purchase-id {
+      color: var(--green);
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .message {
+      display: none;
+      padding: 13px 14px;
+      margin-bottom: 16px;
+      border-radius: 9px;
+      font-size: 13px;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      background: #300000;
+      border: 1px solid var(--red);
+      color: #ff8888;
+    }
+
+    .message.success {
+      background: #062d16;
+      border: 1px solid #15934a;
+      color: #62eb98;
+    }
+
+    .message.info {
+      background: #1d1900;
+      border: 1px solid #a38c00;
+      color: #f0d44d;
+    }
+
+    button {
+      width: 100%;
+      min-height: 48px;
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--red);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #f00000;
+    }
+
+    .btn-dark {
+      background: #222222;
+      color: #ffffff;
+      border: 1px solid #444444;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .footer {
+      text-align: center;
+      color: #555555;
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+      }
+
+      .brand {
+        font-size: 23px;
+        letter-spacing: 3px;
+      }
+
+      .card {
+        padding: 17px;
+      }
+
+      .payment-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <div class="brand">
+        <span class="white">BOLD</span>
+        <span class="red"> AFTER </span>
+        <span class="white">DARK</span>
+      </div>
+
+      <div class="subtitle">
+        PEMBELIAN MESRAN
+      </div>
+    </div>
+
+    <div class="card">
+
+      <div id="messageBox" class="message"></div>
+
+      <div class="section-title">
+        BUAT PEMBELIAN
+      </div>
+
+      <div class="product-box">
+        <div class="product-name">
+          MESRAN — 1 BOTOL
+        </div>
+
+        <div class="product-price">
+          Rp20.000 / botol • 1 botol = 1 kupon
+        </div>
+      </div>
+
+      <form id="purchaseForm">
+
+        <div class="field">
+          <label for="buyerName">
+            Nama <span class="required">*</span>
+          </label>
+
+          <input
+            id="buyerName"
+            type="text"
+            required
+            autocomplete="name"
+          >
+        </div>
+
+        <div class="field">
+          <label for="whatsapp">
+            WhatsApp <span class="required">*</span>
+          </label>
+
+          <input
+            id="whatsapp"
+            type="tel"
+            required
+            autocomplete="tel"
+          >
+        </div>
+
+        <div class="field">
+          <label for="quantity">
+            Jumlah Botol <span class="required">*</span>
+          </label>
+
+          <input
+            id="quantity"
+            type="number"
+            min="1"
+            max="100"
+            step="1"
+            value="1"
+            required
+          >
+
+          <div class="field-help">
+            Setiap 1 botol yang pembayarannya disetujui akan mendapatkan 1 kupon sekali pakai.
+          </div>
+        </div>
+
+        <div class="summary">
+
+          <div class="summary-row">
+            <span>Harga per botol</span>
+            <strong>Rp20.000</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Jumlah</span>
+            <strong id="summaryQuantity">1 botol</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Total Pembayaran</span>
+            <strong id="summaryTotal">Rp20.000</strong>
+          </div>
+
+        </div>
+
+        <button
+          id="createPurchaseButton"
+          class="btn-primary"
+          type="submit"
+        >
+          BUAT ID PEMBELIAN
+        </button>
+
+      </form>
+
+    </div>
+
+
+    <div
+      id="paymentSection"
+      class="card hidden"
+    >
+
+      <div class="section-title">
+        PEMBAYARAN
+      </div>
+
+      <div class="purchase-id-box">
+        <div class="purchase-id-label">
+          ID PEMBELIAN
+        </div>
+
+        <div
+          id="purchaseIdDisplay"
+          class="purchase-id"
+        >
+          -
+        </div>
+      </div>
+
+      <div class="payment-grid">
+
+        <div class="payment-item">
+          <div class="payment-label">
+            ShopeePay / DANA / GoPay
+          </div>
+
+          <div class="payment-number">
+            089670149802
+          </div>
+        </div>
+
+        <div class="payment-item">
+          <div class="payment-label">
+            BCA
+          </div>
+
+          <div class="payment-number">
+            0970708995
+          </div>
+        </div>
+
+        <div class="payment-item">
+          <div class="payment-label">
+            BRI
+          </div>
+
+          <div class="payment-number">
+            683701037120537
+          </div>
+        </div>
+
+        <div class="payment-item">
+          <div class="payment-label">
+            SeaBank
+          </div>
+
+          <div class="payment-number">
+            901862783670
+          </div>
+        </div>
+
+      </div>
+
+      <div class="summary">
+        <div class="summary-row">
+          <span>Total yang harus dibayar</span>
+          <strong id="paymentTotal">Rp0</strong>
+        </div>
+      </div>
+
+      <div class="message info show">
+        Lakukan pembayaran sesuai total di atas, lalu kirim bukti pembayaran melalui form berikut.
+      </div>
+
+      <form id="proofForm">
+
+        <div class="field">
+          <label for="paymentMethod">
+            Metode Pembayaran <span class="required">*</span>
+          </label>
+
+          <select
+            id="paymentMethod"
+            required
+          >
+            <option value="">
+              Pilih metode pembayaran
+            </option>
+
+            <option value="SHOPEEPAY">
+              ShopeePay
+            </option>
+
+            <option value="DANA">
+              DANA
+            </option>
+
+            <option value="GOPAY">
+              GoPay
+            </option>
+
+            <option value="BCA">
+              BCA
+            </option>
+
+            <option value="BRI">
+              BRI
+            </option>
+
+            <option value="SEABANK">
+              SeaBank
+            </option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="proofFile">
+            Bukti Pembayaran <span class="required">*</span>
+          </label>
+
+          <input
+            id="proofFile"
+            type="file"
+            accept=".jpg,.jpeg,.png,.webp,.pdf,image/jpeg,image/png,image/webp,application/pdf"
+            required
+          >
+
+          <div class="field-help">
+            Format JPG, PNG, WEBP, atau PDF. Maksimal 5 MB.
+          </div>
+        </div>
+
+        <button
+          id="submitProofButton"
+          class="btn-primary"
+          type="submit"
+        >
+          SUBMIT BUKTI PEMBAYARAN
+        </button>
+
+      </form>
+
+    </div>
+
+
+    <div
+      id="pendingSection"
+      class="card hidden"
+    >
+
+      <div class="section-title">
+        MENUNGGU VERIFIKASI
+      </div>
+
+      <div class="message success show">
+        Bukti pembayaran berhasil dikirim. Pembayaran akan diverifikasi oleh admin. Kupon dibuat setelah pembayaran disetujui.
+      </div>
+
+      <div class="purchase-id-box">
+        <div class="purchase-id-label">
+          ID PEMBELIAN
+        </div>
+
+        <div
+          id="pendingPurchaseId"
+          class="purchase-id"
+        >
+          -
+        </div>
+      </div>
+
+      <button
+        id="newPurchaseButton"
+        class="btn-dark"
+        type="button"
+      >
+        BUAT PEMBELIAN BARU
+      </button>
+
+    </div>
+
+
+    <div class="footer">
+      BOLD AFTER DARK • PURCHASE
+    </div>
+
+  </div>
+
+
+  <script>
+    "use strict";
+
+    const PURCHASE_SERVICE_URL =
+      "https://yrvnmmascklkuzpjkwxn.supabase.co/functions/v1/purchase-service";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
+
+    const UNIT_PRICE = 20000;
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+
+    const purchaseForm =
+      document.getElementById("purchaseForm");
+
+    const proofForm =
+      document.getElementById("proofForm");
+
+    const buyerNameInput =
+      document.getElementById("buyerName");
+
+    const whatsappInput =
+      document.getElementById("whatsapp");
+
+    const quantityInput =
+      document.getElementById("quantity");
+
+    const summaryQuantity =
+      document.getElementById("summaryQuantity");
+
+    const summaryTotal =
+      document.getElementById("summaryTotal");
+
+    const createPurchaseButton =
+      document.getElementById("createPurchaseButton");
+
+    const paymentSection =
+      document.getElementById("paymentSection");
+
+    const purchaseIdDisplay =
+      document.getElementById("purchaseIdDisplay");
+
+    const paymentTotal =
+      document.getElementById("paymentTotal");
+
+    const paymentMethodInput =
+      document.getElementById("paymentMethod");
+
+    const proofFileInput =
+      document.getElementById("proofFile");
+
+    const submitProofButton =
+      document.getElementById("submitProofButton");
+
+    const pendingSection =
+      document.getElementById("pendingSection");
+
+    const pendingPurchaseId =
+      document.getElementById("pendingPurchaseId");
+
+    const newPurchaseButton =
+      document.getElementById("newPurchaseButton");
+
+    const messageBox =
+      document.getElementById("messageBox");
+
+
+    let currentPurchaseId = "";
+    let currentTotalAmount = 0;
+
+
+    function formatRupiah(value) {
+      return new Intl.NumberFormat(
+        "id-ID",
+        {
+          style: "currency",
+          currency: "IDR",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0
+        }
+      ).format(value);
+    }
+
+
+    function showMessage(type, message) {
+      messageBox.className =
+        "message show " + type;
+
+      messageBox.textContent =
+        message || "";
+    }
+
+
+    function hideMessage() {
+      messageBox.className =
+        "message";
+
+      messageBox.textContent =
+        "";
+    }
+
+
+    function updateSummary() {
+      let quantity =
+        Number(quantityInput.value);
+
+      if (
+        !Number.isInteger(quantity) ||
+        quantity < 1
+      ) {
+        quantity = 1;
+      }
+
+      if (quantity > 100) {
+        quantity = 100;
+      }
+
+      const total =
+        quantity * UNIT_PRICE;
+
+      summaryQuantity.textContent =
+        quantity + " botol";
+
+      summaryTotal.textContent =
+        formatRupiah(total);
+    }
+
+
+    async function createPurchase() {
+      hideMessage();
+
+      const buyerName =
+        buyerNameInput.value.trim();
+
+      const whatsapp =
+        whatsappInput.value.trim();
+
+      const quantity =
+        Number(quantityInput.value);
+
+      if (!buyerName) {
+        showMessage(
+          "error",
+          "Nama wajib diisi."
+        );
+
+        buyerNameInput.focus();
+        return;
+      }
+
+      if (!whatsapp) {
+        showMessage(
+          "error",
+          "WhatsApp wajib diisi."
+        );
+
+        whatsappInput.focus();
+        return;
+      }
+
+      if (
+        !Number.isInteger(quantity) ||
+        quantity < 1 ||
+        quantity > 100
+      ) {
+        showMessage(
+          "error",
+          "Jumlah pembelian harus 1 sampai 100 botol."
+        );
+
+        quantityInput.focus();
+        return;
+      }
+
+      createPurchaseButton.disabled =
+        true;
+
+      createPurchaseButton.textContent =
+        "MEMBUAT ID...";
+
+      try {
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=createPurchase",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type":
+                  "application/json",
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY
+              },
+              body:
+                JSON.stringify({
+                  buyerName,
+                  whatsapp,
+                  quantity
+                })
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data = null;
+
+        try {
+          data =
+            raw
+              ? JSON.parse(raw)
+              : null;
+        } catch {
+          throw new Error(
+            "Server mengembalikan response JSON yang tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "Gagal membuat ID pembelian."
+          );
+        }
+
+        currentPurchaseId =
+          String(
+            data.purchase &&
+            data.purchase.purchaseId
+              ? data.purchase.purchaseId
+              : ""
+          ).trim();
+
+        currentTotalAmount =
+          Number(
+            data.purchase &&
+            data.purchase.totalAmount
+              ? data.purchase.totalAmount
+              : quantity * UNIT_PRICE
+          );
+
+        if (!currentPurchaseId) {
+          throw new Error(
+            "Server tidak mengembalikan ID pembelian."
+          );
+        }
+
+        purchaseIdDisplay.textContent =
+          currentPurchaseId;
+
+        paymentTotal.textContent =
+          formatRupiah(
+            currentTotalAmount
+          );
+
+        paymentSection.classList.remove(
+          "hidden"
+        );
+
+        showMessage(
+          "success",
+          "ID pembelian berhasil dibuat. Silakan lakukan pembayaran."
+        );
+
+        paymentSection.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+      } catch (error) {
+        console.error(
+          "CREATE PURCHASE ERROR:",
+          error
+        );
+
+        showMessage(
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Tidak dapat terhubung ke server."
+        );
+
+      } finally {
+        createPurchaseButton.disabled =
+          false;
+
+        createPurchaseButton.textContent =
+          "BUAT ID PEMBELIAN";
+      }
+    }
+
+
+    async function submitPaymentProof() {
+      hideMessage();
+
+      if (!currentPurchaseId) {
+        showMessage(
+          "error",
+          "ID pembelian belum tersedia."
+        );
+
+        return;
+      }
+
+      const paymentMethod =
+        paymentMethodInput.value.trim();
+
+      const file =
+        proofFileInput.files &&
+        proofFileInput.files.length
+          ? proofFileInput.files[0]
+          : null;
+
+      if (!paymentMethod) {
+        showMessage(
+          "error",
+          "Silakan pilih metode pembayaran."
+        );
+
+        paymentMethodInput.focus();
+        return;
+      }
+
+      if (!file) {
+        showMessage(
+          "error",
+          "Silakan upload bukti pembayaran."
+        );
+
+        return;
+      }
+
+      if (
+        file.size <= 0 ||
+        file.size > MAX_FILE_SIZE
+      ) {
+        showMessage(
+          "error",
+          "Ukuran file maksimal 5 MB."
+        );
+
+        return;
+      }
+
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "application/pdf"
+      ];
+
+      if (
+        !allowedTypes.includes(
+          file.type
+        )
+      ) {
+        showMessage(
+          "error",
+          "Format file harus JPG, PNG, WEBP, atau PDF."
+        );
+
+        return;
+      }
+
+      submitProofButton.disabled =
+        true;
+
+      submitProofButton.textContent =
+        "MENGIRIM...";
+
+      try {
+        const formData =
+          new FormData();
+
+        formData.append(
+          "purchaseId",
+          currentPurchaseId
+        );
+
+        formData.append(
+          "paymentMethod",
+          paymentMethod
+        );
+
+        formData.append(
+          "proof",
+          file
+        );
+
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=submitPaymentProof",
+            {
+              method: "POST",
+              headers: {
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY
+              },
+              body:
+                formData
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data = null;
+
+        try {
+          data =
+            raw
+              ? JSON.parse(raw)
+              : null;
+        } catch {
+          throw new Error(
+            "Server mengembalikan response JSON yang tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "Gagal mengirim bukti pembayaran."
+          );
+        }
+
+        pendingPurchaseId.textContent =
+          currentPurchaseId;
+
+        paymentSection.classList.add(
+          "hidden"
+        );
+
+        pendingSection.classList.remove(
+          "hidden"
+        );
+
+        showMessage(
+          "success",
+          "Bukti pembayaran berhasil dikirim."
+        );
+
+        pendingSection.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+      } catch (error) {
+        console.error(
+          "SUBMIT PAYMENT PROOF ERROR:",
+          error
+        );
+
+        showMessage(
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Tidak dapat mengirim bukti pembayaran."
+        );
+
+      } finally {
+        submitProofButton.disabled =
+          false;
+
+        submitProofButton.textContent =
+          "SUBMIT BUKTI PEMBAYARAN";
+      }
+    }
+
+
+    function resetPurchasePage() {
+      currentPurchaseId = "";
+      currentTotalAmount = 0;
+
+      purchaseForm.reset();
+      proofForm.reset();
+
+      quantityInput.value = "1";
+
+      paymentSection.classList.add(
+        "hidden"
+      );
+
+      pendingSection.classList.add(
+        "hidden"
+      );
+
+      purchaseIdDisplay.textContent = "-";
+      pendingPurchaseId.textContent = "-";
+      paymentTotal.textContent = "Rp0";
+
+      hideMessage();
+      updateSummary();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+
+    quantityInput.addEventListener(
+      "input",
+      updateSummary
+    );
+
+
+    purchaseForm.addEventListener(
+      "submit",
+      async function(event) {
+        event.preventDefault();
+
+        await createPurchase();
+      }
+    );
+
+
+    proofForm.addEventListener(
+      "submit",
+      async function(event) {
+        event.preventDefault();
+
+        await submitPaymentProof();
+      }
+    );
+
+
+    newPurchaseButton.addEventListener(
+      "click",
+      resetPurchasePage
+    );
+
+
+    updateSummary();
+
+  </script>
+
+</body>
+</html>

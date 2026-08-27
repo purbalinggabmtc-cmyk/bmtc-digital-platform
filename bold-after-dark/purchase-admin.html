@@ -1,0 +1,2450 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BOLD AFTER DARK — VERIFIKASI PEMBAYARAN</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --red: #e00000;
+      --green: #20d96b;
+      --yellow: #e6c229;
+      --bg: #050505;
+      --card: #111111;
+      --card-2: #171717;
+      --border: #303030;
+      --text: #ffffff;
+      --muted: #999999;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top,
+          #260000 0%,
+          #0b0b0b 38%,
+          #050505 72%,
+          #000000 100%
+        );
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 20px;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1450px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 4px;
+    }
+
+    .brand .red {
+      color: var(--red);
+    }
+
+    .subtitle {
+      margin-top: 7px;
+      color: #aaa;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+    }
+
+    .card {
+      background: rgba(17, 17, 17, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 480px;
+      margin: 70px auto 0;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      color: #ddd;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      color: #fff;
+      background: #171717;
+      border: 1px solid #444;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 2px rgba(224, 0, 0, 0.12);
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .field-help {
+      margin-top: 6px;
+      color: #777;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .toolbar input,
+    .toolbar select {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .btn {
+      min-height: 44px;
+      padding: 11px 16px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .btn-red {
+      background: var(--red);
+      color: #fff;
+    }
+
+    .btn-dark {
+      background: #242424;
+      color: #fff;
+      border: 1px solid #444;
+    }
+
+    .btn-green {
+      background: #15934a;
+      color: #fff;
+    }
+
+    .btn-yellow {
+      background: #8a7200;
+      color: #fff;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .whatsapp-link {
+      display: none;
+      width: 100%;
+      min-height: 44px;
+      padding: 11px 16px;
+      margin-top: 10px;
+      border-radius: 8px;
+      background: #128c4a;
+      color: #ffffff;
+      text-decoration: none;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 22px;
+    }
+
+    .whatsapp-link.show {
+      display: block;
+    }
+
+    .whatsapp-link:hover {
+      background: #16a557;
+    }
+
+    .message {
+      display: none;
+      padding: 13px 14px;
+      margin-bottom: 15px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      background: #300000;
+      border: 1px solid #8c0000;
+      color: #ff8a8a;
+    }
+
+    .message.success {
+      background: #062d16;
+      border: 1px solid #15934a;
+      color: #65e99a;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .stat-label {
+      color: #888;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .table-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1250px;
+      border-collapse: collapse;
+    }
+
+    th {
+      padding: 12px 10px;
+      background: #191919;
+      color: #aaa;
+      border-bottom: 1px solid #3b3b3b;
+      font-size: 10px;
+      text-align: left;
+      letter-spacing: 0.7px;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #242424;
+      color: #ddd;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    tbody tr:hover td {
+      background: #181818;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .badge-pending {
+      background: rgba(230, 194, 41, 0.13);
+      color: #f0d44d;
+      border: 1px solid rgba(230, 194, 41, 0.4);
+    }
+
+    .badge-approved {
+      background: rgba(32, 217, 107, 0.12);
+      color: #62eb98;
+      border: 1px solid rgba(32, 217, 107, 0.38);
+    }
+
+    .badge-rejected {
+      background: rgba(224, 0, 0, 0.12);
+      color: #ff7777;
+      border: 1px solid rgba(224, 0, 0, 0.38);
+    }
+
+    .actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .actions .btn {
+      min-height: 34px;
+      padding: 8px 10px;
+      font-size: 10px;
+    }
+
+    .muted {
+      color: #777;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(0, 0, 0, 0.82);
+    }
+
+    .modal-card {
+      width: 100%;
+      max-width: 620px;
+      max-height: 92vh;
+      overflow-y: auto;
+      background: #111;
+      border: 1px solid #444;
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .modal-title {
+      font-size: 17px;
+      font-weight: 900;
+      margin-bottom: 15px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+      margin-bottom: 15px;
+    }
+
+    .detail-item {
+      background: #181818;
+      border: 1px solid #303030;
+      border-radius: 8px;
+      padding: 11px;
+    }
+
+    .detail-label {
+      color: #777;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .detail-value {
+      font-size: 12px;
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .proof-frame {
+      width: 100%;
+      min-height: 420px;
+      border: 1px solid #444;
+      border-radius: 8px;
+      background: #fff;
+      margin-bottom: 14px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .modal-actions .btn {
+      flex: 1;
+    }
+
+    .empty {
+      padding: 35px 20px;
+      text-align: center;
+      color: #777;
+    }
+
+    @media (max-width: 800px) {
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 12px;
+      }
+
+      .brand {
+        font-size: 22px;
+        letter-spacing: 2.5px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .toolbar {
+        flex-direction: column;
+      }
+
+      .toolbar input,
+      .toolbar select,
+      .toolbar .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <div class="brand">
+        BOLD <span class="red">AFTER</span> DARK
+      </div>
+
+      <div class="subtitle">
+        PAYMENT VERIFICATION
+      </div>
+    </div>
+
+
+    <section
+      id="secretScreen"
+      class="card login-card"
+    >
+      <div class="section-title">
+        ADMIN PAYMENT ACCESS
+      </div>
+
+      <div
+        id="secretMessage"
+        class="message"
+      ></div>
+
+      <div class="field">
+        <label for="adminSecretInput">
+          PURCHASE ADMIN SECRET
+        </label>
+
+        <input
+          id="adminSecretInput"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Masukkan admin secret"
+        >
+
+        <div class="field-help">
+          Secret hanya disimpan selama tab browser ini terbuka dan tidak ditulis ke source GitHub.
+        </div>
+      </div>
+
+      <button
+        id="enterDashboardButton"
+        class="btn btn-red btn-full"
+        type="button"
+      >
+        BUKA PAYMENT ADMIN
+      </button>
+    </section>
+
+
+    <section
+      id="dashboardScreen"
+      class="hidden"
+    >
+
+      <div
+        id="dashboardMessage"
+        class="message"
+      ></div>
+
+      <div class="toolbar">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Cari ID, nama, WhatsApp..."
+        >
+
+        <select id="statusFilter">
+          <option value="">ALL STATUS</option>
+          <option value="PENDING" selected>PENDING</option>
+          <option value="APPROVED">APPROVED</option>
+          <option value="REJECTED">REJECTED</option>
+        </select>
+
+        <button
+          id="refreshButton"
+          class="btn btn-red"
+          type="button"
+        >
+          REFRESH
+        </button>
+
+        <button
+          id="logoutButton"
+          class="btn btn-dark"
+          type="button"
+        >
+          LOGOUT
+        </button>
+
+      </div>
+
+
+      <div class="card">
+        <div class="section-title">
+          PRODUCT SETTINGS
+        </div>
+
+        <div
+          id="productSettingsMessage"
+          class="message"
+        ></div>
+
+        <div class="detail-grid">
+          <div class="field">
+            <label for="productNameInput">
+              Nama Produk
+            </label>
+
+            <input
+              id="productNameInput"
+              type="text"
+              placeholder="Contoh: MESRAN"
+            >
+          </div>
+
+          <div class="field">
+            <label for="unitPriceInput">
+              Harga per Satuan
+            </label>
+
+            <input
+              id="unitPriceInput"
+              type="number"
+              min="1"
+              step="1"
+              placeholder="Contoh: 20000"
+            >
+          </div>
+
+          <div class="field">
+            <label for="unitNameInput">
+              Satuan
+            </label>
+
+            <input
+              id="unitNameInput"
+              type="text"
+              placeholder="Contoh: botol"
+            >
+          </div>
+        </div>
+
+        <button
+          id="saveProductSettingsButton"
+          class="btn btn-red"
+          type="button"
+        >
+          SIMPAN PERUBAHAN PRODUK
+        </button>
+
+        <div class="field-help">
+          Perubahan akan dipakai untuk transaksi baru. Transaksi lama tetap menggunakan nama, harga, dan satuan saat transaksi dibuat.
+        </div>
+      </div>
+
+
+      <div class="stats">
+
+        <div class="stat">
+          <div class="stat-label">TOTAL</div>
+          <div id="totalCount" class="stat-value">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">PENDING</div>
+          <div id="pendingCount" class="stat-value">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">APPROVED</div>
+          <div id="approvedCount" class="stat-value">0</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">REJECTED</div>
+          <div id="rejectedCount" class="stat-value">0</div>
+        </div>
+
+      </div>
+
+
+      <div class="table-card">
+
+        <div
+          id="emptyState"
+          class="empty hidden"
+        >
+          Tidak ada data pembelian.
+        </div>
+
+        <div
+          id="tableWrapper"
+          class="table-wrapper"
+        >
+          <table>
+
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NAMA</th>
+                <th>WHATSAPP</th>
+                <th>JUMLAH</th>
+                <th>TOTAL</th>
+                <th>METODE</th>
+                <th>STATUS</th>
+                <th>BUKTI</th>
+                <th>CREATED</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+
+            <tbody id="purchaseTableBody"></tbody>
+
+          </table>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <div
+    id="reviewModal"
+    class="modal hidden"
+  >
+    <div class="modal-card">
+
+      <div class="modal-title">
+        VERIFIKASI PEMBAYARAN
+      </div>
+
+      <div
+        id="modalMessage"
+        class="message"
+      ></div>
+
+      <div class="detail-grid">
+
+        <div class="detail-item">
+          <div class="detail-label">ID Pembelian</div>
+          <div id="modalPurchaseId" class="detail-value">-</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">Nama</div>
+          <div id="modalBuyerName" class="detail-value">-</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">WhatsApp</div>
+          <div id="modalWhatsapp" class="detail-value">-</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">Jumlah</div>
+          <div id="modalQuantity" class="detail-value">-</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">Total</div>
+          <div id="modalTotal" class="detail-value">-</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">Metode</div>
+          <div id="modalPaymentMethod" class="detail-value">-</div>
+        </div>
+
+      </div>
+
+      <iframe
+        id="proofFrame"
+        class="proof-frame hidden"
+        title="Bukti Pembayaran"
+      ></iframe>
+
+      <div
+        id="noProofMessage"
+        class="message error hidden"
+      >
+        Bukti pembayaran belum tersedia.
+      </div>
+
+      <div class="field">
+        <label for="rejectionReason">
+          Alasan Penolakan
+        </label>
+
+        <textarea
+          id="rejectionReason"
+          placeholder="Wajib diisi jika pembayaran ditolak."
+        ></textarea>
+      </div>
+
+      <div class="modal-actions">
+
+        <button
+          id="approveButton"
+          class="btn btn-green"
+          type="button"
+        >
+          APPROVE
+        </button>
+
+        <button
+          id="rejectButton"
+          class="btn btn-yellow"
+          type="button"
+        >
+          REJECT
+        </button>
+
+        <button
+          id="closeModalButton"
+          class="btn btn-dark"
+          type="button"
+        >
+          TUTUP
+        </button>
+
+      </div>
+
+      <a
+        id="sendRaffleWhatsappLink"
+        class="whatsapp-link"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        KIRIM NOMOR UNDIAN VIA WHATSAPP
+      </a>
+
+    </div>
+  </div>
+
+
+  <script>
+    "use strict";
+
+    const SUPABASE_URL =
+      "https://yrvnmmascklkuzpjkwxn.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
+
+    const PURCHASE_SERVICE_URL =
+      SUPABASE_URL +
+      "/functions/v1/purchase-service";
+
+
+    const secretScreen =
+      document.getElementById("secretScreen");
+
+    const dashboardScreen =
+      document.getElementById("dashboardScreen");
+
+    const adminSecretInput =
+      document.getElementById("adminSecretInput");
+
+    const enterDashboardButton =
+      document.getElementById("enterDashboardButton");
+
+    const secretMessage =
+      document.getElementById("secretMessage");
+
+    const dashboardMessage =
+      document.getElementById("dashboardMessage");
+
+    const searchInput =
+      document.getElementById("searchInput");
+
+    const statusFilter =
+      document.getElementById("statusFilter");
+
+    const refreshButton =
+      document.getElementById("refreshButton");
+
+    const logoutButton =
+      document.getElementById("logoutButton");
+
+    const purchaseTableBody =
+      document.getElementById("purchaseTableBody");
+
+    const tableWrapper =
+      document.getElementById("tableWrapper");
+
+    const emptyState =
+      document.getElementById("emptyState");
+
+    const totalCount =
+      document.getElementById("totalCount");
+
+    const pendingCount =
+      document.getElementById("pendingCount");
+
+    const approvedCount =
+      document.getElementById("approvedCount");
+
+    const rejectedCount =
+      document.getElementById("rejectedCount");
+
+    const productSettingsMessage =
+      document.getElementById("productSettingsMessage");
+
+    const productNameInput =
+      document.getElementById("productNameInput");
+
+    const unitPriceInput =
+      document.getElementById("unitPriceInput");
+
+    const unitNameInput =
+      document.getElementById("unitNameInput");
+
+    const saveProductSettingsButton =
+      document.getElementById("saveProductSettingsButton");
+
+    const reviewModal =
+      document.getElementById("reviewModal");
+
+    const modalMessage =
+      document.getElementById("modalMessage");
+
+    const modalPurchaseId =
+      document.getElementById("modalPurchaseId");
+
+    const modalBuyerName =
+      document.getElementById("modalBuyerName");
+
+    const modalWhatsapp =
+      document.getElementById("modalWhatsapp");
+
+    const modalQuantity =
+      document.getElementById("modalQuantity");
+
+    const modalTotal =
+      document.getElementById("modalTotal");
+
+    const modalPaymentMethod =
+      document.getElementById("modalPaymentMethod");
+
+    const proofFrame =
+      document.getElementById("proofFrame");
+
+    const noProofMessage =
+      document.getElementById("noProofMessage");
+
+    const rejectionReason =
+      document.getElementById("rejectionReason");
+
+    const approveButton =
+      document.getElementById("approveButton");
+
+    const rejectButton =
+      document.getElementById("rejectButton");
+
+    const closeModalButton =
+      document.getElementById("closeModalButton");
+
+    const sendRaffleWhatsappLink =
+      document.getElementById("sendRaffleWhatsappLink");
+
+
+    let adminSecret =
+      sessionStorage.getItem(
+        "bad_purchase_admin_secret"
+      ) || "";
+
+    let purchases = [];
+
+    let currentPurchase = null;
+
+
+    function formatRupiah(value) {
+      return new Intl.NumberFormat(
+        "id-ID",
+        {
+          style: "currency",
+          currency: "IDR",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0
+        }
+      ).format(
+        Number(value || 0)
+      );
+    }
+
+
+    function formatDate(value) {
+      if (!value) {
+        return "-";
+      }
+
+      const date =
+        new Date(value);
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+        return String(value);
+      }
+
+      return date.toLocaleString(
+        "id-ID",
+        {
+          dateStyle: "short",
+          timeStyle: "medium"
+        }
+      );
+    }
+
+
+    function escapeHtml(value) {
+      return String(
+        value == null
+          ? ""
+          : value
+      )
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+
+    function showMessage(
+      element,
+      type,
+      message
+    ) {
+      element.className =
+        "message show " +
+        type;
+
+      element.textContent =
+        message || "";
+    }
+
+
+    function hideMessage(element) {
+      element.className =
+        "message";
+
+      element.textContent =
+        "";
+    }
+
+
+    function paymentLabel(row) {
+      if (
+        row.paymentAccount &&
+        row.paymentAccount.label
+      ) {
+        return row.paymentAccount.label;
+      }
+
+      return (
+        row.paymentMethod ||
+        "-"
+      );
+    }
+
+
+    function statusBadge(status) {
+      const value =
+        String(
+          status || ""
+        ).toUpperCase();
+
+      let className =
+        "badge-pending";
+
+      if (
+        value === "APPROVED"
+      ) {
+        className =
+          "badge-approved";
+      } else if (
+        value === "REJECTED"
+      ) {
+        className =
+          "badge-rejected";
+      }
+
+      return (
+        '<span class="badge ' +
+        className +
+        '">' +
+        escapeHtml(
+          value || "PENDING"
+        ) +
+        "</span>"
+      );
+    }
+
+
+    function updateStatistics() {
+      totalCount.textContent =
+        purchases.length;
+
+      pendingCount.textContent =
+        purchases.filter(
+          function(row) {
+            return (
+              row.paymentStatus ===
+              "PENDING"
+            );
+          }
+        ).length;
+
+      approvedCount.textContent =
+        purchases.filter(
+          function(row) {
+            return (
+              row.paymentStatus ===
+              "APPROVED"
+            );
+          }
+        ).length;
+
+      rejectedCount.textContent =
+        purchases.filter(
+          function(row) {
+            return (
+              row.paymentStatus ===
+              "REJECTED"
+            );
+          }
+        ).length;
+    }
+
+
+    function renderTable() {
+      purchaseTableBody.innerHTML =
+        "";
+
+      if (
+        !purchases ||
+        purchases.length === 0
+      ) {
+        tableWrapper.classList.add(
+          "hidden"
+        );
+
+        emptyState.classList.remove(
+          "hidden"
+        );
+
+        return;
+      }
+
+      emptyState.classList.add(
+        "hidden"
+      );
+
+      tableWrapper.classList.remove(
+        "hidden"
+      );
+
+      purchases.forEach(
+        function(row) {
+          const tr =
+            document.createElement(
+              "tr"
+            );
+
+          const proofButton =
+            row.paymentProofUrl
+              ? (
+                  '<a class="btn btn-dark" ' +
+                  'href="' +
+                  escapeHtml(
+                    row.paymentProofUrl
+                  ) +
+                  '" target="_blank" ' +
+                  'rel="noopener noreferrer">' +
+                  "BUKA" +
+                  "</a>"
+                )
+              : '<span class="muted">BELUM ADA</span>';
+
+          tr.innerHTML = `
+            <td>
+              <strong>
+                ${escapeHtml(row.purchaseId)}
+              </strong>
+            </td>
+
+            <td>
+              ${escapeHtml(row.buyerName)}
+            </td>
+
+            <td>
+              ${escapeHtml(row.whatsapp)}
+            </td>
+
+            <td>
+              ${escapeHtml(row.quantity)}
+              ${escapeHtml(row.unitName || "unit")}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                formatRupiah(row.totalAmount)
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                paymentLabel(row)
+              )}
+            </td>
+
+            <td>
+              ${statusBadge(
+                row.paymentStatus
+              )}
+            </td>
+
+            <td>
+              ${proofButton}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                formatDate(row.createdAt)
+              )}
+            </td>
+
+            <td>
+              <div class="actions">
+                <button
+                  type="button"
+                  class="btn btn-red review-button"
+                  data-purchase-id="${escapeHtml(
+                    row.purchaseId
+                  )}"
+                >
+                  REVIEW
+                </button>
+              </div>
+            </td>
+          `;
+
+          purchaseTableBody.appendChild(
+            tr
+          );
+        }
+      );
+
+      document
+        .querySelectorAll(
+          ".review-button"
+        )
+        .forEach(
+          function(button) {
+            button.addEventListener(
+              "click",
+              function() {
+                const purchaseId =
+                  button.getAttribute(
+                    "data-purchase-id"
+                  );
+
+                openReviewModal(
+                  purchaseId
+                );
+              }
+            );
+          }
+        );
+    }
+
+
+    async function loadProductSettings() {
+      hideMessage(
+        productSettingsMessage
+      );
+
+      try {
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=getProductSettings",
+            {
+              method: "GET",
+              cache: "no-store",
+              headers: {
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY
+              }
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Response konfigurasi produk tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true ||
+          !data.product
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "Gagal membaca konfigurasi produk."
+          );
+        }
+
+        productNameInput.value =
+          String(
+            data.product.productName || ""
+          );
+
+        unitPriceInput.value =
+          String(
+            data.product.unitPrice || ""
+          );
+
+        unitNameInput.value =
+          String(
+            data.product.unitName || ""
+          );
+
+      } catch (error) {
+        console.error(
+          "LOAD PRODUCT SETTINGS ERROR:",
+          error
+        );
+
+        showMessage(
+          productSettingsMessage,
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Tidak dapat memuat konfigurasi produk."
+        );
+      }
+    }
+
+
+    async function saveProductSettings() {
+      hideMessage(
+        productSettingsMessage
+      );
+
+      const productName =
+        productNameInput.value.trim();
+
+      const unitName =
+        unitNameInput.value.trim();
+
+      const unitPrice =
+        Number(
+          unitPriceInput.value
+        );
+
+      if (!productName) {
+        showMessage(
+          productSettingsMessage,
+          "error",
+          "Nama produk wajib diisi."
+        );
+
+        productNameInput.focus();
+        return;
+      }
+
+      if (
+        !Number.isInteger(
+          unitPrice
+        ) ||
+        unitPrice <= 0
+      ) {
+        showMessage(
+          productSettingsMessage,
+          "error",
+          "Harga produk harus berupa bilangan bulat lebih dari 0."
+        );
+
+        unitPriceInput.focus();
+        return;
+      }
+
+      if (!unitName) {
+        showMessage(
+          productSettingsMessage,
+          "error",
+          "Satuan produk wajib diisi."
+        );
+
+        unitNameInput.focus();
+        return;
+      }
+
+      saveProductSettingsButton.disabled =
+        true;
+
+      saveProductSettingsButton.textContent =
+        "MENYIMPAN...";
+
+      try {
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=adminUpdateProductSettings",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type":
+                  "application/json",
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY,
+                "x-admin-secret":
+                  adminSecret
+              },
+              body:
+                JSON.stringify({
+                  productName,
+                  unitPrice,
+                  unitName
+                })
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Server mengembalikan response tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "Gagal menyimpan konfigurasi produk."
+          );
+        }
+
+        productNameInput.value =
+          String(
+            data.product &&
+            data.product.productName
+              ? data.product.productName
+              : productName
+          );
+
+        unitPriceInput.value =
+          String(
+            data.product &&
+            data.product.unitPrice
+              ? data.product.unitPrice
+              : unitPrice
+          );
+
+        unitNameInput.value =
+          String(
+            data.product &&
+            data.product.unitName
+              ? data.product.unitName
+              : unitName
+          );
+
+        showMessage(
+          productSettingsMessage,
+          "success",
+          "Konfigurasi produk berhasil diperbarui."
+        );
+
+      } catch (error) {
+        console.error(
+          "SAVE PRODUCT SETTINGS ERROR:",
+          error
+        );
+
+        showMessage(
+          productSettingsMessage,
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Konfigurasi produk gagal disimpan."
+        );
+
+      } finally {
+        saveProductSettingsButton.disabled =
+          false;
+
+        saveProductSettingsButton.textContent =
+          "SIMPAN PERUBAHAN PRODUK";
+      }
+    }
+
+
+    async function loadPurchases() {
+      hideMessage(
+        dashboardMessage
+      );
+
+      refreshButton.disabled =
+        true;
+
+      refreshButton.textContent =
+        "LOADING...";
+
+      try {
+        const params =
+          new URLSearchParams();
+
+        params.set(
+          "action",
+          "adminListPurchases"
+        );
+
+        const status =
+          statusFilter.value.trim();
+
+        const search =
+          searchInput.value.trim();
+
+        if (status) {
+          params.set(
+            "status",
+            status
+          );
+        }
+
+        if (search) {
+          params.set(
+            "search",
+            search
+          );
+        }
+
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?" +
+            params.toString(),
+            {
+              method: "GET",
+              cache: "no-store",
+              headers: {
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY,
+                "x-admin-secret":
+                  adminSecret
+              }
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Server mengembalikan response JSON yang tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "Gagal mengambil data pembayaran."
+          );
+        }
+
+        purchases =
+          Array.isArray(
+            data.purchases
+          )
+            ? data.purchases
+            : [];
+
+        updateStatistics();
+        renderTable();
+
+      } catch (error) {
+        console.error(
+          "PAYMENT ADMIN LOAD ERROR:",
+          error
+        );
+
+        purchases = [];
+
+        updateStatistics();
+        renderTable();
+
+        showMessage(
+          dashboardMessage,
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Tidak dapat mengambil data pembayaran."
+        );
+
+        if (
+          error &&
+          String(
+            error.message || ""
+          ).toLowerCase()
+            .includes("ditolak")
+        ) {
+          logoutAdmin();
+        }
+
+      } finally {
+        refreshButton.disabled =
+          false;
+
+        refreshButton.textContent =
+          "REFRESH";
+      }
+    }
+
+
+    function normalizeWhatsappForLink(
+      value
+    ) {
+      let number =
+        String(
+          value || ""
+        ).replace(
+          /\D/g,
+          ""
+        );
+
+      if (!number) {
+        return "";
+      }
+
+      if (
+        number.startsWith("0")
+      ) {
+        number =
+          "62" +
+          number.slice(1);
+      } else if (
+        number.startsWith("8")
+      ) {
+        number =
+          "62" +
+          number;
+      }
+
+      return number;
+    }
+
+
+    function buildRaffleWhatsappMessage(
+      purchase,
+      coupons
+    ) {
+      const numbers =
+        Array.isArray(coupons)
+          ? coupons
+              .map(
+                function(coupon) {
+                  return String(
+                    coupon.coupon_code || ""
+                  ).trim();
+                }
+              )
+              .filter(Boolean)
+          : [];
+
+      const lineBreak =
+        String.fromCharCode(10);
+
+      return [
+        "Halo " +
+          (
+            purchase.buyerName ||
+            "Peserta"
+          ) +
+          ",",
+        "",
+        "Pembayaran BOLD AFTER DARK Anda telah disetujui.",
+        "",
+        "ID Pembelian: " +
+          (
+            purchase.purchaseId ||
+            "-"
+          ),
+        "Jumlah: " +
+          (
+            purchase.quantity ||
+            0
+          ) +
+          " " +
+          (
+            purchase.unitName ||
+            "unit"
+          ) +
+          " " +
+          (
+            purchase.productName ||
+            "Produk"
+          ),
+        "",
+        "Nomor Undian:",
+        numbers.length
+          ? numbers.join(lineBreak)
+          : "-",
+        "",
+        "Simpan pesan ini sebagai bukti nomor undian Anda.",
+        "",
+        "Terima kasih."
+      ].join(lineBreak);
+    }
+
+
+    function prepareRaffleWhatsappLink(
+      purchase,
+      coupons
+    ) {
+      const phone =
+        normalizeWhatsappForLink(
+          purchase.whatsapp
+        );
+
+      const numbers =
+        Array.isArray(coupons)
+          ? coupons.filter(
+              function(coupon) {
+                return String(
+                  coupon.coupon_code || ""
+                ).trim();
+              }
+            )
+          : [];
+
+      if (
+        !phone ||
+        numbers.length === 0
+      ) {
+        sendRaffleWhatsappLink.classList.remove(
+          "show"
+        );
+
+        sendRaffleWhatsappLink.href =
+          "#";
+
+        return;
+      }
+
+      const message =
+        buildRaffleWhatsappMessage(
+          purchase,
+          numbers
+        );
+
+      sendRaffleWhatsappLink.href =
+        "https://wa.me/" +
+        phone +
+        "?text=" +
+        encodeURIComponent(message);
+
+      sendRaffleWhatsappLink.classList.add(
+        "show"
+      );
+    }
+
+
+    function openReviewModal(
+      purchaseId
+    ) {
+      currentPurchase =
+        purchases.find(
+          function(row) {
+            return (
+              row.purchaseId ===
+              purchaseId
+            );
+          }
+        ) || null;
+
+      if (!currentPurchase) {
+        showMessage(
+          dashboardMessage,
+          "error",
+          "Data pembelian tidak ditemukan."
+        );
+        return;
+      }
+
+      hideMessage(
+        modalMessage
+      );
+
+      sendRaffleWhatsappLink.classList.remove(
+        "show"
+      );
+
+      sendRaffleWhatsappLink.href =
+        "#";
+
+      rejectionReason.value =
+        currentPurchase.rejectionReason ||
+        "";
+
+      modalPurchaseId.textContent =
+        currentPurchase.purchaseId ||
+        "-";
+
+      modalBuyerName.textContent =
+        currentPurchase.buyerName ||
+        "-";
+
+      modalWhatsapp.textContent =
+        currentPurchase.whatsapp ||
+        "-";
+
+      modalQuantity.textContent =
+        (
+          currentPurchase.quantity ||
+          0
+        ) +
+        " " +
+        (
+          currentPurchase.unitName ||
+          "unit"
+        );
+
+      modalTotal.textContent =
+        formatRupiah(
+          currentPurchase.totalAmount
+        );
+
+      modalPaymentMethod.textContent =
+        paymentLabel(
+          currentPurchase
+        );
+
+      if (
+        currentPurchase.paymentProofUrl
+      ) {
+        proofFrame.src =
+          currentPurchase.paymentProofUrl;
+
+        proofFrame.classList.remove(
+          "hidden"
+        );
+
+        noProofMessage.classList.add(
+          "hidden"
+        );
+      } else {
+        proofFrame.removeAttribute(
+          "src"
+        );
+
+        proofFrame.classList.add(
+          "hidden"
+        );
+
+        noProofMessage.classList.remove(
+          "hidden"
+        );
+      }
+
+      const isApproved =
+        currentPurchase.paymentStatus ===
+        "APPROVED";
+
+      approveButton.disabled =
+        isApproved;
+
+      rejectButton.disabled =
+        isApproved;
+
+      reviewModal.classList.remove(
+        "hidden"
+      );
+
+      if (isApproved) {
+        loadApprovedCouponsForWhatsapp(
+          currentPurchase
+        );
+      }
+    }
+
+
+    async function loadApprovedCouponsForWhatsapp(
+      purchase
+    ) {
+      try {
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=getPurchase&purchaseId=" +
+            encodeURIComponent(
+              purchase.purchaseId
+            ),
+            {
+              method: "GET",
+              cache: "no-store",
+              headers: {
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY
+              }
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          return;
+        }
+
+        if (
+          response.ok &&
+          data &&
+          data.success === true
+        ) {
+          prepareRaffleWhatsappLink(
+            purchase,
+            data.coupons || []
+          );
+        }
+
+      } catch (error) {
+        console.warn(
+          "LOAD APPROVED COUPONS ERROR:",
+          error
+        );
+      }
+    }
+
+
+    function closeReviewModal() {
+      currentPurchase =
+        null;
+
+      proofFrame.removeAttribute(
+        "src"
+      );
+
+      reviewModal.classList.add(
+        "hidden"
+      );
+
+      hideMessage(
+        modalMessage
+      );
+
+      sendRaffleWhatsappLink.classList.remove(
+        "show"
+      );
+
+      sendRaffleWhatsappLink.href =
+        "#";
+    }
+
+
+    async function reviewPurchase(
+      decision
+    ) {
+      if (!currentPurchase) {
+        return;
+      }
+
+      const reason =
+        rejectionReason.value.trim();
+
+      if (
+        decision === "REJECT" &&
+        !reason
+      ) {
+        showMessage(
+          modalMessage,
+          "error",
+          "Alasan penolakan wajib diisi."
+        );
+
+        rejectionReason.focus();
+
+        return;
+      }
+
+      approveButton.disabled =
+        true;
+
+      rejectButton.disabled =
+        true;
+
+      try {
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=adminReviewPurchase",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type":
+                  "application/json",
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY,
+                "x-admin-secret":
+                  adminSecret
+              },
+              body:
+                JSON.stringify({
+                  purchaseId:
+                    currentPurchase.purchaseId,
+                  decision,
+                  rejectionReason:
+                    reason,
+                  verifiedBy:
+                    "PAYMENT ADMIN"
+                })
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Server mengembalikan response JSON yang tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "Verifikasi pembayaran gagal."
+          );
+        }
+
+        if (
+          decision === "APPROVE"
+        ) {
+          showMessage(
+            modalMessage,
+            "success",
+            "Pembayaran disetujui. Nomor undian berhasil dibuat."
+          );
+
+          prepareRaffleWhatsappLink(
+            currentPurchase,
+            data.coupons || []
+          );
+        } else {
+          showMessage(
+            modalMessage,
+            "success",
+            "Pembayaran ditolak."
+          );
+        }
+
+        await loadPurchases();
+
+        if (
+          decision !== "APPROVE"
+        ) {
+          setTimeout(
+            closeReviewModal,
+            800
+          );
+        }
+
+      } catch (error) {
+        console.error(
+          "PAYMENT REVIEW ERROR:",
+          error
+        );
+
+        showMessage(
+          modalMessage,
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Verifikasi pembayaran gagal."
+        );
+
+      } finally {
+        if (
+          currentPurchase &&
+          currentPurchase.paymentStatus !==
+            "APPROVED"
+        ) {
+          approveButton.disabled =
+            false;
+
+          rejectButton.disabled =
+            false;
+        }
+      }
+    }
+
+
+    async function enterDashboard() {
+      const value =
+        adminSecretInput.value.trim();
+
+      if (!value) {
+        showMessage(
+          secretMessage,
+          "error",
+          "Admin secret wajib diisi."
+        );
+        return;
+      }
+
+      adminSecret =
+        value;
+
+      enterDashboardButton.disabled =
+        true;
+
+      enterDashboardButton.textContent =
+        "MEMERIKSA...";
+
+      try {
+        sessionStorage.setItem(
+          "bad_purchase_admin_secret",
+          adminSecret
+        );
+
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=adminListPurchases&status=PENDING",
+            {
+              method: "GET",
+              cache: "no-store",
+              headers: {
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY,
+                "x-admin-secret":
+                  adminSecret
+              }
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Server mengembalikan response tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            data.message
+              ? data.message
+              : "Admin secret tidak valid."
+          );
+        }
+
+        purchases =
+          Array.isArray(
+            data.purchases
+          )
+            ? data.purchases
+            : [];
+
+        secretScreen.classList.add(
+          "hidden"
+        );
+
+        dashboardScreen.classList.remove(
+          "hidden"
+        );
+
+        hideMessage(
+          secretMessage
+        );
+
+        updateStatistics();
+        renderTable();
+
+        await loadProductSettings();
+
+      } catch (error) {
+        sessionStorage.removeItem(
+          "bad_purchase_admin_secret"
+        );
+
+        adminSecret =
+          "";
+
+        showMessage(
+          secretMessage,
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Admin secret tidak valid."
+        );
+
+      } finally {
+        enterDashboardButton.disabled =
+          false;
+
+        enterDashboardButton.textContent =
+          "BUKA PAYMENT ADMIN";
+      }
+    }
+
+
+    function logoutAdmin() {
+      sessionStorage.removeItem(
+        "bad_purchase_admin_secret"
+      );
+
+      adminSecret =
+        "";
+
+      purchases = [];
+
+      dashboardScreen.classList.add(
+        "hidden"
+      );
+
+      secretScreen.classList.remove(
+        "hidden"
+      );
+
+      adminSecretInput.value =
+        "";
+
+      updateStatistics();
+      renderTable();
+    }
+
+
+    enterDashboardButton.addEventListener(
+      "click",
+      enterDashboard
+    );
+
+
+    adminSecretInput.addEventListener(
+      "keydown",
+      function(event) {
+        if (
+          event.key === "Enter"
+        ) {
+          event.preventDefault();
+          enterDashboard();
+        }
+      }
+    );
+
+
+    saveProductSettingsButton.addEventListener(
+      "click",
+      saveProductSettings
+    );
+
+
+    refreshButton.addEventListener(
+      "click",
+      loadPurchases
+    );
+
+
+    statusFilter.addEventListener(
+      "change",
+      loadPurchases
+    );
+
+
+    searchInput.addEventListener(
+      "keydown",
+      function(event) {
+        if (
+          event.key === "Enter"
+        ) {
+          event.preventDefault();
+          loadPurchases();
+        }
+      }
+    );
+
+
+    logoutButton.addEventListener(
+      "click",
+      logoutAdmin
+    );
+
+
+    approveButton.addEventListener(
+      "click",
+      function() {
+        reviewPurchase(
+          "APPROVE"
+        );
+      }
+    );
+
+
+    rejectButton.addEventListener(
+      "click",
+      function() {
+        reviewPurchase(
+          "REJECT"
+        );
+      }
+    );
+
+
+    closeModalButton.addEventListener(
+      "click",
+      closeReviewModal
+    );
+
+
+    reviewModal.addEventListener(
+      "click",
+      function(event) {
+        if (
+          event.target ===
+          reviewModal
+        ) {
+          closeReviewModal();
+        }
+      }
+    );
+
+
+    if (adminSecret) {
+      adminSecretInput.value =
+        adminSecret;
+
+      enterDashboard();
+    }
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,2828 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>BOLD AFTER DARK — REPORT</title>
+
+  <!-- =========================================================
+       NAVIGATION CONFIG
+       ========================================================= -->
+
+  <script src="https://boldafterdark.my.id/config/navigation.js"></script>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #050505;
+      --black-card: #111111;
+      --white: #ffffff;
+      --gray: #999999;
+      --red: #e00000;
+      --red-soft: rgba(224, 0, 0, 0.12);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      background:
+        radial-gradient(
+          circle at top,
+          #260000 0%,
+          #0b0b0b 38%,
+          #050505 72%,
+          #000000 100%
+        );
+
+      color: var(--white);
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      padding: 24px;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1450px;
+      margin: 0 auto;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .brand {
+      font-size: 31px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      color: #ffffff;
+    }
+
+    .brand .bold {
+      color: #ffffff;
+    }
+
+    .brand .after {
+      color: #e00000;
+    }
+
+    .brand .dark {
+      color: #ffffff;
+    }
+
+    .subtitle {
+      margin-top: 7px;
+      color: #aaa;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 4px;
+    }
+
+    .header-line {
+      width: 80px;
+      height: 3px;
+      margin: 13px auto 0;
+      background: var(--red);
+      border-radius: 5px;
+    }
+
+    /* =========================================================
+       TOOLBAR
+       ========================================================= */
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      margin-bottom: 18px;
+      padding: 15px;
+
+      background: rgba(17, 17, 17, 0.95);
+
+      border:
+        1px solid
+        #2d2d2d;
+
+      border-radius: 13px;
+    }
+
+    .toolbar input,
+    .toolbar select {
+      flex: 1;
+
+      min-width: 190px;
+
+      padding: 13px 14px;
+
+      background: #171717;
+      color: var(--white);
+
+      border:
+        1px solid
+        #3a3a3a;
+
+      border-radius: 8px;
+
+      outline: none;
+    }
+
+    .toolbar input::placeholder {
+      color: #777;
+    }
+
+    .toolbar input:focus,
+    .toolbar select:focus {
+      border-color: var(--red);
+
+      box-shadow:
+        0 0 0 2px
+        rgba(224, 0, 0, 0.12);
+    }
+
+    .toolbar select {
+      flex: 0 1 170px;
+    }
+
+    .btn {
+      padding: 13px 18px;
+
+      border-radius: 8px;
+
+      font-weight: 800;
+
+      border: none;
+
+      white-space: nowrap;
+    }
+
+    .btn-red {
+      background: var(--red);
+      color: var(--white);
+    }
+
+    .btn-red:hover {
+      background: #ff0000;
+    }
+
+    .btn-dark {
+      background: #222;
+      color: var(--white);
+
+      border:
+        1px solid
+        #444;
+    }
+
+    .btn-dark:hover {
+      background: #2d2d2d;
+    }
+
+    .btn-outline-red {
+      background: transparent;
+      color: var(--white);
+
+      border:
+        1px solid
+        var(--red);
+    }
+
+    .btn-outline-red:hover {
+      background: var(--red-soft);
+    }
+
+    /* =========================================================
+       ERROR
+       ========================================================= */
+
+    .error {
+      display: none;
+
+      margin-bottom: 18px;
+
+      padding: 14px 16px;
+
+      background:
+        rgba(224, 0, 0, 0.1);
+
+      border:
+        1px solid
+        rgba(224, 0, 0, 0.45);
+
+      border-left:
+        4px solid
+        var(--red);
+
+      border-radius: 9px;
+
+      color: #ff9a9a;
+
+      font-size: 13px;
+
+      line-height: 1.5;
+
+      white-space: pre-wrap;
+    }
+
+    /* =========================================================
+       NAVIGATION ERROR
+       ========================================================= */
+
+    .navigation-error {
+      display: none;
+
+      margin-bottom: 18px;
+
+      padding: 12px 15px;
+
+      background:
+        rgba(224, 0, 0, 0.1);
+
+      border:
+        1px solid
+        rgba(224, 0, 0, 0.4);
+
+      border-left:
+        4px solid
+        var(--red);
+
+      border-radius: 9px;
+
+      color: #ff9a9a;
+
+      font-size: 13px;
+
+      line-height: 1.5;
+    }
+
+    /* =========================================================
+       STATISTICS
+       ========================================================= */
+
+    .stats {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          5,
+          minmax(0, 1fr)
+        );
+
+      gap: 12px;
+
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      position: relative;
+
+      overflow: hidden;
+
+      background:
+        var(--black-card);
+
+      border:
+        1px solid
+        #303030;
+
+      border-radius: 13px;
+
+      padding: 18px;
+
+      text-align: center;
+    }
+
+    .stat::after {
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      height: 2px;
+
+      background:
+        var(--red);
+    }
+
+    .stat-label {
+      color: #999;
+
+      font-size: 11px;
+
+      font-weight: 800;
+
+      letter-spacing: 1.5px;
+
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      color: var(--white);
+
+      font-size: 30px;
+
+      font-weight: 900;
+    }
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .table-card {
+      background:
+        var(--black-card);
+
+      border:
+        1px solid
+        #303030;
+
+      border-radius: 14px;
+
+      overflow: hidden;
+    }
+
+    .table-header {
+      display: flex;
+
+      justify-content:
+        space-between;
+
+      align-items: center;
+
+      gap: 15px;
+
+      padding:
+        16px 18px;
+
+      border-bottom:
+        1px solid
+        #2d2d2d;
+    }
+
+    .table-title {
+      font-size: 15px;
+
+      font-weight: 900;
+
+      letter-spacing: 1px;
+    }
+
+    .table-subtitle {
+      color: #777;
+
+      font-size: 11px;
+    }
+
+    .table-wrapper {
+      width: 100%;
+
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+
+      min-width: 1200px;
+
+      border-collapse:
+        collapse;
+    }
+
+    th {
+      background: #191919;
+
+      color: #aaa;
+
+      font-size: 10px;
+
+      text-align: left;
+
+      padding:
+        13px 10px;
+
+      border-bottom:
+        1px solid
+        #3b3b3b;
+
+      white-space: nowrap;
+
+      letter-spacing: 1px;
+    }
+
+    td {
+      padding:
+        13px 10px;
+
+      border-bottom:
+        1px solid
+        #242424;
+
+      font-size: 13px;
+
+      color: #ddd;
+
+      vertical-align: middle;
+    }
+
+    tbody tr {
+      transition:
+        background
+        0.15s ease;
+    }
+
+    tbody tr:hover td {
+      background: #181818;
+    }
+
+    /* =========================================================
+       USED
+       ========================================================= */
+
+    tr.used-row td {
+      background:
+        rgba(224, 0, 0, 0.08);
+
+      color: #f5caca;
+
+      border-top:
+        1px solid
+        rgba(224, 0, 0, 0.35);
+
+      border-bottom:
+        1px solid
+        rgba(224, 0, 0, 0.35);
+    }
+
+    tr.used-row:hover td {
+      background:
+        rgba(224, 0, 0, 0.15);
+    }
+
+    tr.used-row td:first-child {
+      border-left:
+        4px solid
+        var(--red);
+    }
+
+    /* =========================================================
+       UNUSED
+       ========================================================= */
+
+    tr.unused-row td {
+      background: #111;
+      color: #ddd;
+    }
+
+    tr.unused-row:hover td {
+      background: #181818;
+    }
+
+    /* =========================================================
+       STATUS
+       ========================================================= */
+
+    .status {
+      display: inline-block;
+
+      padding:
+        5px 9px;
+
+      border-radius:
+        999px;
+
+      font-size: 10px;
+
+      font-weight: 900;
+
+      letter-spacing: 0.6px;
+
+      white-space: nowrap;
+    }
+
+    .status.used {
+      background:
+        rgba(224, 0, 0, 0.14);
+
+      color: #ff7777;
+
+      border:
+        1px solid
+        rgba(224, 0, 0, 0.5);
+    }
+
+    .status.unused {
+      background:
+        rgba(255, 255, 255, 0.07);
+
+      color: #fff;
+
+      border:
+        1px solid
+        #555;
+    }
+
+    .status.cancelled {
+      background:
+        rgba(255, 255, 255, 0.06);
+
+      color: #aaa;
+
+      border:
+        1px solid
+        #444;
+    }
+
+    .status.unknown {
+      background: #202020;
+
+      color: #888;
+
+      border:
+        1px solid
+        #444;
+    }
+
+    /* =========================================================
+       ACCESS
+       ========================================================= */
+
+    .access {
+      display: inline-block;
+
+      padding:
+        5px 9px;
+
+      border-radius:
+        999px;
+
+      font-size: 10px;
+
+      font-weight: 900;
+
+      letter-spacing: 0.5px;
+    }
+
+    .access.reguler {
+      background:
+        rgba(255, 255, 255, 0.07);
+
+      color: #fff;
+
+      border:
+        1px solid
+        #555;
+    }
+
+    .access.bold {
+      background: #171717;
+
+      color: #fff;
+
+      border:
+        1px solid
+        #777;
+    }
+
+    /* =========================================================
+       STATES
+       ========================================================= */
+
+    .loading,
+    .empty {
+      padding:
+        45px 20px;
+
+      text-align: center;
+
+      color: #777;
+    }
+
+    .loading {
+      color: #aaa;
+    }
+
+    .loading::before {
+      content: "";
+
+      display: inline-block;
+
+      width: 15px;
+      height: 15px;
+
+      margin-right: 8px;
+
+      vertical-align: -2px;
+
+      border:
+        2px solid
+        #555;
+
+      border-top-color:
+        var(--red);
+
+      border-radius: 50%;
+
+      animation:
+        spin
+        0.8s
+        linear
+        infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform:
+          rotate(360deg);
+      }
+    }
+
+    .footer {
+      text-align: center;
+
+      margin-top: 20px;
+
+      color: #555;
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing: 2px;
+    }
+
+    .print-only {
+      display: none;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+
+      .stats {
+        grid-template-columns:
+          repeat(
+            3,
+            minmax(0, 1fr)
+          );
+      }
+
+    }
+
+    @media (max-width: 650px) {
+
+      body {
+        padding: 12px;
+      }
+
+      .brand {
+        font-size: 23px;
+        letter-spacing: 2.5px;
+      }
+
+      .subtitle {
+        font-size: 10px;
+        letter-spacing: 2.5px;
+      }
+
+      .stats {
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0, 1fr)
+          );
+      }
+
+      .stat-value {
+        font-size: 25px;
+      }
+
+      .toolbar {
+        flex-direction: column;
+      }
+
+      .toolbar input,
+      .toolbar select,
+      .toolbar .btn {
+        width: 100%;
+        flex: none;
+      }
+
+      .table-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+    }
+
+    @media (max-width: 380px) {
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+    /* =========================================================
+       PRINT
+       ========================================================= */
+
+    @media print {
+
+      @page {
+        size: landscape;
+        margin: 10mm;
+      }
+
+      body {
+        background: #fff !important;
+        color: #000 !important;
+        padding: 0;
+      }
+
+      .container {
+        max-width: none;
+      }
+
+      .header {
+        color: #000;
+        margin-bottom: 12px;
+      }
+
+      .brand {
+        color: #000;
+      }
+
+      .brand .bold,
+      .brand .after,
+      .brand .dark {
+        color: #000;
+      }
+
+      .subtitle {
+        color: #555;
+      }
+
+      .header-line {
+        background: #000;
+      }
+
+      .toolbar,
+      .footer,
+      .error,
+      .navigation-error {
+        display: none !important;
+      }
+
+      .stats {
+        grid-template-columns:
+          repeat(
+            5,
+            1fr
+          );
+
+        gap: 6px;
+
+        margin-bottom: 12px;
+      }
+
+      .stat {
+        border:
+          1px solid
+          #aaa;
+
+        background: #fff;
+
+        padding: 8px;
+      }
+
+      .stat::after {
+        display: none;
+      }
+
+      .stat-label {
+        color: #555;
+      }
+
+      .stat-value {
+        color: #000;
+
+        font-size: 18px;
+      }
+
+      .table-card {
+        border:
+          1px solid
+          #999;
+
+        background: #fff;
+      }
+
+      .table-header {
+        display: none;
+      }
+
+      .table-wrapper {
+        overflow: visible;
+      }
+
+      table {
+        min-width: 0;
+        width: 100%;
+      }
+
+      th {
+        background: #eee !important;
+        color: #000 !important;
+
+        border-bottom:
+          1px solid
+          #999;
+
+        font-size: 8px;
+      }
+
+      td {
+        color: #000 !important;
+
+        border-bottom:
+          1px solid
+          #ddd;
+
+        font-size: 7.5px;
+      }
+
+      tr.used-row td {
+        background:
+          #ffe0e0 !important;
+
+        color:
+          #8b0000 !important;
+
+        border-top:
+          1px solid
+          #d00000 !important;
+
+        border-bottom:
+          1px solid
+          #d00000 !important;
+      }
+
+      tr.used-row td:first-child {
+        border-left:
+          4px solid
+          #d00000 !important;
+      }
+
+      tr.unused-row td {
+        background: #fff !important;
+        color: #000 !important;
+      }
+
+      .status {
+        padding: 2px 5px;
+      }
+
+      .status.used {
+        background:
+          #ffe0e0 !important;
+
+        color:
+          #b00000 !important;
+
+        border:
+          1px solid
+          #d00000 !important;
+      }
+
+      .status.unused {
+        background:
+          #eee !important;
+
+        color:
+          #333 !important;
+
+        border:
+          1px solid
+          #777 !important;
+      }
+
+      .status.cancelled,
+      .status.unknown {
+        background:
+          #eee !important;
+
+        color:
+          #555 !important;
+
+        border:
+          1px solid
+          #999 !important;
+      }
+
+      .access {
+        background:
+          #fff !important;
+
+        color:
+          #000 !important;
+
+        border:
+          1px solid
+          #888 !important;
+      }
+
+      .print-only {
+        display: block;
+
+        margin-bottom: 10px;
+
+        color: #333;
+
+        font-size: 9px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- =======================================================
+         HEADER
+         ======================================================= -->
+
+    <div class="header">
+
+      <div class="brand">
+        <span class="bold">BOLD</span>
+        <span class="after"> AFTER</span>
+        <span class="dark"> DARK</span>
+      </div>
+
+      <div class="subtitle">
+        AUDIENCE REPORT
+      </div>
+
+      <div class="header-line"></div>
+
+    </div>
+
+
+    <!-- =======================================================
+         TOOLBAR
+         ======================================================= -->
+
+    <div class="toolbar">
+
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="Cari nama, WhatsApp, Pass ID, community..."
+        autocomplete="off"
+      >
+
+      <select id="accessFilter">
+
+        <option value="">
+          ALL ACCESS
+        </option>
+
+        <option value="REGULER">
+          REGULER
+        </option>
+
+        <option value="BOLD RIDERS">
+          BOLD RIDERS
+        </option>
+
+      </select>
+
+
+      <select id="statusFilter">
+
+        <option value="">
+          ALL STATUS
+        </option>
+
+        <option value="UNUSED">
+          UNUSED
+        </option>
+
+        <option value="USED">
+          USED
+        </option>
+
+        <option value="CANCELLED">
+          CANCELLED
+        </option>
+
+      </select>
+
+
+      <button
+        type="button"
+        class="btn btn-red"
+        id="refreshButton"
+      >
+        REFRESH
+      </button>
+
+
+      <button
+        type="button"
+        class="btn btn-dark"
+        id="printButton"
+      >
+        PRINT REPORT
+      </button>
+
+
+      <button
+        type="button"
+        class="btn btn-dark"
+        id="csvButton"
+      >
+        DOWNLOAD CSV
+      </button>
+
+
+      <button
+        type="button"
+        class="btn btn-outline-red"
+        id="homeButton"
+      >
+        HOME
+      </button>
+
+
+      <button
+        type="button"
+        class="btn btn-outline-red"
+        id="adminButton"
+      >
+        ADMIN
+      </button>
+
+    </div>
+
+
+    <!-- =======================================================
+         NAVIGATION ERROR
+         ======================================================= -->
+
+    <div
+      id="navigationError"
+      class="navigation-error"
+    ></div>
+
+
+    <!-- =======================================================
+         API ERROR
+         ======================================================= -->
+
+    <div
+      id="errorBox"
+      class="error"
+    ></div>
+
+
+    <!-- =======================================================
+         STATISTICS
+         ======================================================= -->
+
+    <div class="stats">
+
+      <div class="stat">
+
+        <div class="stat-label">
+          TOTAL
+        </div>
+
+        <div
+          id="totalCount"
+          class="stat-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-label">
+          REGULER
+        </div>
+
+        <div
+          id="regulerCount"
+          class="stat-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-label">
+          BOLD RIDERS
+        </div>
+
+        <div
+          id="boldRidersCount"
+          class="stat-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-label">
+          USED
+        </div>
+
+        <div
+          id="usedCount"
+          class="stat-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-label">
+          UNUSED
+        </div>
+
+        <div
+          id="unusedCount"
+          class="stat-value"
+        >
+          0
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =======================================================
+         PRINT INFO
+         ======================================================= -->
+
+    <div class="print-only">
+
+      <strong>
+        BOLD AFTER DARK — AUDIENCE REPORT
+      </strong>
+
+      <br>
+
+      Dicetak:
+      <span id="printDate"></span>
+
+    </div>
+
+
+    <!-- =======================================================
+         TABLE
+         ======================================================= -->
+
+    <div class="table-card">
+
+      <div class="table-header">
+
+        <div>
+
+          <div class="table-title">
+            REGISTRATIONS
+          </div>
+
+          <div class="table-subtitle">
+            Data audience BOLD AFTER DARK
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="loading"
+        class="loading"
+      >
+        Memuat data audience...
+      </div>
+
+
+      <div
+        id="empty"
+        class="empty"
+        style="display: none;"
+      >
+        Tidak ada data audience.
+      </div>
+
+
+      <div
+        id="tableWrapper"
+        class="table-wrapper"
+        style="display: none;"
+      >
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>#</th>
+
+              <th>NAMA</th>
+
+              <th>WHATSAPP</th>
+
+              <th>PASS ID</th>
+
+              <th>ACCESS</th>
+
+              <th>COMMUNITY</th>
+
+              <th>STATUS</th>
+
+              <th>REGISTERED</th>
+
+              <th>CHECK-IN</th>
+
+              <th>CHECKED BY</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="tableBody"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+    <!-- =======================================================
+         FOOTER
+         ======================================================= -->
+
+    <div class="footer">
+      BOLD AFTER DARK • AUDIENCE REPORT
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+       ========================================================= -->
+
+  <script>
+
+    "use strict";
+
+
+    /* =========================================================
+       SUPABASE
+       ========================================================= */
+
+    const SUPABASE_URL =
+      "https://yrvnmmascklkuzpjkwxn.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
+
+    const API_URL =
+      SUPABASE_URL +
+      "/functions/v1/dynamic-service";
+
+
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
+
+    function getNavigationConfig() {
+
+      /*
+       * navigation.js sekarang menggunakan:
+       *
+       * const NAVIGATION = Object.freeze({
+       *   home: "...",
+       *   admin: "...",
+       *   report: "...",
+       *   scanner: "...",
+       *   registration: "..."
+       * });
+       *
+       * Kita juga mendukung window.BOLD_AFTER_DARK_NAVIGATION
+       * apabila nanti format navigation.js dikembangkan.
+       */
+
+      if (
+        typeof window.BOLD_AFTER_DARK_NAVIGATION === "object" &&
+        window.BOLD_AFTER_DARK_NAVIGATION !== null
+      ) {
+
+        return window.BOLD_AFTER_DARK_NAVIGATION;
+
+      }
+
+
+      if (
+        typeof NAVIGATION !== "undefined" &&
+        NAVIGATION &&
+        typeof NAVIGATION === "object"
+      ) {
+
+        return NAVIGATION;
+
+      }
+
+
+      return null;
+
+    }
+
+
+    function validateNavigation(
+      navigation
+    ) {
+
+      if (
+        !navigation ||
+        typeof navigation !== "object"
+      ) {
+
+        throw new Error(
+          "NAVIGATION tidak ditemukan."
+        );
+
+      }
+
+
+      const requiredPages = [
+        "home",
+        "admin",
+        "report",
+        "scanner",
+        "registration"
+      ];
+
+
+      requiredPages.forEach(
+        function(page) {
+
+          if (
+            typeof navigation[page] !== "string" ||
+            !navigation[page].trim()
+          ) {
+
+            throw new Error(
+              "Alamat '" +
+              page +
+              "' tidak tersedia di navigation.js."
+            );
+
+          }
+
+
+          let parsed;
+
+          try {
+
+            parsed =
+              new URL(
+                navigation[page]
+              );
+
+          } catch (error) {
+
+            throw new Error(
+              "URL '" +
+              page +
+              "' di navigation.js tidak valid."
+            );
+
+          }
+
+
+          if (
+            parsed.protocol !== "https:" &&
+            parsed.protocol !== "http:"
+          ) {
+
+            throw new Error(
+              "Protocol URL '" +
+              page +
+              "' tidak valid."
+            );
+
+          }
+
+        }
+      );
+
+
+      return true;
+
+    }
+
+
+    function navigateTo(
+      pageName
+    ) {
+
+      try {
+
+        const navigation =
+          getNavigationConfig();
+
+
+        validateNavigation(
+          navigation
+        );
+
+
+        const target =
+          navigation[pageName];
+
+
+        if (
+          typeof target !== "string" ||
+          !target.trim()
+        ) {
+
+          throw new Error(
+            "Alamat halaman '" +
+            pageName +
+            "' tidak tersedia."
+          );
+
+        }
+
+
+        window.location.assign(
+          target
+        );
+
+      } catch (error) {
+
+        console.error(
+          "NAVIGATION ERROR:",
+          error
+        );
+
+
+        showNavigationError(
+          error &&
+          error.message
+            ? error.message
+            : "Navigasi gagal."
+        );
+
+      }
+
+    }
+
+
+    function showNavigationError(
+      message
+    ) {
+
+      const box =
+        document.getElementById(
+          "navigationError"
+        );
+
+
+      box.textContent =
+        "Navigasi gagal. " +
+        message;
+
+
+      box.style.display =
+        "block";
+
+    }
+
+
+    function clearNavigationError() {
+
+      const box =
+        document.getElementById(
+          "navigationError"
+        );
+
+
+      box.textContent =
+        "";
+
+      box.style.display =
+        "none";
+
+    }
+
+
+    /* =========================================================
+       STATE
+       ========================================================= */
+
+    let allRows = [];
+
+    let filteredRows = [];
+
+
+    /* =========================================================
+       ELEMENTS
+       ========================================================= */
+
+    const searchInput =
+      document.getElementById(
+        "searchInput"
+      );
+
+    const accessFilter =
+      document.getElementById(
+        "accessFilter"
+      );
+
+    const statusFilter =
+      document.getElementById(
+        "statusFilter"
+      );
+
+    const refreshButton =
+      document.getElementById(
+        "refreshButton"
+      );
+
+    const printButton =
+      document.getElementById(
+        "printButton"
+      );
+
+    const csvButton =
+      document.getElementById(
+        "csvButton"
+      );
+
+    const homeButton =
+      document.getElementById(
+        "homeButton"
+      );
+
+    const adminButton =
+      document.getElementById(
+        "adminButton"
+      );
+
+    const errorBox =
+      document.getElementById(
+        "errorBox"
+      );
+
+    const loading =
+      document.getElementById(
+        "loading"
+      );
+
+    const empty =
+      document.getElementById(
+        "empty"
+      );
+
+    const tableWrapper =
+      document.getElementById(
+        "tableWrapper"
+      );
+
+    const tableBody =
+      document.getElementById(
+        "tableBody"
+      );
+
+
+    /* =========================================================
+       ESCAPE HTML
+       ========================================================= */
+
+    function escapeHtml(
+      value
+    ) {
+
+      return String(
+        value == null
+          ? ""
+          : value
+      )
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    /* =========================================================
+       STATUS
+       ========================================================= */
+
+    function normalizeStatus(
+      value
+    ) {
+
+      const status =
+        String(
+          value || ""
+        )
+          .trim()
+          .toUpperCase();
+
+
+      if (
+        status === "USED" ||
+        status === "CHECKED_IN" ||
+        status === "CHECKED-IN"
+      ) {
+
+        return "USED";
+
+      }
+
+
+      if (
+        status === "UNUSED"
+      ) {
+
+        return "UNUSED";
+
+      }
+
+
+      if (
+        status === "CANCELLED" ||
+        status === "CANCELED"
+      ) {
+
+        return "CANCELLED";
+
+      }
+
+
+      return status;
+
+    }
+
+
+    /* =========================================================
+       ACCESS
+       ========================================================= */
+
+    function normalizeAccess(
+      value
+    ) {
+
+      return String(
+        value || ""
+      )
+        .trim()
+        .toUpperCase();
+
+    }
+
+
+    /* =========================================================
+       DATE
+       ========================================================= */
+
+    function formatDate(
+      value
+    ) {
+
+      if (!value) {
+        return "-";
+      }
+
+
+      const date =
+        new Date(value);
+
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+
+        return String(value);
+
+      }
+
+
+      return date.toLocaleString(
+        "id-ID",
+        {
+          dateStyle: "short",
+          timeStyle: "medium"
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       ERROR
+       ========================================================= */
+
+    function showError(
+      message
+    ) {
+
+      errorBox.textContent =
+        message ||
+        "Terjadi kesalahan.";
+
+
+      errorBox.style.display =
+        "block";
+
+    }
+
+
+    function hideError() {
+
+      errorBox.textContent =
+        "";
+
+
+      errorBox.style.display =
+        "none";
+
+    }
+
+
+    /* =========================================================
+       LOAD REPORT
+       ========================================================= */
+
+    async function loadReport() {
+
+      hideError();
+
+      clearNavigationError();
+
+
+      loading.style.display =
+        "block";
+
+
+      empty.style.display =
+        "none";
+
+
+      tableWrapper.style.display =
+        "none";
+
+
+      refreshButton.disabled =
+        true;
+
+
+      refreshButton.textContent =
+        "LOADING...";
+
+
+      try {
+
+        const params =
+          new URLSearchParams();
+
+
+        params.set(
+          "action",
+          "report"
+        );
+
+
+        const response =
+          await fetch(
+            API_URL +
+            "?" +
+            params.toString(),
+            {
+              method: "GET",
+
+              cache: "no-store",
+
+              headers: {
+                "Accept":
+                  "application/json",
+
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY
+              }
+            }
+          );
+
+
+        const raw =
+          await response.text();
+
+
+        console.log(
+          "REPORT HTTP STATUS:",
+          response.status
+        );
+
+
+        console.log(
+          "REPORT RAW RESPONSE:",
+          raw
+        );
+
+
+        let data = null;
+
+
+        try {
+
+          data =
+            raw
+              ? JSON.parse(raw)
+              : null;
+
+        } catch (parseError) {
+
+          throw new Error(
+            "Server mengembalikan response JSON yang tidak valid."
+          );
+
+        }
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data &&
+            data.message
+              ? data.message
+              : (
+                "Gagal mengambil laporan. HTTP " +
+                response.status
+              )
+          );
+
+        }
+
+
+        if (
+          data &&
+          data.success === false
+        ) {
+
+          throw new Error(
+            data.message ||
+            data.detail ||
+            "Data laporan ditolak server."
+          );
+
+        }
+
+
+        allRows =
+          data &&
+          Array.isArray(
+            data.registrations
+          )
+            ? data.registrations
+            : [];
+
+
+        applyFilters();
+
+      } catch (error) {
+
+        console.error(
+          "REPORT ERROR:",
+          error
+        );
+
+
+        allRows = [];
+
+        filteredRows = [];
+
+
+        updateStatistics([]);
+
+
+        tableBody.innerHTML =
+          "";
+
+
+        loading.style.display =
+          "none";
+
+
+        tableWrapper.style.display =
+          "none";
+
+
+        empty.style.display =
+          "block";
+
+
+        showError(
+          error &&
+          error.message
+            ? error.message
+            : "Tidak dapat mengambil laporan."
+        );
+
+      } finally {
+
+        refreshButton.disabled =
+          false;
+
+
+        refreshButton.textContent =
+          "REFRESH";
+
+      }
+
+    }
+
+
+    /* =========================================================
+       FILTER
+       ========================================================= */
+
+    function applyFilters() {
+
+      const search =
+        searchInput.value
+          .trim()
+          .toLowerCase();
+
+
+      const access =
+        normalizeAccess(
+          accessFilter.value
+        );
+
+
+      const selectedStatus =
+        normalizeStatus(
+          statusFilter.value
+        );
+
+
+      filteredRows =
+        allRows.filter(
+          function(row) {
+
+            const rowAccess =
+              normalizeAccess(
+                row.access_type
+              );
+
+
+            const rowStatus =
+              normalizeStatus(
+                row.pass_status
+              );
+
+
+            if (
+              access &&
+              rowAccess !== access
+            ) {
+
+              return false;
+
+            }
+
+
+            if (
+              selectedStatus &&
+              rowStatus !== selectedStatus
+            ) {
+
+              return false;
+
+            }
+
+
+            if (search) {
+
+              const haystack =
+                [
+                  row.name,
+                  row.whatsapp,
+                  row.pass_id,
+                  row.community,
+                  row.access_type,
+                  row.pass_status
+                ]
+                  .map(
+                    function(value) {
+
+                      return String(
+                        value || ""
+                      ).toLowerCase();
+
+                    }
+                  )
+                  .join(" ");
+
+
+              if (
+                !haystack.includes(
+                  search
+                )
+              ) {
+
+                return false;
+
+              }
+
+            }
+
+
+            return true;
+
+          }
+        );
+
+
+      updateStatistics(
+        filteredRows
+      );
+
+
+      renderTable(
+        filteredRows
+      );
+
+    }
+
+
+    /* =========================================================
+       STATISTICS
+       ========================================================= */
+
+    function updateStatistics(
+      rows
+    ) {
+
+      const total =
+        rows.length;
+
+
+      const reguler =
+        rows.filter(
+          function(row) {
+
+            return normalizeAccess(
+              row.access_type
+            ) === "REGULER";
+
+          }
+        ).length;
+
+
+      const boldRiders =
+        rows.filter(
+          function(row) {
+
+            return normalizeAccess(
+              row.access_type
+            ) === "BOLD RIDERS";
+
+          }
+        ).length;
+
+
+      const used =
+        rows.filter(
+          function(row) {
+
+            return normalizeStatus(
+              row.pass_status
+            ) === "USED";
+
+          }
+        ).length;
+
+
+      const unused =
+        rows.filter(
+          function(row) {
+
+            return normalizeStatus(
+              row.pass_status
+            ) === "UNUSED";
+
+          }
+        ).length;
+
+
+      document.getElementById(
+        "totalCount"
+      ).textContent =
+        total;
+
+
+      document.getElementById(
+        "regulerCount"
+      ).textContent =
+        reguler;
+
+
+      document.getElementById(
+        "boldRidersCount"
+      ).textContent =
+        boldRiders;
+
+
+      document.getElementById(
+        "usedCount"
+      ).textContent =
+        used;
+
+
+      document.getElementById(
+        "unusedCount"
+      ).textContent =
+        unused;
+
+    }
+
+
+    /* =========================================================
+       ACCESS BADGE
+       ========================================================= */
+
+    function accessBadge(
+      access
+    ) {
+
+      const value =
+        normalizeAccess(
+          access
+        );
+
+
+      let className =
+        "reguler";
+
+      if (
+        value === "BOLD RIDERS"
+      ) {
+
+        className =
+          "bold";
+
+      }
+
+
+      return (
+        '<span class="access ' +
+        className +
+        '">' +
+        escapeHtml(
+          value || "-"
+        ) +
+        "</span>"
+      );
+
+    }
+
+
+    /* =========================================================
+       STATUS BADGE
+       ========================================================= */
+
+    function statusBadge(
+      status
+    ) {
+
+      const value =
+        normalizeStatus(
+          status
+        );
+
+
+      let className =
+        "unknown";
+
+
+      let label =
+        value || "-";
+
+
+      if (
+        value === "USED"
+      ) {
+
+        className =
+          "used";
+
+        label =
+          "USED";
+
+      } else if (
+        value === "UNUSED"
+      ) {
+
+        className =
+          "unused";
+
+        label =
+          "UNUSED";
+
+      } else if (
+        value === "CANCELLED"
+      ) {
+
+        className =
+          "cancelled";
+
+        label =
+          "CANCELLED";
+
+      }
+
+
+      return (
+        '<span class="status ' +
+        className +
+        '">' +
+        escapeHtml(
+          label
+        ) +
+        "</span>"
+      );
+
+    }
+
+
+    /* =========================================================
+       RENDER TABLE
+       ========================================================= */
+
+    function renderTable(
+      rows
+    ) {
+
+      loading.style.display =
+        "none";
+
+
+      tableBody.innerHTML =
+        "";
+
+
+      if (
+        !rows ||
+        rows.length === 0
+      ) {
+
+        tableWrapper.style.display =
+          "none";
+
+
+        empty.style.display =
+          "block";
+
+
+        return;
+
+      }
+
+
+      empty.style.display =
+        "none";
+
+
+      tableWrapper.style.display =
+        "block";
+
+
+      rows.forEach(
+        function(row, index) {
+
+          const tr =
+            document.createElement(
+              "tr"
+            );
+
+
+          const status =
+            normalizeStatus(
+              row.pass_status
+            );
+
+
+          if (
+            status === "USED"
+          ) {
+
+            tr.classList.add(
+              "used-row"
+            );
+
+          } else if (
+            status === "UNUSED"
+          ) {
+
+            tr.classList.add(
+              "unused-row"
+            );
+
+          }
+
+
+          tr.innerHTML =
+            `
+              <td>
+                ${escapeHtml(index + 1)}
+              </td>
+
+              <td>
+                <strong>
+                  ${escapeHtml(row.name)}
+                </strong>
+              </td>
+
+              <td>
+                ${escapeHtml(row.whatsapp)}
+              </td>
+
+              <td>
+                <strong>
+                  ${escapeHtml(row.pass_id)}
+                </strong>
+              </td>
+
+              <td>
+                ${accessBadge(row.access_type)}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  row.community || "-"
+                )}
+              </td>
+
+              <td>
+                ${statusBadge(
+                  row.pass_status
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  formatDate(
+                    row.created_at
+                  )
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  formatDate(
+                    row.checked_in_at
+                  )
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  row.checked_in_by || "-"
+                )}
+              </td>
+            `;
+
+
+          tableBody.appendChild(
+            tr
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       CSV
+       ========================================================= */
+
+    function csvEscape(
+      value
+    ) {
+
+      const text =
+        String(
+          value == null
+            ? ""
+            : value
+        );
+
+
+      return (
+        '"' +
+        text.replace(
+          /"/g,
+          '""'
+        ) +
+        '"'
+      );
+
+    }
+
+
+    function downloadCsv() {
+
+      if (
+        !filteredRows ||
+        filteredRows.length === 0
+      ) {
+
+        alert(
+          "Tidak ada data untuk di-download."
+        );
+
+
+        return;
+
+      }
+
+
+      const headers = [
+        "No",
+        "Nama",
+        "WhatsApp",
+        "Pass ID",
+        "Access",
+        "Community",
+        "Stay Connected",
+        "Status",
+        "Registered At",
+        "Check In At",
+        "Checked By"
+      ];
+
+
+      const lines = [
+        headers
+          .map(
+            csvEscape
+          )
+          .join(",")
+      ];
+
+
+      filteredRows.forEach(
+        function(row, index) {
+
+          lines.push(
+            [
+              index + 1,
+              row.name,
+              row.whatsapp,
+              row.pass_id,
+              row.access_type,
+              row.community,
+              row.stay_connected,
+              normalizeStatus(
+                row.pass_status
+              ),
+              row.created_at,
+              row.checked_in_at,
+              row.checked_in_by
+            ]
+              .map(
+                csvEscape
+              )
+              .join(",")
+          );
+
+        }
+      );
+
+
+      const csv =
+        "\uFEFF" +
+        lines.join(
+          "\r\n"
+        );
+
+
+      const blob =
+        new Blob(
+          [csv],
+          {
+            type:
+              "text/csv;charset=utf-8;"
+          }
+        );
+
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+
+      link.href =
+        url;
+
+
+      link.download =
+        "bold-after-dark-audience-report.csv";
+
+
+      document.body.appendChild(
+        link
+      );
+
+
+      link.click();
+
+
+      link.remove();
+
+
+      URL.revokeObjectURL(
+        url
+      );
+
+    }
+
+
+    /* =========================================================
+       PRINT
+       ========================================================= */
+
+    function printReport() {
+
+      document.getElementById(
+        "printDate"
+      ).textContent =
+        new Date().toLocaleString(
+          "id-ID"
+        );
+
+
+      window.print();
+
+    }
+
+
+    /* =========================================================
+       NAVIGATION BUTTONS
+       ========================================================= */
+
+    homeButton.addEventListener(
+      "click",
+      function(event) {
+
+        event.preventDefault();
+
+        navigateTo(
+          "home"
+        );
+
+      }
+    );
+
+
+    adminButton.addEventListener(
+      "click",
+      function(event) {
+
+        event.preventDefault();
+
+        navigateTo(
+          "admin"
+        );
+
+      }
+    );
+
+
+    /* =========================================================
+       OTHER BUTTONS
+       ========================================================= */
+
+    refreshButton.addEventListener(
+      "click",
+      function() {
+
+        loadReport();
+
+      }
+    );
+
+
+    printButton.addEventListener(
+      "click",
+      function() {
+
+        printReport();
+
+      }
+    );
+
+
+    csvButton.addEventListener(
+      "click",
+      function() {
+
+        downloadCsv();
+
+      }
+    );
+
+
+    /* =========================================================
+       FILTER EVENTS
+       ========================================================= */
+
+    searchInput.addEventListener(
+      "input",
+      function() {
+
+        applyFilters();
+
+      }
+    );
+
+
+    accessFilter.addEventListener(
+      "change",
+      function() {
+
+        applyFilters();
+
+      }
+    );
+
+
+    statusFilter.addEventListener(
+      "change",
+      function() {
+
+        applyFilters();
+
+      }
+    );
+
+
+    /* =========================================================
+       PAGE LOAD
+       ========================================================= */
+
+    window.addEventListener(
+      "load",
+      function() {
+
+        /*
+         * Validasi navigation.js hanya sekali.
+         *
+         * Tidak melakukan fetch.
+         * Tidak menampilkan isi JavaScript
+         * ke halaman.
+         */
+
+        try {
+
+          const navigation =
+            getNavigationConfig();
+
+
+          validateNavigation(
+            navigation
+          );
+
+
+          clearNavigationError();
+
+        } catch (error) {
+
+          console.error(
+            "NAVIGATION CONFIG ERROR:",
+            error
+          );
+
+
+          showNavigationError(
+            error &&
+            error.message
+              ? error.message
+              : "NAVIGATION tidak ditemukan."
+          );
+
+        }
+
+
+        loadReport();
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>

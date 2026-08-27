@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BOLD AFTER DARK</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --red: #e00000;
+      --bg: #050505;
+      --card: #111111;
+      --border: #292929;
+      --text: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top,
+          #250000 0%,
+          #0a0a0a 38%,
+          #000000 100%
+        );
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+      text-align: center;
+    }
+
+    .brand {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .brand .bold {
+      color: #ffffff;
+    }
+
+    .brand .after {
+      color: var(--red);
+    }
+
+    .brand .dark {
+      color: #ffffff;
+    }
+
+    .subtitle {
+      color: #777;
+      font-size: 11px;
+      letter-spacing: 4px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: rgba(17, 17, 17, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.55);
+    }
+
+    .button-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      min-height: 54px;
+      padding: 15px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition:
+        transform 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .btn-scanner {
+      background: var(--red);
+      color: #ffffff;
+      border: 1px solid var(--red);
+    }
+
+    .btn-scanner:hover {
+      background: #f00000;
+      border-color: #f00000;
+    }
+
+    .btn-admin {
+      background: #ffffff;
+      color: #000000;
+      border: 1px solid #ffffff;
+    }
+
+    .btn-admin:hover {
+      background: #eeeeee;
+      border-color: #eeeeee;
+    }
+
+    .footer {
+      margin-top: 22px;
+      color: #444;
+      font-size: 9px;
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 14px;
+      }
+
+      .brand {
+        font-size: 23px;
+        letter-spacing: 3px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      button {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="brand">
+      <span class="bold">BOLD</span>
+      <span class="after"> AFTER </span>
+      <span class="dark">DARK</span>
+    </div>
+
+    <div class="subtitle">
+      OFFICIAL EVENT ACCESS
+    </div>
+
+    <div class="card">
+
+      <div class="button-list">
+
+        <button
+          id="scannerButton"
+          class="btn-scanner"
+          type="button"
+        >
+          QR SCANNER
+        </button>
+
+        <button
+          id="adminButton"
+          class="btn-admin"
+          type="button"
+        >
+          ADMIN
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="footer">
+      BOLD AFTER DARK
+    </div>
+
+  </div>
+
+  <script>
+    "use strict";
+
+    /*
+     * Semua link menggunakan domain aktif.
+     *
+     * HOME:
+     * /
+     *
+     * SCANNER:
+     * /scanner.html
+     *
+     * ADMIN:
+     * /admin.html
+     */
+
+    const SCANNER_URL =
+      "https://boldafterdark.my.id/scanner.html";
+
+    const ADMIN_URL =
+      "https://boldafterdark.my.id/admin.html";
+
+
+    const scannerButton =
+      document.getElementById("scannerButton");
+
+    const adminButton =
+      document.getElementById("adminButton");
+
+
+    function openScanner() {
+
+      window.location.href =
+        SCANNER_URL;
+
+    }
+
+
+    function openAdmin() {
+
+      window.location.href =
+        ADMIN_URL;
+
+    }
+
+
+    scannerButton.addEventListener(
+      "click",
+      openScanner
+    );
+
+
+    adminButton.addEventListener(
+      "click",
+      openAdmin
+    );
+
+  </script>
+
+</body>
+</html>

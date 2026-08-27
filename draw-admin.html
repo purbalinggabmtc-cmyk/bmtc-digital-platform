@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BOLD AFTER DARK — RAFFLE ADMIN</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --red: #e00000;
+      --green: #18b663;
+      --bg: #050505;
+      --card: #111111;
+      --border: #303030;
+      --text: #ffffff;
+      --muted: #8c8c8c;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top,
+          #260000 0%,
+          #0a0a0a 36%,
+          #050505 72%,
+          #000000 100%
+        );
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 4px;
+    }
+
+    .brand .red {
+      color: var(--red);
+    }
+
+    .subtitle {
+      margin-top: 7px;
+      color: #999;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+    }
+
+    .card {
+      background: rgba(17, 17, 17, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .section-title {
+      margin-bottom: 14px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #ddd;
+    }
+
+    input {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 13px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #171717;
+      color: #fff;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 2px rgba(224, 0, 0, 0.12);
+    }
+
+    .btn {
+      width: 100%;
+      min-height: 50px;
+      padding: 13px 16px;
+      border: none;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .btn-red {
+      background: var(--red);
+      color: #fff;
+    }
+
+    .btn-green {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .btn-dark {
+      background: #242424;
+      color: #fff;
+      border: 1px solid #444;
+    }
+
+    .message {
+      display: none;
+      margin-bottom: 14px;
+      padding: 12px 13px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      background: #300000;
+      border: 1px solid #8c0000;
+      color: #ff8a8a;
+    }
+
+    .message.success {
+      background: #062d16;
+      border: 1px solid #15934a;
+      color: #65e99a;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .status-card {
+      background: #171717;
+      border: 1px solid #303030;
+      border-radius: 10px;
+      padding: 13px;
+      text-align: center;
+    }
+
+    .status-label {
+      color: #777;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.7px;
+      margin-bottom: 5px;
+    }
+
+    .status-value {
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .draw-panel {
+      text-align: center;
+      padding: 18px 0 4px;
+    }
+
+    .draw-number {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      margin-bottom: 14px;
+    }
+
+    .winner-name {
+      min-height: 24px;
+      margin-bottom: 14px;
+      color: #bbb;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .draw-button {
+      width: 100%;
+      min-height: 72px;
+      border-radius: 12px;
+      border: none;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      cursor: pointer;
+    }
+
+    .draw-button.start {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .draw-button.stop {
+      background: var(--red);
+      color: #fff;
+    }
+
+    .secondary-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .secondary-actions .btn {
+      flex: 1;
+    }
+
+    .history {
+      margin-top: 16px;
+    }
+
+    .history-row {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #242424;
+    }
+
+    .history-row:last-child {
+      border-bottom: none;
+    }
+
+    .history-code {
+      font-weight: 900;
+    }
+
+    .history-name {
+      color: #aaa;
+      font-size: 12px;
+    }
+
+    .history-time {
+      color: #666;
+      font-size: 10px;
+      text-align: right;
+    }
+
+    @media (max-width: 620px) {
+      .status-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .history-row {
+        grid-template-columns: 1fr;
+      }
+
+      .history-time {
+        text-align: left;
+      }
+
+      .draw-number {
+        font-size: 40px;
+      }
+
+      .secondary-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <div class="brand">
+        BOLD <span class="red">AFTER</span> DARK
+      </div>
+
+      <div class="subtitle">
+        LIVE RAFFLE ADMIN
+      </div>
+    </div>
+
+
+    <section
+      id="loginCard"
+      class="card"
+    >
+      <div class="section-title">
+        ADMIN ACCESS
+      </div>
+
+      <div
+        id="loginMessage"
+        class="message"
+      ></div>
+
+      <div class="field">
+        <label for="adminSecretInput">
+          PURCHASE ADMIN SECRET
+        </label>
+
+        <input
+          id="adminSecretInput"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Masukkan admin secret"
+        >
+      </div>
+
+      <button
+        id="loginButton"
+        class="btn btn-red"
+        type="button"
+      >
+        MASUK
+      </button>
+    </section>
+
+
+    <section
+      id="dashboard"
+      class="hidden"
+    >
+
+      <div
+        id="dashboardMessage"
+        class="message"
+      ></div>
+
+      <div class="status-grid">
+
+        <div class="status-card">
+          <div class="status-label">
+            STATUS
+          </div>
+          <div
+            id="statusValue"
+            class="status-value"
+          >
+            IDLE
+          </div>
+        </div>
+
+        <div class="status-card">
+          <div class="status-label">
+            NOMOR TERSEDIA
+          </div>
+          <div
+            id="eligibleValue"
+            class="status-value"
+          >
+            0
+          </div>
+        </div>
+
+        <div class="status-card">
+          <div class="status-label">
+            TOTAL PEMENANG
+          </div>
+          <div
+            id="winnerCountValue"
+            class="status-value"
+          >
+            0
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="draw-panel">
+
+          <div
+            id="drawNumber"
+            class="draw-number"
+          >
+            -----
+          </div>
+
+          <div
+            id="winnerName"
+            class="winner-name"
+          >
+            Siap untuk pengundian.
+          </div>
+
+          <button
+            id="drawButton"
+            class="draw-button start"
+            type="button"
+          >
+            START
+          </button>
+
+          <div class="secondary-actions">
+            <button
+              id="refreshButton"
+              class="btn btn-dark"
+              type="button"
+            >
+              REFRESH
+            </button>
+
+            <button
+              id="logoutButton"
+              class="btn btn-dark"
+              type="button"
+            >
+              LOGOUT
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="card history">
+        <div class="section-title">
+          RIWAYAT PEMENANG
+        </div>
+
+        <div id="winnerHistory"></div>
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <script>
+    "use strict";
+
+    const SUPABASE_URL =
+      "https://yrvnmmascklkuzpjkwxn.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
+
+    const RAFFLE_SERVICE_URL =
+      SUPABASE_URL +
+      "/functions/v1/raffle-service";
+
+
+    const loginCard =
+      document.getElementById("loginCard");
+
+    const dashboard =
+      document.getElementById("dashboard");
+
+    const adminSecretInput =
+      document.getElementById("adminSecretInput");
+
+    const loginButton =
+      document.getElementById("loginButton");
+
+    const loginMessage =
+      document.getElementById("loginMessage");
+
+    const dashboardMessage =
+      document.getElementById("dashboardMessage");
+
+    const statusValue =
+      document.getElementById("statusValue");
+
+    const eligibleValue =
+      document.getElementById("eligibleValue");
+
+    const winnerCountValue =
+      document.getElementById("winnerCountValue");
+
+    const drawNumber =
+      document.getElementById("drawNumber");
+
+    const winnerName =
+      document.getElementById("winnerName");
+
+    const drawButton =
+      document.getElementById("drawButton");
+
+    const refreshButton =
+      document.getElementById("refreshButton");
+
+    const logoutButton =
+      document.getElementById("logoutButton");
+
+    const winnerHistory =
+      document.getElementById("winnerHistory");
+
+
+    let adminSecret =
+      sessionStorage.getItem(
+        "bad_raffle_admin_secret"
+      ) || "";
+
+    let currentState =
+      "IDLE";
+
+    let animationTimer =
+      null;
+
+
+    function showMessage(
+      element,
+      type,
+      message
+    ) {
+      element.className =
+        "message show " +
+        type;
+
+      element.textContent =
+        message || "";
+    }
+
+
+    function hideMessage(
+      element
+    ) {
+      element.className =
+        "message";
+
+      element.textContent =
+        "";
+    }
+
+
+    function formatTime(
+      value
+    ) {
+      if (!value) {
+        return "-";
+      }
+
+      const date =
+        new Date(
+          value
+        );
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+        return "-";
+      }
+
+      return date.toLocaleString(
+        "id-ID",
+        {
+          dateStyle:
+            "short",
+          timeStyle:
+            "medium"
+        }
+      );
+    }
+
+
+    function startVisualAnimation() {
+      stopVisualAnimation();
+
+      animationTimer =
+        setInterval(
+          function() {
+            const fake =
+              String(
+                Math.floor(
+                  10000 +
+                  Math.random() *
+                  90000
+                )
+              );
+
+            drawNumber.textContent =
+              fake;
+          },
+          80
+        );
+    }
+
+
+    function stopVisualAnimation() {
+      if (
+        animationTimer
+      ) {
+        clearInterval(
+          animationTimer
+        );
+
+        animationTimer =
+          null;
+      }
+    }
+
+
+    function renderState(
+      data
+    ) {
+      const live =
+        data &&
+        data.live
+          ? data.live
+          : {};
+
+      const winners =
+        Array.isArray(
+          data.winners
+        )
+          ? data.winners
+          : [];
+
+      currentState =
+        String(
+          live.status || "IDLE"
+        ).toUpperCase();
+
+      statusValue.textContent =
+        currentState;
+
+      eligibleValue.textContent =
+        String(
+          data.eligibleCount || 0
+        );
+
+      winnerCountValue.textContent =
+        String(
+          winners.length
+        );
+
+      winnerHistory.innerHTML =
+        "";
+
+      if (
+        winners.length === 0
+      ) {
+        winnerHistory.innerHTML =
+          '<div style="color:#777;font-size:12px;">Belum ada pemenang.</div>';
+      } else {
+        winners.forEach(
+          function(row) {
+            const div =
+              document.createElement(
+                "div"
+              );
+
+            div.className =
+              "history-row";
+
+            const code =
+              document.createElement(
+                "div"
+              );
+
+            code.className =
+              "history-code";
+
+            code.textContent =
+              row.coupon_code ||
+              "-";
+
+            const name =
+              document.createElement(
+                "div"
+              );
+
+            name.className =
+              "history-name";
+
+            name.textContent =
+              row.buyer_name ||
+              "-";
+
+            const time =
+              document.createElement(
+                "div"
+              );
+
+            time.className =
+              "history-time";
+
+            time.textContent =
+              formatTime(
+                row.drawn_at
+              );
+
+            div.appendChild(
+              code
+            );
+
+            div.appendChild(
+              name
+            );
+
+            div.appendChild(
+              time
+            );
+
+            winnerHistory.appendChild(
+              div
+            );
+          }
+        );
+      }
+
+
+      if (
+        currentState ===
+        "RUNNING"
+      ) {
+        drawButton.textContent =
+          "STOP";
+
+        drawButton.className =
+          "draw-button stop";
+
+        winnerName.textContent =
+          "Pengundian sedang berjalan...";
+
+        startVisualAnimation();
+
+        return;
+      }
+
+      stopVisualAnimation();
+
+      drawButton.textContent =
+        "START";
+
+      drawButton.className =
+        "draw-button start";
+
+
+      if (
+        currentState ===
+        "WINNER"
+      ) {
+        drawNumber.textContent =
+          live.winnerCouponCode ||
+          "-----";
+
+        winnerName.textContent =
+          live.winnerBuyerName
+            ? (
+                "Pemenang: " +
+                live.winnerBuyerName
+              )
+            : "Pemenang terpilih.";
+
+        return;
+      }
+
+      drawNumber.textContent =
+        "-----";
+
+      winnerName.textContent =
+        "Siap untuk pengundian.";
+    }
+
+
+    async function requestState() {
+      const response =
+        await fetch(
+          RAFFLE_SERVICE_URL +
+          "?action=state",
+          {
+            method:
+              "GET",
+            cache:
+              "no-store",
+            headers: {
+              "Accept":
+                "application/json",
+              "apikey":
+                SUPABASE_PUBLISHABLE_KEY,
+              "Authorization":
+                "Bearer " +
+                SUPABASE_PUBLISHABLE_KEY
+            }
+          }
+        );
+
+      const raw =
+        await response.text();
+
+      let data;
+
+      try {
+        data =
+          JSON.parse(
+            raw
+          );
+      } catch {
+        throw new Error(
+          "Server mengembalikan response yang tidak valid."
+        );
+      }
+
+      if (
+        !response.ok ||
+        !data ||
+        data.success !== true
+      ) {
+        throw new Error(
+          data &&
+          (
+            data.message ||
+            data.detail
+          )
+            ? (
+                data.message ||
+                data.detail
+              )
+            : "Gagal membaca status raffle."
+        );
+      }
+
+      return data;
+    }
+
+
+    async function loadState() {
+      hideMessage(
+        dashboardMessage
+      );
+
+      refreshButton.disabled =
+        true;
+
+      try {
+        const data =
+          await requestState();
+
+        renderState(
+          data
+        );
+
+      } catch (error) {
+        console.error(
+          "LOAD RAFFLE STATE ERROR:",
+          error
+        );
+
+        showMessage(
+          dashboardMessage,
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Tidak dapat membaca status raffle."
+        );
+
+      } finally {
+        refreshButton.disabled =
+          false;
+      }
+    }
+
+
+    async function runAdminAction(
+      action
+    ) {
+      drawButton.disabled =
+        true;
+
+      hideMessage(
+        dashboardMessage
+      );
+
+      try {
+        const response =
+          await fetch(
+            RAFFLE_SERVICE_URL +
+            "?action=" +
+            encodeURIComponent(
+              action
+            ),
+            {
+              method:
+                "POST",
+              headers: {
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY,
+                "x-admin-secret":
+                  adminSecret
+              }
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(
+              raw
+            );
+        } catch {
+          throw new Error(
+            "Server mengembalikan response yang tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "Perintah raffle gagal."
+          );
+        }
+
+        if (
+          action ===
+          "stop" &&
+          data.winner
+        ) {
+          drawNumber.textContent =
+            data.winner.couponCode ||
+            "-----";
+
+          winnerName.textContent =
+            data.winner.buyerName
+              ? (
+                  "Pemenang: " +
+                  data.winner.buyerName
+                )
+              : "Pemenang terpilih.";
+
+          showMessage(
+            dashboardMessage,
+            "success",
+            "Pemenang berhasil dipilih."
+          );
+        }
+
+        await loadState();
+
+      } catch (error) {
+        console.error(
+          "RAFFLE ACTION ERROR:",
+          error
+        );
+
+        showMessage(
+          dashboardMessage,
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Perintah raffle gagal."
+        );
+
+      } finally {
+        drawButton.disabled =
+          false;
+      }
+    }
+
+
+    async function login() {
+      hideMessage(
+        loginMessage
+      );
+
+      const value =
+        adminSecretInput.value.trim();
+
+      if (!value) {
+        showMessage(
+          loginMessage,
+          "error",
+          "Admin secret wajib diisi."
+        );
+        return;
+      }
+
+      adminSecret =
+        value;
+
+      loginButton.disabled =
+        true;
+
+      loginButton.textContent =
+        "MEMERIKSA...";
+
+      try {
+        /*
+         * Validasi secret dengan action START tidak aman karena bisa
+         * mengubah state. Jadi kita gunakan request state publik dulu,
+         * lalu secret baru benar-benar divalidasi saat START/STOP.
+         * Secret disimpan hanya selama session browser aktif.
+         */
+        await requestState();
+
+        sessionStorage.setItem(
+          "bad_raffle_admin_secret",
+          adminSecret
+        );
+
+        loginCard.classList.add(
+          "hidden"
+        );
+
+        dashboard.classList.remove(
+          "hidden"
+        );
+
+        await loadState();
+
+      } catch (error) {
+        showMessage(
+          loginMessage,
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Tidak dapat membuka raffle admin."
+        );
+
+      } finally {
+        loginButton.disabled =
+          false;
+
+        loginButton.textContent =
+          "MASUK";
+      }
+    }
+
+
+    function logout() {
+      stopVisualAnimation();
+
+      sessionStorage.removeItem(
+        "bad_raffle_admin_secret"
+      );
+
+      adminSecret =
+        "";
+
+      adminSecretInput.value =
+        "";
+
+      dashboard.classList.add(
+        "hidden"
+      );
+
+      loginCard.classList.remove(
+        "hidden"
+      );
+    }
+
+
+    drawButton.addEventListener(
+      "click",
+      function() {
+        if (
+          currentState ===
+          "RUNNING"
+        ) {
+          runAdminAction(
+            "stop"
+          );
+        } else {
+          runAdminAction(
+            "start"
+          );
+        }
+      }
+    );
+
+
+    refreshButton.addEventListener(
+      "click",
+      loadState
+    );
+
+
+    logoutButton.addEventListener(
+      "click",
+      logout
+    );
+
+
+    loginButton.addEventListener(
+      "click",
+      login
+    );
+
+
+    adminSecretInput.addEventListener(
+      "keydown",
+      function(event) {
+        if (
+          event.key ===
+          "Enter"
+        ) {
+          event.preventDefault();
+          login();
+        }
+      }
+    );
+
+
+    if (adminSecret) {
+      adminSecretInput.value =
+        adminSecret;
+
+      login();
+    }
+
+  </script>
+
+</body>
+</html>

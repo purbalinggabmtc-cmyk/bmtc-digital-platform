@@ -292,7 +292,7 @@ REGISTRASI BOLD AFTER DARK
 
 </section>
 
-<section class="live-raffle-section">
+<section id="liveRaffleSection" class="live-raffle-section" style="display:none;">
 
 <div class="live-raffle-card">
 
@@ -393,6 +393,9 @@ const BMTC_RAFFLE_SERVICE_URL =
 const BMTC_RAFFLE_PUBLISHABLE_KEY =
   "sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
 
+const liveRaffleSection =
+  document.getElementById("liveRaffleSection");
+
 const liveRaffleStatus =
   document.getElementById("liveRaffleStatus");
 
@@ -448,6 +451,19 @@ function renderHomeRaffle(data) {
     data && data.live
       ? data.live
       : {};
+
+  const isVisible =
+    live.isVisible === true;
+
+  liveRaffleSection.style.display =
+    isVisible
+      ? ""
+      : "none";
+
+  if (!isVisible) {
+    stopHomeRaffleAnimation();
+    return;
+  }
 
   const status =
     String(

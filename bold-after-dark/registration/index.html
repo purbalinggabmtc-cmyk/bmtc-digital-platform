@@ -1,0 +1,4225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BOLD AFTER DARK — REGISTRATION</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --red: #e00000;
+      --red-dark: #9d0000;
+      --bg: #050505;
+      --card: #111111;
+      --card-2: #171717;
+      --border: #333333;
+      --text: #ffffff;
+      --muted: #999999;
+      --green: #20d96b;
+      --yellow: #e6c229;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-image:
+        url("https://raw.githubusercontent.com/purbalinggabmtc-cmyk/bold-after-dark-scanner/main/registration/images-1.jpg");
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 4px;
+    }
+
+    .brand span {
+      display: inline;
+    }
+
+    .brand-white {
+      color: #ffffff;
+    }
+
+    .brand-red {
+      color: var(--red);
+    }
+
+    .subtitle {
+      margin-top: 7px;
+      color: #aaa;
+      font-size: 12px;
+      letter-spacing: 3px;
+    }
+
+    .card {
+      background: rgba(17, 17, 17, 0.93);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.62);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      margin-bottom: 18px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      color: #ddd;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .required {
+      color: var(--red);
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 48px;
+      padding: 13px 14px;
+      border-radius: 9px;
+      border: 1px solid #444;
+      background: #0d0d0d;
+      color: #fff;
+      outline: none;
+      font-size: 14px;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 2px rgba(224, 0, 0, 0.12);
+    }
+
+    input:disabled,
+    select:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    input::placeholder {
+      color: #777;
+    }
+
+    .purchase-id-input-group {
+      display: flex;
+      align-items: stretch;
+      width: 100%;
+    }
+
+    .purchase-id-prefix {
+      display: flex;
+      align-items: center;
+      min-height: 48px;
+      padding: 0 13px;
+      border: 1px solid #444444;
+      border-right: 0;
+      border-radius: 9px 0 0 9px;
+      background: #1a1a1a;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .purchase-id-input-group input {
+      border-radius: 0 9px 9px 0;
+    }
+
+    .field-help {
+      margin-top: 6px;
+      color: #777;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .rider-status {
+      margin-top: 8px;
+      min-height: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .rider-status.loading {
+      color: #aaa;
+    }
+
+    .rider-status.valid {
+      color: var(--green);
+    }
+
+    .rider-status.invalid {
+      color: #ff5c5c;
+    }
+
+    .rider-status.error {
+      color: #ff8c8c;
+    }
+
+    .access-info {
+      margin-top: 10px;
+      padding: 11px 13px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #181818;
+      color: #aaa;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    button {
+      min-height: 48px;
+      padding: 13px 18px;
+      border: none;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: var(--red);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #f00000;
+    }
+
+    .btn-whatsapp {
+      width: 100%;
+      background: #128c4a;
+      color: #fff;
+    }
+
+    .btn-whatsapp:hover {
+      background: #16a557;
+    }
+
+    .message {
+      display: none;
+      margin-bottom: 18px;
+      padding: 14px;
+      border-radius: 9px;
+      font-size: 13px;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      background: #300000;
+      border: 1px solid var(--red);
+      color: #ff8888;
+    }
+
+    .message.success {
+      background: #062d16;
+      border: 1px solid #15934a;
+      color: #62eb98;
+    }
+
+    .message.info {
+      background: #1d1900;
+      border: 1px solid #a38c00;
+      color: #f0d44d;
+    }
+
+    .result {
+      display: none;
+      margin-top: 22px;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .success-card {
+      background: #0c180f;
+      border: 1px solid #197a3f;
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    .success-title {
+      color: var(--green);
+      font-size: 20px;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .ticket {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .ticket-label {
+      color: #888;
+      font-size: 11px;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+    }
+
+    .ticket-id {
+      color: #fff;
+      font-size: 27px;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .result-item {
+      background: #101010;
+      border: 1px solid #292929;
+      border-radius: 9px;
+      padding: 12px;
+    }
+
+    .result-label {
+      color: #777;
+      font-size: 10px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .result-value {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .qr-box {
+      margin-top: 18px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .qr-box img {
+      width: 260px;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .combined-purchase-details {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #d7d7d7;
+      color: #111111;
+      text-align: left;
+    }
+
+    .combined-purchase-title {
+      margin-bottom: 12px;
+      color: #111111;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .combined-purchase-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .combined-purchase-item {
+      padding: 10px 11px;
+      border: 1px solid #dddddd;
+      border-radius: 8px;
+      background: #f7f7f7;
+    }
+
+    .combined-purchase-label {
+      margin-bottom: 4px;
+      color: #777777;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .combined-purchase-value {
+      color: #111111;
+      font-size: 12px;
+      font-weight: 900;
+      word-break: break-word;
+    }
+
+    @media (max-width: 600px) {
+      .combined-purchase-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
+    .qr-caption {
+      margin-top: 8px;
+      color: #111;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .btn-save-qr {
+      width: 100%;
+      margin-top: 12px;
+      background: #e00000;
+      color: #ffffff;
+      border: 1px solid #e00000;
+      box-shadow: 0 0 14px rgba(224, 0, 0, 0.18);
+    }
+
+    .btn-save-qr:hover {
+      background: #ff0000;
+      border-color: #ff0000;
+      box-shadow: 0 0 18px rgba(255, 0, 0, 0.28);
+    }
+
+
+    .whatsapp-link-button {
+      display: block;
+      width: 100%;
+      min-height: 48px;
+      padding: 13px 18px;
+      margin-top: 10px;
+      border-radius: 9px;
+      background: #128c4a;
+      color: #ffffff;
+      text-decoration: none;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 22px;
+    }
+
+    .whatsapp-link-button:hover {
+      background: #16a557;
+    }
+
+    .footer {
+      text-align: center;
+      color: #555;
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin-top: 20px;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      color: #aaa;
+      padding: 10px 0;
+      font-size: 13px;
+    }
+
+    .loading.show {
+      display: block;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #555;
+      border-top-color: var(--red);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: -2px;
+      margin-right: 6px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+
+    /* =========================================================
+       TIKET UNDIAN / PEMBELIAN PRODUK
+       ========================================================= */
+
+    .raffle-option {
+      margin: 6px 0 16px;
+      padding: 14px;
+      border: 1px solid #3a3a3a;
+      border-radius: 10px;
+      background: #151515;
+    }
+
+    .raffle-checkbox-label {
+      display: flex !important;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 0 !important;
+      cursor: pointer;
+      line-height: 1.45;
+    }
+
+    .raffle-checkbox-label input {
+      width: 18px;
+      height: 18px;
+      min-height: 18px;
+      padding: 0;
+      margin: 1px 0 0;
+      flex: 0 0 auto;
+      accent-color: var(--red);
+    }
+
+    .raffle-checkbox-text {
+      font-size: 13px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .raffle-box {
+      margin: 0 0 18px;
+      padding: 16px;
+      border: 1px solid #444444;
+      border-radius: 12px;
+      background: #111111;
+    }
+
+    .raffle-title {
+      margin-bottom: 5px;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+    }
+
+    .raffle-subtitle {
+      margin-bottom: 16px;
+      color: #888888;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .price-summary {
+      margin: 12px 0 16px;
+      padding: 13px;
+      border: 1px solid #333333;
+      border-radius: 9px;
+      background: #181818;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 8px;
+      color: #cccccc;
+      font-size: 12px;
+    }
+
+    .price-row:last-child {
+      margin-bottom: 0;
+      padding-top: 9px;
+      border-top: 1px solid #333333;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .payment-title {
+      margin: 18px 0 10px;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.7px;
+    }
+
+    .payment-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+      margin-bottom: 16px;
+    }
+
+    .payment-item {
+      padding: 11px 12px;
+      border: 1px solid #333333;
+      border-radius: 9px;
+      background: #181818;
+    }
+
+    .payment-label {
+      margin-bottom: 5px;
+      color: #888888;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    .payment-number {
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 900;
+      word-break: break-word;
+    }
+
+    .purchase-result {
+      margin-top: 12px;
+      padding: 13px;
+      border: 1px solid #765f00;
+      border-radius: 9px;
+      background: #1d1900;
+    }
+
+    .purchase-result-label {
+      color: #b9a12d;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+
+    .purchase-result-value {
+      color: #f0d44d;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      word-break: break-word;
+    }
+
+    @media (max-width: 600px) {
+      .payment-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+        background-attachment: scroll;
+        background-position: center top;
+      }
+
+      .card {
+        padding: 17px;
+      }
+
+      .brand {
+        font-size: 23px;
+        letter-spacing: 3px;
+      }
+
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .button-row {
+        flex-direction: column;
+      }
+
+      .btn-primary {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <div class="brand">
+        <span class="brand-white">BOLD</span>
+        <span class="brand-red">AFTER</span>
+        <span class="brand-white">DARK</span>
+      </div>
+
+      <div class="subtitle">
+        REGISTRATION
+      </div>
+    </div>
+
+    <div class="card">
+
+      <div id="messageBox" class="message"></div>
+
+      <div class="section-title">
+        REGISTRATION FORM
+      </div>
+
+      <form id="registrationForm" novalidate>
+
+        <!-- ACCESS -->
+        <div class="field">
+          <label for="accessType">
+            Access <span class="required">*</span>
+          </label>
+
+          <select
+            id="accessType"
+            name="accessType"
+            required
+          >
+            <option value="">
+              Pilih Access
+            </option>
+
+            <option value="REGULER">
+              REGULER
+            </option>
+
+            <option value="BOLD RIDERS">
+              BOLD RIDERS
+            </option>
+          </select>
+
+          <div class="access-info">
+            Pilih REGULER untuk akses umum, atau BOLD RIDERS jika Anda memiliki ID BOLD RIDERS yang terdaftar.
+          </div>
+        </div>
+
+        <!-- BOLD RIDERS ID -->
+        <div
+          id="boldRidersField"
+          class="field hidden"
+        >
+          <label for="boldRidersId">
+            ID BOLD RIDERS <span class="required">*</span>
+          </label>
+
+          <input
+            id="boldRidersId"
+            name="boldRidersId"
+            type="text"
+            inputmode="text"
+            maxlength="8"
+            minlength="8"
+            autocomplete="off"
+            spellcheck="false"
+            autocapitalize="characters"
+          >
+
+          <div class="field-help">
+            Masukkan ID BOLD RIDERS sebanyak 8 karakter.
+          </div>
+
+          <div
+            id="boldRidersStatus"
+            class="rider-status"
+          ></div>
+        </div>
+
+        <!-- NAMA -->
+        <div class="field">
+          <label for="name">
+            Nama <span class="required">*</span>
+          </label>
+
+          <input
+            id="name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            required
+          >
+
+          <div
+            id="nameHelp"
+            class="field-help hidden"
+          >
+            Nama otomatis mengikuti nama pemilik ID BOLD RIDERS yang tervalidasi.
+          </div>
+        </div>
+
+        <!-- WHATSAPP -->
+        <div class="field">
+          <label for="whatsapp">
+            WhatsApp <span class="required">*</span>
+          </label>
+
+          <input
+            id="whatsapp"
+            name="whatsapp"
+            type="tel"
+            autocomplete="tel"
+            required
+          >
+        </div>
+
+        <!-- TIKET UNDIAN -->
+        <div class="raffle-option">
+          <label
+            for="wantRaffleTicket"
+            class="raffle-checkbox-label"
+          >
+            <input
+              id="wantRaffleTicket"
+              name="wantRaffleTicket"
+              type="checkbox"
+            >
+
+            <span class="raffle-checkbox-text">
+              Saya ingin mendapatkan tiket undian
+            </span>
+          </label>
+
+          <div class="field-help">
+            <span id="raffleProductInfo">Memuat informasi produk...</span>
+          </div>
+        </div>
+
+        <div
+          id="rafflePurchaseBox"
+          class="raffle-box hidden"
+        >
+          <div class="raffle-title">
+            <span id="purchaseSectionTitle">PEMBELIAN PRODUK</span>
+          </div>
+
+          <div class="raffle-subtitle">
+            Tentukan jumlah pembelian dan metode pembayaran. Bukti pembayaran diunggah setelah registrasi.
+          </div>
+
+          <div class="field">
+            <label for="raffleQuantity">
+              <span id="raffleQuantityLabel">Jumlah</span> <span class="required">*</span>
+            </label>
+
+            <input
+              id="raffleQuantity"
+              name="raffleQuantity"
+              type="number"
+              min="1"
+              max="100"
+              step="1"
+              value="1"
+            >
+          </div>
+
+          <div class="price-summary">
+            <div class="price-row">
+              <span id="raffleUnitPriceLabel">Harga per unit</span>
+              <strong id="raffleUnitPriceText">-</strong>
+            </div>
+
+            <div class="price-row">
+              <span>Jumlah</span>
+              <strong id="raffleQuantityText">1 unit</strong>
+            </div>
+
+            <div class="price-row">
+              <span>Total Pembayaran</span>
+              <strong id="raffleTotalText">Rp20.000</strong>
+            </div>
+          </div>
+
+          <div class="payment-title">
+            PAYMENT GATEWAY
+          </div>
+
+          <div class="field">
+            <label for="paymentMethod">
+              Pilih Metode Pembayaran <span class="required">*</span>
+            </label>
+
+            <select
+              id="paymentMethod"
+              name="paymentMethod"
+            >
+              <option value="">
+                Pilih bank / e-wallet
+              </option>
+
+              <option value="EWALLET">DANA / GoPay / ShopeePay</option>
+              <option value="BCA">BCA</option>
+              <option value="BRI">BRI</option>
+              <option value="SEABANK">SeaBank</option>
+            </select>
+          </div>
+
+          <div
+            id="selectedPaymentAccount"
+            class="payment-item hidden"
+          >
+            <div
+              id="selectedPaymentLabel"
+              class="payment-label"
+            >
+              -
+            </div>
+
+            <div
+              id="selectedPaymentNumber"
+              class="payment-number"
+            >
+              -
+            </div>
+
+            <div
+              id="selectedPaymentOwner"
+              class="field-help hidden"
+            >
+              -
+            </div>
+          </div>
+</div>
+
+
+        <div
+          id="loadingBox"
+          class="loading"
+        >
+          <span class="spinner"></span>
+          Memproses registrasi...
+        </div>
+
+        <div class="button-row">
+
+          <button
+            id="submitButton"
+            class="btn-primary"
+            type="submit"
+          >
+            REGISTER NOW
+          </button>
+
+        </div>
+
+      </form>
+
+      <div class="button-row">
+
+        <button
+          id="whatsappButton"
+          class="btn-whatsapp"
+          type="button"
+        >
+          BANTUAN VIA WHATSAPP
+        </button>
+
+      </div>
+
+
+      <div class="button-row">
+        <button
+          id="openPaymentUploadButton"
+          class="btn-whatsapp"
+          type="button"
+        >
+          UPLOAD BUKTI PEMBAYARAN
+        </button>
+      </div>
+
+      <div
+        id="paymentLookupBox"
+        class="result"
+      >
+        <div class="success-card">
+          <div class="section-title">
+            UPLOAD BUKTI PEMBAYARAN
+          </div>
+
+          <div class="field">
+            <label for="lookupPurchaseId">
+              ID Pembelian / Ticket ID <span class="required">*</span>
+            </label>
+
+            <div class="purchase-id-input-group">
+              <div class="purchase-id-prefix">
+                BAD26-
+              </div>
+
+              <input
+                id="lookupPurchaseId"
+                type="text"
+                inputmode="numeric"
+                maxlength="6"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="XXXXXX"
+              >
+            </div>
+
+            <div class="field-help">
+              Masukkan hanya 6 digit kode setelah BAD26-.
+            </div>
+          </div>
+
+          <button
+            id="lookupPurchaseButton"
+            class="btn-primary"
+            type="button"
+          >
+            CEK ID PEMBELIAN
+          </button>
+
+          <div
+            id="lookupPurchaseDetails"
+            class="hidden"
+            style="margin-top:16px;"
+          >
+            <div
+              id="approvedRaffleBox"
+              class="purchase-result hidden"
+              style="margin-bottom:16px;"
+            >
+              <div class="purchase-result-label">
+                NOMOR UNDIAN
+              </div>
+
+              <div
+                id="approvedRaffleNumbers"
+                class="purchase-result-value"
+                style="line-height:1.6; white-space:pre-line;"
+              >
+                -
+              </div>
+
+              <button
+                id="saveRaffleNumbersButton"
+                class="btn-save-qr"
+                type="button"
+                style="margin-top:12px;"
+              >
+                SIMPAN NOMOR UNDIAN (JPG)
+              </button>
+            </div>
+
+            <div class="result-grid">
+              <div class="result-item">
+                <div class="result-label">ID Pembelian / Ticket ID</div>
+                <div id="lookupResultPurchaseId" class="result-value">-</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-label">Nama</div>
+                <div id="lookupResultName" class="result-value">-</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-label">Jumlah</div>
+                <div id="lookupResultQuantity" class="result-value">-</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-label">Total</div>
+                <div id="lookupResultTotal" class="result-value">-</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-label">Metode</div>
+                <div id="lookupResultPaymentMethod" class="result-value">-</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-label">Tujuan Pembayaran</div>
+                <div id="lookupResultPaymentAccount" class="result-value">-</div>
+              </div>
+            </div>
+
+            <div class="field" style="margin-top:16px;">
+              <label for="lookupPaymentProof">
+                Bukti Pembayaran <span class="required">*</span>
+              </label>
+
+              <input
+                id="lookupPaymentProof"
+                type="file"
+                accept=".jpg,.jpeg,.png,.webp,.pdf,image/jpeg,image/png,image/webp,application/pdf"
+              >
+
+              <div class="field-help">
+                Upload JPG, PNG, WEBP, atau PDF. Maksimal 5 MB.
+              </div>
+            </div>
+
+            <button
+              id="submitLookupPaymentProof"
+              class="btn-primary"
+              type="button"
+            >
+              SUBMIT BUKTI PEMBAYARAN
+            </button>
+
+            <div
+              id="whatsappConfirmationBox"
+              class="hidden"
+              style="margin-top:10px;"
+            >
+              <a
+                id="confirmViaWhatsappLink"
+                class="whatsapp-link-button"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                KONFIRMASI VIA WHATSAPP
+              </a>
+
+              <div
+                class="field-help"
+                style="margin-top:8px;"
+              >
+                Link WhatsApp ini baru dibuat setelah bukti pembayaran berhasil diunggah.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- RESULT -->
+      <div
+        id="resultBox"
+        class="result"
+      >
+
+        <div class="success-card">
+
+          <div class="success-title">
+            REGISTRATION BERHASIL
+          </div>
+
+          <div class="ticket">
+
+            <div
+              id="resultTicketLabel"
+              class="ticket-label"
+            >
+              TICKET ID
+            </div>
+
+            <div
+              id="resultPassId"
+              class="ticket-id"
+            >
+              -
+            </div>
+
+          </div>
+
+          <div class="result-grid">
+
+            <div class="result-item">
+              <div class="result-label">
+                Nama
+              </div>
+
+              <div
+                id="resultName"
+                class="result-value"
+              >
+                -
+              </div>
+            </div>
+
+            <div class="result-item">
+              <div class="result-label">
+                WhatsApp
+              </div>
+
+              <div
+                id="resultWhatsapp"
+                class="result-value"
+              >
+                -
+              </div>
+            </div>
+
+            <div class="result-item">
+              <div class="result-label">
+                Access
+              </div>
+
+              <div
+                id="resultAccess"
+                class="result-value"
+              >
+                -
+              </div>
+            </div>
+
+            <div
+              id="resultRiderIdItem"
+              class="result-item hidden"
+            >
+              <div class="result-label">
+                BOLD RIDERS ID
+              </div>
+
+              <div
+                id="resultRiderId"
+                class="result-value"
+              >
+                -
+              </div>
+            </div>
+
+            <div
+              id="resultRiderNameItem"
+              class="result-item hidden"
+            >
+              <div class="result-label">
+                Nama BOLD RIDERS
+              </div>
+
+              <div
+                id="resultRiderName"
+                class="result-value"
+              >
+                -
+              </div>
+            </div>
+
+          </div>
+
+          <div
+            id="qrBox"
+            class="qr-box hidden"
+          >
+            <img
+              id="qrImage"
+              src=""
+              alt="QR Code"
+            >
+
+            <div class="qr-caption">
+              Tunjukkan QR Code ini saat check-in.
+            </div>
+
+            <div
+              id="purchaseDetailResultBox"
+              class="combined-purchase-details hidden"
+            >
+              <div
+                id="purchaseDetailTitle"
+                class="combined-purchase-title"
+              >
+                DETAIL PEMBELIAN PRODUK
+              </div>
+
+              <div class="combined-purchase-grid">
+                <div class="combined-purchase-item">
+                  <div class="combined-purchase-label">
+                    Produk
+                  </div>
+                  <div
+                    id="resultPurchaseProduct"
+                    class="combined-purchase-value"
+                  >
+                    -
+                  </div>
+                </div>
+
+                <div class="combined-purchase-item">
+                  <div class="combined-purchase-label">
+                    Jumlah
+                  </div>
+                  <div
+                    id="resultPurchaseQuantity"
+                    class="combined-purchase-value"
+                  >
+                    -
+                  </div>
+                </div>
+
+                <div class="combined-purchase-item">
+                  <div class="combined-purchase-label">
+                    Total
+                  </div>
+                  <div
+                    id="resultPurchaseTotal"
+                    class="combined-purchase-value"
+                  >
+                    -
+                  </div>
+                </div>
+
+                <div class="combined-purchase-item">
+                  <div class="combined-purchase-label">
+                    Metode
+                  </div>
+                  <div
+                    id="resultPurchaseMethod"
+                    class="combined-purchase-value"
+                  >
+                    -
+                  </div>
+                </div>
+
+                <div
+                  class="combined-purchase-item"
+                  style="grid-column:1 / -1;"
+                >
+                  <div class="combined-purchase-label">
+                    Tujuan Pembayaran
+                  </div>
+                  <div
+                    id="resultPurchaseAccount"
+                    class="combined-purchase-value"
+                  >
+                    -
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              id="saveQrButton"
+              class="btn-save-qr"
+              type="button"
+            >
+              SIMPAN TIKET MASUK (JPG)
+            </button>
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer">
+      BOLD AFTER DARK • REGISTRATION
+    </div>
+
+  </div>
+
+  <script>
+    "use strict";
+
+    const API_URL =
+      "https://yrvnmmascklkuzpjkwxn.supabase.co/functions/v1/dynamic-service";
+
+    const BOLD_RIDER_VALIDATION_URL =
+      "https://yrvnmmascklkuzpjkwxn.supabase.co/functions/v1/validate-bold-rider";
+
+    const PURCHASE_SERVICE_URL =
+      "https://yrvnmmascklkuzpjkwxn.supabase.co/functions/v1/purchase-service";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
+
+    const WHATSAPP_NUMBER =
+      "6282324854187";
+
+    /*
+     * Admin penerima konfirmasi pembayaran.
+     * Format internasional Indonesia: 62 + nomor tanpa angka 0 di depan.
+     */
+    const PAYMENT_ADMIN_WHATSAPP =
+      "6282324854187";
+
+    let ACTIVE_PRODUCT_NAME =
+      "Produk";
+
+    let ACTIVE_PRODUCT_UNIT_PRICE =
+      0;
+
+    let ACTIVE_PRODUCT_UNIT_NAME =
+      "unit";
+
+    const MAX_PAYMENT_PROOF_SIZE =
+      5 * 1024 * 1024;
+
+    const registrationForm =
+      document.getElementById("registrationForm");
+
+    const nameInput =
+      document.getElementById("name");
+
+    const nameHelp =
+      document.getElementById("nameHelp");
+
+    const whatsappInput =
+      document.getElementById("whatsapp");
+
+    const wantRaffleTicketInput =
+      document.getElementById("wantRaffleTicket");
+
+    const rafflePurchaseBox =
+      document.getElementById("rafflePurchaseBox");
+
+    const purchaseSectionTitle =
+      document.getElementById("purchaseSectionTitle");
+
+    const raffleProductInfo =
+      document.getElementById("raffleProductInfo");
+
+    const raffleQuantityLabel =
+      document.getElementById("raffleQuantityLabel");
+
+    const raffleUnitPriceLabel =
+      document.getElementById("raffleUnitPriceLabel");
+
+    const raffleUnitPriceText =
+      document.getElementById("raffleUnitPriceText");
+
+    const purchaseDetailTitle =
+      document.getElementById("purchaseDetailTitle");
+
+    const raffleQuantityInput =
+      document.getElementById("raffleQuantity");
+
+    const raffleQuantityText =
+      document.getElementById("raffleQuantityText");
+
+    const raffleTotalText =
+      document.getElementById("raffleTotalText");
+
+    const paymentMethodInput =
+      document.getElementById("paymentMethod");
+
+    const selectedPaymentAccount =
+      document.getElementById("selectedPaymentAccount");
+
+    const selectedPaymentLabel =
+      document.getElementById("selectedPaymentLabel");
+
+    const selectedPaymentNumber =
+      document.getElementById("selectedPaymentNumber");
+
+    const selectedPaymentOwner =
+      document.getElementById("selectedPaymentOwner");
+
+    const purchaseDetailResultBox =
+      document.getElementById("purchaseDetailResultBox");
+
+    const resultTicketLabel =
+      document.getElementById("resultTicketLabel");
+
+    const resultPurchaseProduct =
+      document.getElementById("resultPurchaseProduct");
+
+    const resultPurchaseQuantity =
+      document.getElementById("resultPurchaseQuantity");
+
+    const resultPurchaseTotal =
+      document.getElementById("resultPurchaseTotal");
+
+    const resultPurchaseMethod =
+      document.getElementById("resultPurchaseMethod");
+
+    const resultPurchaseAccount =
+      document.getElementById("resultPurchaseAccount");
+
+    const openPaymentUploadButton =
+      document.getElementById("openPaymentUploadButton");
+
+    const paymentLookupBox =
+      document.getElementById("paymentLookupBox");
+
+    const lookupPurchaseIdInput =
+      document.getElementById("lookupPurchaseId");
+
+    const lookupPurchaseButton =
+      document.getElementById("lookupPurchaseButton");
+
+    const lookupPurchaseDetails =
+      document.getElementById("lookupPurchaseDetails");
+
+    const lookupResultPurchaseId =
+      document.getElementById("lookupResultPurchaseId");
+
+    const lookupResultName =
+      document.getElementById("lookupResultName");
+
+    const lookupResultQuantity =
+      document.getElementById("lookupResultQuantity");
+
+    const lookupResultTotal =
+      document.getElementById("lookupResultTotal");
+
+    const lookupResultPaymentMethod =
+      document.getElementById("lookupResultPaymentMethod");
+
+    const lookupResultPaymentAccount =
+      document.getElementById("lookupResultPaymentAccount");
+
+    const approvedRaffleBox =
+      document.getElementById("approvedRaffleBox");
+
+    const approvedRaffleNumbers =
+      document.getElementById("approvedRaffleNumbers");
+
+    const saveRaffleNumbersButton =
+      document.getElementById("saveRaffleNumbersButton");
+
+    const lookupPaymentProofInput =
+      document.getElementById("lookupPaymentProof");
+
+    const submitLookupPaymentProofButton =
+      document.getElementById("submitLookupPaymentProof");
+
+    const whatsappConfirmationBox =
+      document.getElementById("whatsappConfirmationBox");
+
+    const confirmViaWhatsappLink =
+      document.getElementById("confirmViaWhatsappLink");
+
+    const accessTypeInput =
+      document.getElementById("accessType");
+
+    const boldRidersField =
+      document.getElementById("boldRidersField");
+
+    const boldRidersIdInput =
+      document.getElementById("boldRidersId");
+
+    const boldRidersStatus =
+      document.getElementById("boldRidersStatus");
+const submitButton =
+      document.getElementById("submitButton");
+
+    const whatsappButton =
+      document.getElementById("whatsappButton");
+
+    const loadingBox =
+      document.getElementById("loadingBox");
+
+    const messageBox =
+      document.getElementById("messageBox");
+
+    const resultBox =
+      document.getElementById("resultBox");
+
+    const resultPassId =
+      document.getElementById("resultPassId");
+
+    const resultName =
+      document.getElementById("resultName");
+
+    const resultWhatsapp =
+      document.getElementById("resultWhatsapp");
+
+    const resultAccess =
+      document.getElementById("resultAccess");
+
+    const resultRiderIdItem =
+      document.getElementById("resultRiderIdItem");
+
+    const resultRiderNameItem =
+      document.getElementById("resultRiderNameItem");
+
+    const resultRiderId =
+      document.getElementById("resultRiderId");
+
+    const resultRiderName =
+      document.getElementById("resultRiderName");
+
+    const qrBox =
+      document.getElementById("qrBox");
+
+    const qrImage =
+      document.getElementById("qrImage");
+
+    const saveQrButton =
+      document.getElementById("saveQrButton");
+
+    let currentTicketId = "";
+    let currentQrUrl = "";
+
+    let currentHasMesranPurchase = false;
+
+    let boldRiderIsValid = false;
+    let boldRiderValidatedId = "";
+    let boldRiderOwnerName = "";
+    let validationRequestNumber = 0;
+
+
+    function escapeHtml(value) {
+      return String(
+        value == null
+          ? ""
+          : value
+      )
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+
+
+    function formatRupiah(value) {
+      return new Intl.NumberFormat(
+        "id-ID",
+        {
+          style: "currency",
+          currency: "IDR",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0
+        }
+      ).format(value);
+    }
+
+
+    async function loadProductSettings() {
+      try {
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=getProductSettings",
+            {
+              method: "GET",
+              cache: "no-store",
+              headers: {
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY
+              }
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Response konfigurasi produk tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true ||
+          !data.product
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "Konfigurasi produk tidak tersedia."
+          );
+        }
+
+        ACTIVE_PRODUCT_NAME =
+          String(
+            data.product.productName || ""
+          ).trim() || "Produk";
+
+        ACTIVE_PRODUCT_UNIT_PRICE =
+          Number(
+            data.product.unitPrice || 0
+          );
+
+        ACTIVE_PRODUCT_UNIT_NAME =
+          String(
+            data.product.unitName || ""
+          ).trim() || "unit";
+
+        if (
+          !Number.isInteger(
+            ACTIVE_PRODUCT_UNIT_PRICE
+          ) ||
+          ACTIVE_PRODUCT_UNIT_PRICE <= 0
+        ) {
+          throw new Error(
+            "Harga produk aktif tidak valid."
+          );
+        }
+
+        applyProductSettingsToUi();
+
+      } catch (error) {
+        console.error(
+          "LOAD PRODUCT SETTINGS ERROR:",
+          error
+        );
+
+        showMessage(
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Tidak dapat memuat konfigurasi produk."
+        );
+
+        wantRaffleTicketInput.disabled =
+          true;
+      }
+    }
+
+
+    function applyProductSettingsToUi() {
+      if (purchaseSectionTitle) {
+        purchaseSectionTitle.textContent =
+          "PEMBELIAN " +
+          ACTIVE_PRODUCT_NAME.toUpperCase();
+      }
+
+      if (raffleProductInfo) {
+        raffleProductInfo.textContent =
+          "1 " +
+          ACTIVE_PRODUCT_UNIT_NAME +
+          " " +
+          ACTIVE_PRODUCT_NAME +
+          " " +
+          formatRupiah(
+            ACTIVE_PRODUCT_UNIT_PRICE
+          ) +
+          ". Setelah pembayaran disetujui, setiap 1 " +
+          ACTIVE_PRODUCT_UNIT_NAME +
+          " mendapatkan 1 tiket undian sekali pakai.";
+      }
+
+      if (raffleQuantityLabel) {
+        raffleQuantityLabel.textContent =
+          "Jumlah " +
+          ACTIVE_PRODUCT_UNIT_NAME;
+      }
+
+      if (raffleUnitPriceLabel) {
+        raffleUnitPriceLabel.textContent =
+          "Harga per " +
+          ACTIVE_PRODUCT_UNIT_NAME;
+      }
+
+      if (raffleUnitPriceText) {
+        raffleUnitPriceText.textContent =
+          formatRupiah(
+            ACTIVE_PRODUCT_UNIT_PRICE
+          );
+      }
+
+      if (purchaseDetailTitle) {
+        purchaseDetailTitle.textContent =
+          "DETAIL PEMBELIAN " +
+          ACTIVE_PRODUCT_NAME.toUpperCase();
+      }
+
+      updateRaffleTotal();
+    }
+
+    const PAYMENT_ACCOUNTS = {
+      EWALLET: {
+        label: "DANA / GoPay / ShopeePay",
+        number: "089670149802",
+        owner: ""
+      },
+      BCA: {
+        label: "BCA",
+        number: "0970708995",
+        owner: "a.n Gatot Setiawan"
+      },
+      BRI: {
+        label: "BRI",
+        number: "683701037120537",
+        owner: "a.n Gatot Setiawan"
+      },
+      SEABANK: {
+        label: "SeaBank",
+        number: "901862783670",
+        owner: "a.n Gatot Setiawan"
+      }
+    };
+
+
+    function updatePaymentAccount() {
+      const method =
+        String(paymentMethodInput.value || "").trim();
+
+      const account =
+        PAYMENT_ACCOUNTS[method];
+
+      if (!account) {
+        selectedPaymentLabel.textContent = "-";
+        selectedPaymentNumber.textContent = "-";
+        selectedPaymentOwner.textContent = "-";
+        selectedPaymentOwner.classList.add("hidden");
+        selectedPaymentAccount.classList.add("hidden");
+        return;
+      }
+
+      selectedPaymentLabel.textContent =
+        account.label;
+
+      selectedPaymentNumber.textContent =
+        account.number;
+
+      if (account.owner) {
+        selectedPaymentOwner.textContent =
+          account.owner;
+
+        selectedPaymentOwner.classList.remove(
+          "hidden"
+        );
+      } else {
+        selectedPaymentOwner.textContent =
+          "-";
+
+        selectedPaymentOwner.classList.add(
+          "hidden"
+        );
+      }
+
+      selectedPaymentAccount.classList.remove("hidden");
+    }
+
+
+    function updateRafflePurchaseFields() {
+      const enabled =
+        wantRaffleTicketInput.checked;
+
+      if (enabled) {
+        rafflePurchaseBox.classList.remove(
+          "hidden"
+        );
+
+        raffleQuantityInput.required =
+          true;
+
+        paymentMethodInput.required =
+          true;
+
+        updateRaffleTotal();
+      } else {
+        rafflePurchaseBox.classList.add(
+          "hidden"
+        );
+
+        raffleQuantityInput.required =
+          false;
+
+        paymentMethodInput.required =
+          false;
+
+        raffleQuantityInput.value =
+          "1";
+
+        paymentMethodInput.value =
+          "";
+
+        updatePaymentAccount();
+
+    paymentLookupBox.style.display =
+      "none";
+
+        updateRaffleTotal();
+      }
+    }
+
+
+    function updateRaffleTotal() {
+      let quantity =
+        Number(
+          raffleQuantityInput.value
+        );
+
+      if (
+        !Number.isInteger(quantity) ||
+        quantity < 1
+      ) {
+        quantity = 1;
+      }
+
+      if (quantity > 100) {
+        quantity = 100;
+      }
+
+      raffleQuantityText.textContent =
+        quantity +
+        " " +
+        ACTIVE_PRODUCT_UNIT_NAME;
+
+      raffleTotalText.textContent =
+        formatRupiah(
+          quantity *
+          ACTIVE_PRODUCT_UNIT_PRICE
+        );
+    }
+
+
+    function validateRafflePurchase() {
+      if (
+        !wantRaffleTicketInput.checked
+      ) {
+        return {
+          ok: true,
+          quantity: 0,
+          paymentMethod: "",
+          file: null
+        };
+      }
+
+      const quantity =
+        Number(
+          raffleQuantityInput.value
+        );
+
+      if (
+        !Number.isInteger(quantity) ||
+        quantity < 1 ||
+        quantity > 100
+      ) {
+        return {
+          ok: false,
+          message:
+            "Jumlah pembelian " + ACTIVE_PRODUCT_NAME + " harus 1 sampai 100 " + ACTIVE_PRODUCT_UNIT_NAME + ".",
+          element:
+            raffleQuantityInput
+        };
+      }
+
+      const paymentMethod =
+        String(
+          paymentMethodInput.value || ""
+        ).trim();
+
+      if (!paymentMethod) {
+        return {
+          ok: false,
+          message:
+            "Silakan pilih metode pembayaran " + ACTIVE_PRODUCT_NAME + ".",
+          element:
+            paymentMethodInput
+        };
+      }
+
+      return {
+        ok: true,
+        quantity,
+        paymentMethod
+      };
+    }
+
+
+    async function createMesranPurchase(
+      registrationData,
+      raffleData
+    ) {
+      const createResponse =
+        await fetch(
+          PURCHASE_SERVICE_URL +
+          "?action=createPurchase",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json",
+              "Accept":
+                "application/json",
+              "apikey":
+                SUPABASE_PUBLISHABLE_KEY,
+              "Authorization":
+                "Bearer " +
+                SUPABASE_PUBLISHABLE_KEY
+            },
+            body:
+              JSON.stringify({
+                buyerName:
+                  registrationData.name,
+                whatsapp:
+                  registrationData.whatsapp,
+                registrationPassId:
+                  registrationData.passId,
+                quantity:
+                  raffleData.quantity,
+                paymentMethod:
+                  raffleData.paymentMethod
+              })
+          }
+        );
+
+      const raw =
+        await createResponse.text();
+
+      let data;
+
+      try {
+        data =
+          JSON.parse(raw);
+      } catch {
+        throw new Error(
+          "Registrasi berhasil, tetapi server pembelian mengembalikan response yang tidak valid."
+        );
+      }
+
+      if (
+        !createResponse.ok ||
+        !data ||
+        data.success !== true
+      ) {
+        throw new Error(
+          data &&
+          (
+            data.message ||
+            data.detail
+          )
+            ? (
+                data.message ||
+                data.detail
+              )
+            : "Registrasi berhasil, tetapi ID pembelian " + ACTIVE_PRODUCT_NAME + " gagal dibuat."
+        );
+      }
+
+      return {
+        purchaseId:
+          String(
+            data.purchase &&
+            data.purchase.purchaseId
+              ? data.purchase.purchaseId
+              : registrationData.passId
+          ).trim(),
+        quantity:
+          Number(
+            data.purchase &&
+            data.purchase.quantity
+              ? data.purchase.quantity
+              : raffleData.quantity
+          ),
+        totalAmount:
+          Number(
+            data.purchase &&
+            data.purchase.totalAmount
+              ? data.purchase.totalAmount
+              : raffleData.quantity *
+                ACTIVE_PRODUCT_UNIT_PRICE
+          ),
+        paymentMethod:
+          String(
+            data.purchase &&
+            data.purchase.paymentMethod
+              ? data.purchase.paymentMethod
+              : raffleData.paymentMethod
+          ),
+        productName:
+          String(
+            data.purchase &&
+            data.purchase.productName
+              ? data.purchase.productName
+              : ACTIVE_PRODUCT_NAME
+          ),
+        unitName:
+          String(
+            data.purchase &&
+            data.purchase.unitName
+              ? data.purchase.unitName
+              : ACTIVE_PRODUCT_UNIT_NAME
+          ),
+        unitPrice:
+          Number(
+            data.purchase &&
+            data.purchase.unitPrice
+              ? data.purchase.unitPrice
+              : ACTIVE_PRODUCT_UNIT_PRICE
+          ),
+        paymentAccount:
+          data.paymentAccount || null
+      };
+    }
+
+
+    async function lookupPurchase() {
+      hideMessage();
+
+      const purchaseCode =
+        String(
+          lookupPurchaseIdInput.value || ""
+        )
+          .replace(/\D/g, "")
+          .slice(0, 6);
+
+      lookupPurchaseIdInput.value =
+        purchaseCode;
+
+      if (
+        purchaseCode.length !== 6
+      ) {
+        showMessage(
+          "error",
+          "Masukkan 6 digit kode setelah BAD26-."
+        );
+        return;
+      }
+
+      const purchaseId =
+        "BAD26-" +
+        purchaseCode;
+
+      whatsappConfirmationBox.classList.add(
+        "hidden"
+      );
+
+      lookupPurchaseButton.disabled =
+        true;
+
+      lookupPurchaseButton.textContent =
+        "MEMERIKSA...";
+
+      try {
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=getPurchase&purchaseId=" +
+            encodeURIComponent(purchaseId),
+            {
+              method: "GET",
+              headers: {
+                "Accept": "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY
+              }
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Server mengembalikan response yang tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "ID pembelian tidak ditemukan."
+          );
+        }
+
+        const purchase =
+          data.purchase || {};
+
+        lookupResultPurchaseId.textContent =
+          purchase.purchaseId || "-";
+
+        lookupResultName.textContent =
+          purchase.buyerName || "-";
+
+        lookupResultQuantity.textContent =
+          (purchase.quantity || 0) +
+          " " +
+          (
+            purchase.unitName ||
+            ACTIVE_PRODUCT_UNIT_NAME
+          );
+
+        lookupResultTotal.textContent =
+          formatRupiah(
+            Number(
+              purchase.totalAmount || 0
+            )
+          );
+
+        lookupResultPaymentMethod.textContent =
+          purchase.paymentAccount &&
+          purchase.paymentAccount.label
+            ? purchase.paymentAccount.label
+            : (
+                purchase.paymentMethod ||
+                "-"
+              );
+
+        const account =
+          purchase.paymentAccount;
+
+        lookupResultPaymentAccount.textContent =
+          account
+            ? (
+                account.number +
+                (
+                  account.owner
+                    ? " • a.n " +
+                      account.owner
+                    : ""
+                )
+              )
+            : "-";
+
+        const raffleNumbers =
+          Array.isArray(data.coupons)
+            ? data.coupons
+                .map(function(coupon) {
+                  return String(
+                    coupon.coupon_code || ""
+                  ).trim();
+                })
+                .filter(Boolean)
+            : [];
+
+        if (
+          String(
+            purchase.paymentStatus || ""
+          ).toUpperCase() === "APPROVED" &&
+          raffleNumbers.length > 0
+        ) {
+          approvedRaffleNumbers.textContent =
+            raffleNumbers.join("\n");
+
+          approvedRaffleBox.classList.remove(
+            "hidden"
+          );
+
+          lookupPaymentProofInput
+            .closest(".field")
+            .classList.add(
+              "hidden"
+            );
+
+          submitLookupPaymentProofButton.classList.add(
+            "hidden"
+          );
+
+          whatsappConfirmationBox.classList.add(
+            "hidden"
+          );
+
+          showMessage(
+            "success",
+            "Pembayaran sudah disetujui. Nomor undian Anda tersedia."
+          );
+        } else {
+          approvedRaffleNumbers.textContent =
+            "-";
+
+          approvedRaffleBox.classList.add(
+            "hidden"
+          );
+
+          lookupPaymentProofInput
+            .closest(".field")
+            .classList.remove(
+              "hidden"
+            );
+
+          submitLookupPaymentProofButton.classList.remove(
+            "hidden"
+          );
+        }
+
+        lookupPurchaseDetails.classList.remove(
+          "hidden"
+        );
+
+      } catch (error) {
+        console.error(
+          "LOOKUP PURCHASE ERROR:",
+          error
+        );
+
+        lookupPurchaseDetails.classList.add(
+          "hidden"
+        );
+
+        whatsappConfirmationBox.classList.add(
+          "hidden"
+        );
+
+        showMessage(
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "ID pembelian tidak ditemukan."
+        );
+
+      } finally {
+        lookupPurchaseButton.disabled =
+          false;
+
+        lookupPurchaseButton.textContent =
+          "CEK ID PEMBELIAN";
+      }
+    }
+
+
+    function buildPaymentConfirmationMessage() {
+      const purchaseId =
+        lookupResultPurchaseId.textContent.trim();
+
+      const buyerName =
+        lookupResultName.textContent.trim();
+
+      const quantity =
+        lookupResultQuantity.textContent.trim();
+
+      const total =
+        lookupResultTotal.textContent.trim();
+
+      const paymentMethod =
+        lookupResultPaymentMethod.textContent.trim();
+
+      return [
+        "Halo Admin BOLD AFTER DARK,",
+        "",
+        "Saya sudah mengirim bukti pembayaran.",
+        "",
+        "ID Pembelian / Ticket ID: " + purchaseId,
+        "Nama: " + buyerName,
+        "Jumlah: " + quantity,
+        "Total: " + total,
+        "Metode: " + paymentMethod,
+        "",
+        "Mohon dilakukan verifikasi."
+      ].join("\n");
+    }
+
+
+    function buildWhatsAppConfirmationUrl() {
+      const message =
+        buildPaymentConfirmationMessage();
+
+      return (
+        "https://wa.me/" +
+        PAYMENT_ADMIN_WHATSAPP +
+        "?text=" +
+        encodeURIComponent(message)
+      );
+    }
+
+
+    function preparePaymentConfirmationWhatsAppLink() {
+      confirmViaWhatsappLink.href =
+        buildWhatsAppConfirmationUrl();
+
+      whatsappConfirmationBox.classList.remove(
+        "hidden"
+      );
+    }
+
+
+    async function submitLookupPaymentProof() {
+      hideMessage();
+
+      const purchaseId =
+        lookupResultPurchaseId.textContent.trim();
+
+      const file =
+        lookupPaymentProofInput.files &&
+        lookupPaymentProofInput.files.length
+          ? lookupPaymentProofInput.files[0]
+          : null;
+
+      if (
+        !purchaseId ||
+        purchaseId === "-"
+      ) {
+        showMessage(
+          "error",
+          "Silakan cek ID pembelian terlebih dahulu."
+        );
+        return;
+      }
+
+      if (!file) {
+        showMessage(
+          "error",
+          "Silakan upload bukti pembayaran."
+        );
+        return;
+      }
+
+      if (
+        file.size <= 0 ||
+        file.size >
+          MAX_PAYMENT_PROOF_SIZE
+      ) {
+        showMessage(
+          "error",
+          "Ukuran file maksimal 5 MB."
+        );
+        return;
+      }
+
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "application/pdf"
+      ];
+
+      if (
+        !allowedTypes.includes(
+          file.type
+        )
+      ) {
+        showMessage(
+          "error",
+          "Format file harus JPG, PNG, WEBP, atau PDF."
+        );
+        return;
+      }
+
+      submitLookupPaymentProofButton.disabled =
+        true;
+
+      submitLookupPaymentProofButton.textContent =
+        "MENGIRIM...";
+
+      try {
+        const formData =
+          new FormData();
+
+        formData.append(
+          "purchaseId",
+          purchaseId
+        );
+
+        formData.append(
+          "proof",
+          file
+        );
+
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=submitPaymentProof",
+            {
+              method: "POST",
+              headers: {
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY
+              },
+              body:
+                formData
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Server mengembalikan response yang tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "Upload bukti pembayaran gagal."
+          );
+        }
+
+        showMessage(
+          "success",
+          "Bukti pembayaran berhasil dikirim. Silakan konfirmasi ke admin melalui WhatsApp."
+        );
+
+        lookupPaymentProofInput.value =
+          "";
+
+        preparePaymentConfirmationWhatsAppLink();
+
+      } catch (error) {
+        console.error(
+          "SUBMIT PAYMENT PROOF ERROR:",
+          error
+        );
+
+        showMessage(
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Upload bukti pembayaran gagal."
+        );
+
+      } finally {
+        submitLookupPaymentProofButton.disabled =
+          false;
+
+        submitLookupPaymentProofButton.textContent =
+          "SUBMIT BUKTI PEMBAYARAN";
+      }
+    }
+
+
+    function resetRegistrationForm() {
+      registrationForm.reset();
+
+      resultBox.classList.remove(
+        "show"
+      );
+
+      paymentLookupBox.classList.remove(
+        "show"
+      );
+
+      paymentLookupBox.style.display =
+        "none";
+
+      lookupPurchaseDetails.classList.add(
+        "hidden"
+      );
+
+      whatsappConfirmationBox.classList.add(
+        "hidden"
+      );
+
+      purchaseDetailResultBox.classList.add(
+        "hidden"
+      );
+
+      resultRiderIdItem.classList.add(
+        "hidden"
+      );
+
+      resultRiderNameItem.classList.add(
+        "hidden"
+      );
+
+      qrBox.classList.add(
+        "hidden"
+      );
+
+      currentTicketId = "";
+      currentQrUrl = "";
+
+      currentHasMesranPurchase =
+        false;
+
+      updateAccessFields();
+      updateRafflePurchaseFields();
+      updateRaffleTotal();
+      updatePaymentAccount();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+
+    function showMessage(type, message) {
+      messageBox.className =
+        "message show " + type;
+
+      messageBox.textContent =
+        message || "";
+    }
+
+    function hideMessage() {
+      messageBox.className =
+        "message";
+
+      messageBox.textContent =
+        "";
+    }
+
+    function clearBoldRiderValidation() {
+      boldRiderIsValid = false;
+      boldRiderValidatedId = "";
+      boldRiderOwnerName = "";
+
+      boldRidersStatus.className =
+        "rider-status";
+
+      boldRidersStatus.textContent =
+        "";
+
+      nameInput.value = "";
+
+      nameInput.readOnly = false;
+      nameInput.style.borderColor = "";
+
+      nameHelp.classList.add("hidden");
+    }
+
+    function updateAccessFields() {
+      const access =
+        String(
+          accessTypeInput.value || ""
+        )
+          .trim()
+          .toUpperCase();
+
+      const isBoldRider =
+        access === "BOLD RIDERS";
+
+      if (isBoldRider) {
+        boldRidersField.classList.remove(
+          "hidden"
+        );
+
+        boldRidersIdInput.required =
+          true;
+
+        nameInput.readOnly =
+          true;
+
+        nameInput.style.borderColor =
+          "#145b32";
+
+        nameHelp.classList.remove(
+          "hidden"
+        );
+
+      } else {
+        boldRidersField.classList.add(
+          "hidden"
+        );
+
+        boldRidersIdInput.required =
+          false;
+
+        boldRidersIdInput.value =
+          "";
+
+        nameInput.readOnly =
+          false;
+
+        nameInput.style.borderColor =
+          "";
+
+        nameHelp.classList.add(
+          "hidden"
+        );
+
+        clearBoldRiderValidation();
+      }
+    }
+
+    async function validateBoldRider() {
+      const requestNumber =
+        ++validationRequestNumber;
+
+      const riderId =
+        String(
+          boldRidersIdInput.value || ""
+        )
+          .trim()
+          .toUpperCase();
+
+      boldRidersIdInput.value =
+        riderId;
+
+      boldRiderIsValid =
+        false;
+
+      boldRiderValidatedId =
+        "";
+
+      boldRiderOwnerName =
+        "";
+
+      if (!riderId) {
+        boldRidersStatus.className =
+          "rider-status";
+
+        boldRidersStatus.textContent =
+          "";
+
+        nameInput.value =
+          "";
+
+        return false;
+      }
+
+      if (riderId.length !== 8) {
+        boldRidersStatus.className =
+          "rider-status";
+
+        boldRidersStatus.textContent =
+          "";
+
+        nameInput.value =
+          "";
+
+        return false;
+      }
+
+      boldRidersStatus.className =
+        "rider-status loading";
+
+      boldRidersStatus.textContent =
+        "Memeriksa ID BOLD RIDERS...";
+
+      try {
+        const url =
+          BOLD_RIDER_VALIDATION_URL +
+          "?action=validateBoldRider" +
+          "&boldRidersId=" +
+          encodeURIComponent(riderId);
+
+        const response =
+          await fetch(
+            url,
+            {
+              method: "GET",
+              credentials: "omit",
+              cache: "no-store"
+            }
+          );
+
+        if (
+          requestNumber !==
+          validationRequestNumber
+        ) {
+          return false;
+        }
+
+        const raw =
+          await response.text();
+
+        console.log(
+          "BOLD RIDERS VALIDATION HTTP STATUS:",
+          response.status
+        );
+
+        console.log(
+          "BOLD RIDERS VALIDATION RAW RESPONSE:",
+          raw
+        );
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Server mengembalikan response JSON yang tidak valid."
+          );
+        }
+
+        if (
+          data &&
+          data.success === true &&
+          data.status === "VALID"
+        ) {
+          const ownerName =
+            String(
+              data.boldRidersName || ""
+            ).trim();
+
+          boldRiderIsValid =
+            true;
+
+          boldRiderValidatedId =
+            riderId;
+
+          boldRiderOwnerName =
+            ownerName;
+
+          boldRidersStatus.className =
+            "rider-status valid";
+
+          /*
+           * HANYA tampilkan:
+           * ID BOLD RIDERS valid.
+           *
+           * Tidak ada lagi:
+           * Nama pemilik: ...
+           */
+          boldRidersStatus.textContent =
+            "ID BOLD RIDERS valid.";
+
+          /*
+           * Nama otomatis mengikuti data
+           * BOLD RIDERS.
+           */
+          if (ownerName) {
+            nameInput.value =
+              ownerName;
+
+            nameInput.readOnly =
+              true;
+
+            nameInput.style.borderColor =
+              "#145b32";
+          } else {
+            nameInput.value =
+              "";
+
+            nameInput.readOnly =
+              true;
+          }
+
+          return true;
+        }
+
+        boldRiderIsValid =
+          false;
+
+        boldRiderValidatedId =
+          "";
+
+        boldRiderOwnerName =
+          "";
+
+        nameInput.value =
+          "";
+
+        boldRidersStatus.className =
+          "rider-status invalid";
+
+        boldRidersStatus.textContent =
+          data &&
+          data.message
+            ? data.message
+            : "ID BOLD RIDERS tidak terdaftar.";
+
+        return false;
+
+      } catch (error) {
+        if (
+          requestNumber !==
+          validationRequestNumber
+        ) {
+          return false;
+        }
+
+        console.error(
+          "BOLD RIDERS VALIDATION ERROR:",
+          error
+        );
+
+        boldRiderIsValid =
+          false;
+
+        boldRiderValidatedId =
+          "";
+
+        boldRiderOwnerName =
+          "";
+
+        nameInput.value =
+          "";
+
+        boldRidersStatus.className =
+          "rider-status error";
+
+        boldRidersStatus.textContent =
+          "Tidak dapat terhubung ke server.";
+
+        return false;
+      }
+    }
+
+    async function submitRegistration() {
+      hideMessage();
+
+      const accessType =
+        String(
+          accessTypeInput.value || ""
+        )
+          .trim()
+          .toUpperCase();
+
+      const name =
+        nameInput.value.trim();
+
+      const whatsapp =
+        whatsappInput.value.trim();
+const boldRidersId =
+        String(
+          boldRidersIdInput.value || ""
+        )
+          .trim()
+          .toUpperCase();
+
+      /*
+       * ACCESS
+       */
+      if (!accessType) {
+        showMessage(
+          "error",
+          "Silakan pilih Access."
+        );
+
+        accessTypeInput.focus();
+        return;
+      }
+
+      /*
+       * BOLD RIDERS VALIDATION
+       */
+      if (
+        accessType === "BOLD RIDERS"
+      ) {
+        if (
+          boldRidersId.length !== 8
+        ) {
+          showMessage(
+            "error",
+            "ID BOLD RIDERS harus 8 karakter."
+          );
+
+          boldRidersIdInput.focus();
+          return;
+        }
+
+        if (
+          !boldRiderIsValid ||
+          boldRiderValidatedId !==
+            boldRidersId
+        ) {
+          showMessage(
+            "error",
+            "ID BOLD RIDERS belum tervalidasi atau tidak terdaftar."
+          );
+
+          const valid =
+            await validateBoldRider();
+
+          if (!valid) {
+            return;
+          }
+
+          if (
+            !boldRiderIsValid ||
+            boldRiderValidatedId !==
+              boldRidersId
+          ) {
+            return;
+          }
+        }
+      }
+
+      /*
+       * NAMA
+       */
+      const finalName =
+        nameInput.value.trim();
+
+      if (!finalName) {
+        showMessage(
+          "error",
+          "Nama wajib diisi."
+        );
+
+        nameInput.focus();
+        return;
+      }
+
+      /*
+       * WHATSAPP
+       */
+      if (!whatsapp) {
+        showMessage(
+          "error",
+          "WhatsApp wajib diisi."
+        );
+
+        whatsappInput.focus();
+        return;
+      }
+
+      /*
+       * TIKET UNDIAN / PEMBELIAN PRODUK
+       */
+      const raffleData =
+        validateRafflePurchase();
+
+      if (!raffleData.ok) {
+        showMessage(
+          "error",
+          raffleData.message
+        );
+
+        if (
+          raffleData.element &&
+          typeof raffleData.element.focus ===
+            "function"
+        ) {
+          raffleData.element.focus();
+        }
+
+        return;
+      }
+
+
+      /*
+       * BODY
+       */
+      const body = {
+        name: finalName,
+
+        whatsapp,
+
+        accessType,
+boldRidersId:
+          accessType === "BOLD RIDERS"
+            ? boldRidersId
+            : ""
+      };
+
+      submitButton.disabled =
+        true;
+
+      accessTypeInput.disabled =
+        true;
+
+      loadingBox.classList.add(
+        "show"
+      );
+
+      try {
+        const response =
+          await fetch(
+            API_URL +
+            "?action=register",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+
+                "Accept":
+                  "application/json",
+
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY
+              },
+
+              body:
+                JSON.stringify(body)
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        console.log(
+          "REGISTRATION HTTP STATUS:",
+          response.status
+        );
+
+        console.log(
+          "REGISTRATION RAW RESPONSE:",
+          raw
+        );
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Server mengembalikan response JSON yang tidak valid."
+          );
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data &&
+            data.message
+              ? data.message
+              : "Registration gagal."
+          );
+        }
+
+        if (
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            data.message
+              ? data.message
+              : "Registration gagal."
+          );
+        }
+
+        let mesranPurchase = null;
+
+        if (
+          wantRaffleTicketInput.checked
+        ) {
+          try {
+            mesranPurchase =
+              await createMesranPurchase(
+                data,
+                raffleData
+              );
+          } catch (purchaseError) {
+            console.error(
+              "PRODUCT PURCHASE ERROR:",
+              purchaseError
+            );
+
+            showRegistrationResult(
+              data
+            );
+
+            showMessage(
+              "error",
+              purchaseError &&
+              purchaseError.message
+                ? purchaseError.message
+                : "Registrasi berhasil, tetapi proses pembelian " + ACTIVE_PRODUCT_NAME + " gagal."
+            );
+
+            return;
+          }
+        }
+
+        showRegistrationResult(
+          data,
+          mesranPurchase
+        );
+
+        showMessage(
+          "success",
+          mesranPurchase
+            ? "Registration berhasil. Simpan detail pembelian Anda untuk proses pembayaran."
+            : "Registration berhasil."
+        );
+
+      } catch (error) {
+        console.error(
+          "REGISTRATION ERROR:",
+          error
+        );
+
+        showMessage(
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Tidak dapat terhubung ke server."
+        );
+
+      } finally {
+        submitButton.disabled =
+          false;
+
+        accessTypeInput.disabled =
+          false;
+
+        loadingBox.classList.remove(
+          "show"
+        );
+      }
+    }
+
+    async function saveQrAsJpg() {
+      const ticketId =
+        String(
+          currentTicketId ||
+          resultPassId.textContent ||
+          "TICKET"
+        ).trim();
+
+      const qrUrl =
+        String(
+          currentQrUrl ||
+          qrImage.currentSrc ||
+          qrImage.src ||
+          ""
+        ).trim();
+
+      if (!ticketId) {
+        showMessage(
+          "error",
+          "Ticket ID tidak tersedia."
+        );
+        return;
+      }
+
+      if (!qrUrl) {
+        showMessage(
+          "error",
+          "QR Code belum tersedia."
+        );
+        return;
+      }
+
+      saveQrButton.disabled =
+        true;
+
+      saveQrButton.textContent =
+        "MENYIAPKAN JPG...";
+
+      try {
+        const qr =
+          await loadImageForCanvas(
+            qrUrl
+          );
+
+        const hasPurchase =
+          currentHasMesranPurchase;
+
+        const canvas =
+          document.createElement(
+            "canvas"
+          );
+
+        canvas.width =
+          1000;
+
+        canvas.height =
+          hasPurchase
+            ? 1550
+            : 1120;
+
+        const ctx =
+          canvas.getContext(
+            "2d"
+          );
+
+        if (!ctx) {
+          throw new Error(
+            "Browser tidak mendukung pembuatan JPG."
+          );
+        }
+
+        ctx.fillStyle =
+          "#ffffff";
+
+        ctx.fillRect(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+
+        ctx.textAlign =
+          "center";
+
+        ctx.textBaseline =
+          "middle";
+
+        ctx.fillStyle =
+          "#111111";
+
+        ctx.font =
+          "900 44px Arial, Helvetica, sans-serif";
+
+        ctx.fillText(
+          "BOLD AFTER DARK",
+          canvas.width / 2,
+          70
+        );
+
+        ctx.fillStyle =
+          "#666666";
+
+        ctx.font =
+          "700 20px Arial, Helvetica, sans-serif";
+
+        ctx.fillText(
+          hasPurchase
+            ? "TICKET ID / ID PEMBELIAN"
+            : "TICKET ID",
+          canvas.width / 2,
+          120
+        );
+
+        ctx.fillStyle =
+          "#111111";
+
+        ctx.font =
+          "900 38px Arial, Helvetica, sans-serif";
+
+        ctx.fillText(
+          ticketId,
+          canvas.width / 2,
+          165
+        );
+
+        const qrSize =
+          660;
+
+        const qrX =
+          (
+            canvas.width -
+            qrSize
+          ) / 2;
+
+        const qrY =
+          225;
+
+        ctx.drawImage(
+          qr,
+          qrX,
+          qrY,
+          qrSize,
+          qrSize
+        );
+
+        ctx.fillStyle =
+          "#444444";
+
+        ctx.font =
+          "700 18px Arial, Helvetica, sans-serif";
+
+        ctx.fillText(
+          "Tunjukkan QR Code ini saat check-in.",
+          canvas.width / 2,
+          925
+        );
+
+        if (hasPurchase) {
+          ctx.fillStyle =
+            "#111111";
+
+          ctx.font =
+            "900 24px Arial, Helvetica, sans-serif";
+
+          ctx.fillText(
+            "DETAIL PEMBELIAN",
+            canvas.width / 2,
+            990
+          );
+
+          const rows = [
+            [
+              "PRODUK",
+              resultPurchaseProduct.textContent
+            ],
+            [
+              "JUMLAH",
+              resultPurchaseQuantity.textContent
+            ],
+            [
+              "TOTAL",
+              resultPurchaseTotal.textContent
+            ],
+            [
+              "METODE",
+              resultPurchaseMethod.textContent
+            ],
+            [
+              "TUJUAN PEMBAYARAN",
+              resultPurchaseAccount.textContent
+            ]
+          ];
+
+          let y =
+            1050;
+
+          rows.forEach(
+            function(row) {
+              ctx.textAlign =
+                "left";
+
+              ctx.fillStyle =
+                "#777777";
+
+              ctx.font =
+                "700 17px Arial, Helvetica, sans-serif";
+
+              ctx.fillText(
+                row[0],
+                100,
+                y
+              );
+
+              ctx.fillStyle =
+                "#111111";
+
+              ctx.font =
+                "900 23px Arial, Helvetica, sans-serif";
+
+              ctx.fillText(
+                String(
+                  row[1] || "-"
+                ),
+                100,
+                y + 34
+              );
+
+              y +=
+                90;
+            }
+          );
+
+          ctx.textAlign =
+            "center";
+
+          ctx.fillStyle =
+            "#555555";
+
+          ctx.font =
+            "700 17px Arial, Helvetica, sans-serif";
+
+          ctx.fillText(
+            "Gunakan Ticket ID di atas untuk upload bukti pembayaran.",
+            canvas.width / 2,
+            canvas.height - 55
+          );
+        }
+
+        const blob =
+          await new Promise(
+            function(
+              resolve,
+              reject
+            ) {
+              canvas.toBlob(
+                function(result) {
+                  if (result) {
+                    resolve(
+                      result
+                    );
+                  } else {
+                    reject(
+                      new Error(
+                        "Gagal membuat file JPG."
+                      )
+                    );
+                  }
+                },
+                "image/jpeg",
+                0.95
+              );
+            }
+          );
+
+        const url =
+          URL.createObjectURL(
+            blob
+          );
+
+        const link =
+          document.createElement(
+            "a"
+          );
+
+        link.href =
+          url;
+
+        link.download =
+          "BOLD-AFTER-DARK-" +
+          sanitizeFileName(
+            ticketId
+          ) +
+          ".jpg";
+
+        document.body.appendChild(
+          link
+        );
+
+        link.click();
+        link.remove();
+
+        setTimeout(
+          function() {
+            URL.revokeObjectURL(
+              url
+            );
+          },
+          1000
+        );
+
+        showMessage(
+          "success",
+          hasPurchase
+            ? "Tiket masuk dan detail pembelian berhasil disimpan sebagai satu JPG."
+            : "Tiket masuk berhasil disimpan sebagai JPG."
+        );
+
+        setTimeout(
+          resetRegistrationForm,
+          500
+        );
+
+      } catch (error) {
+        console.error(
+          "SAVE TICKET JPG ERROR:",
+          error
+        );
+
+        showMessage(
+          "error",
+          "Tiket tidak dapat disimpan sebagai JPG. Silakan coba lagi."
+        );
+
+      } finally {
+        saveQrButton.disabled =
+          false;
+
+        saveQrButton.textContent =
+          currentHasMesranPurchase
+            ? "SIMPAN TIKET + DETAIL PEMBELIAN (JPG)"
+            : "SIMPAN TIKET MASUK (JPG)";
+      }
+    }
+
+    async function saveRaffleNumbersAsJpg() {
+      const purchaseId =
+        lookupResultPurchaseId.textContent.trim();
+
+      const buyerName =
+        lookupResultName.textContent.trim();
+
+      const numbers =
+        String(
+          approvedRaffleNumbers.textContent || ""
+        )
+          .split(/\s+/)
+          .map(function(value) {
+            return value.trim();
+          })
+          .filter(Boolean);
+
+      if (
+        !purchaseId ||
+        purchaseId === "-" ||
+        numbers.length === 0
+      ) {
+        showMessage(
+          "error",
+          "Nomor undian belum tersedia."
+        );
+        return;
+      }
+
+      saveRaffleNumbersButton.disabled =
+        true;
+
+      saveRaffleNumbersButton.textContent =
+        "MENYIAPKAN JPG...";
+
+      try {
+        const canvas =
+          document.createElement("canvas");
+
+        canvas.width = 1000;
+        canvas.height =
+          420 +
+          numbers.length * 72;
+
+        const ctx =
+          canvas.getContext("2d");
+
+        if (!ctx) {
+          throw new Error(
+            "Browser tidak mendukung pembuatan JPG."
+          );
+        }
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#111111";
+        ctx.font =
+          "900 44px Arial, Helvetica, sans-serif";
+
+        ctx.fillText(
+          "BOLD AFTER DARK",
+          canvas.width / 2,
+          80
+        );
+
+        ctx.fillStyle = "#666666";
+        ctx.font =
+          "700 24px Arial, Helvetica, sans-serif";
+
+        ctx.fillText(
+          "NOMOR UNDIAN",
+          canvas.width / 2,
+          130
+        );
+
+        ctx.fillStyle = "#111111";
+        ctx.font =
+          "700 22px Arial, Helvetica, sans-serif";
+
+        ctx.fillText(
+          "ID Pembelian / Ticket ID: " + purchaseId,
+          canvas.width / 2,
+          190
+        );
+
+        ctx.fillText(
+          "Nama: " + buyerName,
+          canvas.width / 2,
+          225
+        );
+
+        let y = 320;
+
+        numbers.forEach(
+          function(number) {
+            ctx.font =
+              "900 42px Arial, Helvetica, sans-serif";
+
+            ctx.fillText(
+              number,
+              canvas.width / 2,
+              y
+            );
+
+            y += 72;
+          }
+        );
+
+        ctx.fillStyle = "#666666";
+        ctx.font =
+          "700 18px Arial, Helvetica, sans-serif";
+
+        ctx.fillText(
+          "Simpan gambar ini sebagai bukti nomor undian Anda.",
+          canvas.width / 2,
+          canvas.height - 45
+        );
+
+        const blob =
+          await new Promise(
+            function(resolve, reject) {
+              canvas.toBlob(
+                function(result) {
+                  if (result) {
+                    resolve(result);
+                  } else {
+                    reject(
+                      new Error(
+                        "Gagal membuat JPG."
+                      )
+                    );
+                  }
+                },
+                "image/jpeg",
+                0.95
+              );
+            }
+          );
+
+        const url =
+          URL.createObjectURL(blob);
+
+        const link =
+          document.createElement("a");
+
+        link.href = url;
+        link.download =
+          "BOLD-AFTER-DARK-UNDIAN-" +
+          sanitizeFileName(
+            purchaseId
+          ) +
+          ".jpg";
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(
+          function() {
+            URL.revokeObjectURL(url);
+          },
+          1000
+        );
+
+        showMessage(
+          "success",
+          "Nomor undian berhasil disimpan sebagai JPG."
+        );
+
+      } catch (error) {
+        console.error(
+          "SAVE RAFFLE NUMBERS ERROR:",
+          error
+        );
+
+        showMessage(
+          "error",
+          "Nomor undian tidak dapat disimpan."
+        );
+
+      } finally {
+        saveRaffleNumbersButton.disabled =
+          false;
+
+        saveRaffleNumbersButton.textContent =
+          "SIMPAN NOMOR UNDIAN (JPG)";
+      }
+    }
+
+
+    function loadImageForCanvas(url) {
+      return new Promise(
+        function(resolve, reject) {
+          const image =
+            new Image();
+
+          image.crossOrigin = "anonymous";
+
+          image.onload =
+            function() {
+              resolve(image);
+            };
+
+          image.onerror =
+            function() {
+              reject(
+                new Error(
+                  "QR image tidak dapat dibaca oleh browser."
+                )
+              );
+            };
+
+          image.src = url;
+        }
+      );
+    }
+
+    function sanitizeFileName(value) {
+      return String(
+        value || "TICKET"
+      )
+        .replace(
+          /[^a-zA-Z0-9_-]+/g,
+          "-"
+        )
+        .replace(
+          /^-+|-+$/g,
+          ""
+        ) || "TICKET";
+    }
+
+    function showRegistrationResult(data, mesranPurchase = null) {
+      resultBox.classList.add(
+        "show"
+      );
+
+      currentHasMesranPurchase =
+        Boolean(
+          mesranPurchase &&
+          mesranPurchase.purchaseId
+        );
+
+      resultPassId.textContent =
+        data.passId || "-";
+
+      currentTicketId =
+        String(
+          data.passId ||
+          ""
+        ).trim();
+
+      resultName.textContent =
+        data.name || "-";
+
+      resultWhatsapp.textContent =
+        data.whatsapp || "-";
+
+      resultAccess.textContent =
+        data.accessType || "-";
+
+      const riderId =
+        String(
+          data.boldRidersId || ""
+        ).trim();
+
+      const riderName =
+        String(
+          data.boldRidersName || ""
+        ).trim();
+
+      if (
+        riderId &&
+        String(
+          data.accessType || ""
+        ).toUpperCase() ===
+          "BOLD RIDERS"
+      ) {
+        resultRiderIdItem.classList.remove(
+          "hidden"
+        );
+
+        resultRiderNameItem.classList.remove(
+          "hidden"
+        );
+
+        resultRiderId.textContent =
+          riderId;
+
+        resultRiderName.textContent =
+          riderName || data.name || "-";
+      } else {
+        resultRiderIdItem.classList.add(
+          "hidden"
+        );
+
+        resultRiderNameItem.classList.add(
+          "hidden"
+        );
+      }
+
+
+      if (
+        mesranPurchase &&
+        mesranPurchase.purchaseId
+      ) {
+        resultTicketLabel.textContent =
+          "TICKET ID / ID PEMBELIAN";
+
+        resultPurchaseProduct.textContent =
+          mesranPurchase.productName ||
+          ACTIVE_PRODUCT_NAME;
+
+        /*
+         * Untuk hasil yang langsung tampil setelah REGISTER NOW,
+         * gunakan satuan produk aktif yang sudah dimuat dari
+         * product_settings. Ini menjaga tampilan konsisten dengan
+         * harga/nama produk yang dilihat user pada form.
+         */
+        resultPurchaseQuantity.textContent =
+          mesranPurchase.quantity +
+          " " +
+          ACTIVE_PRODUCT_UNIT_NAME;
+
+        resultPurchaseTotal.textContent =
+          formatRupiah(
+            mesranPurchase.totalAmount
+          );
+
+        resultPurchaseMethod.textContent =
+          mesranPurchase.paymentAccount &&
+          mesranPurchase.paymentAccount.label
+            ? mesranPurchase.paymentAccount.label
+            : (
+                mesranPurchase.paymentMethod ||
+                "-"
+              );
+
+        const account =
+          mesranPurchase.paymentAccount;
+
+        resultPurchaseAccount.textContent =
+          account
+            ? (
+                account.number +
+                (
+                  account.owner
+                    ? " • a.n " +
+                      account.owner
+                    : ""
+                )
+              )
+            : "-";
+
+        purchaseDetailResultBox.classList.remove(
+          "hidden"
+        );
+      } else {
+        resultTicketLabel.textContent =
+          "TICKET ID";
+
+        resultPurchaseProduct.textContent =
+          "-";
+
+        resultPurchaseQuantity.textContent =
+          "-";
+
+        resultPurchaseTotal.textContent =
+          "-";
+
+        resultPurchaseMethod.textContent =
+          "-";
+
+        resultPurchaseAccount.textContent =
+          "-";
+
+        purchaseDetailResultBox.classList.add(
+          "hidden"
+        );
+      }
+
+      const qrUrl =
+        String(
+          data.qrCodeUrl || ""
+        ).trim();
+
+      currentQrUrl = qrUrl;
+
+      if (qrUrl) {
+        qrImage.src =
+          qrUrl;
+
+        qrBox.classList.remove(
+          "hidden"
+        );
+
+        saveQrButton.textContent =
+          currentHasMesranPurchase
+            ? "SIMPAN TIKET + DETAIL PEMBELIAN (JPG)"
+            : "SIMPAN TIKET MASUK (JPG)";
+      } else {
+        qrImage.removeAttribute(
+          "src"
+        );
+
+        qrBox.classList.add(
+          "hidden"
+        );
+      }
+
+      resultBox.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    function openWhatsAppHelp() {
+      const message =
+        encodeURIComponent(
+          "Halo, saya membutuhkan bantuan terkait registrasi BOLD AFTER DARK."
+        );
+
+      const url =
+        "https://wa.me/" +
+        WHATSAPP_NUMBER +
+        "?text=" +
+        message;
+
+      window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    }
+
+    /*
+     * ACCESS CHANGE
+     */
+    function syncAccessUi() {
+      updateAccessFields();
+      updateRafflePurchaseFields();
+      updateRaffleTotal();
+      updatePaymentAccount();
+    }
+
+
+    accessTypeInput.addEventListener(
+      "change",
+      function() {
+        syncAccessUi();
+        hideMessage();
+      }
+    );
+
+
+    accessTypeInput.addEventListener(
+      "input",
+      function() {
+        syncAccessUi();
+      }
+    );
+
+    /*
+     * BOLD RIDERS ID INPUT
+     */
+    boldRidersIdInput.addEventListener(
+      "input",
+      function() {
+        const value =
+          String(
+            boldRidersIdInput.value || ""
+          )
+            .toUpperCase()
+            .replace(
+              /[^A-Z0-9]/g,
+              ""
+            )
+            .slice(
+              0,
+              8
+            );
+
+        boldRidersIdInput.value =
+          value;
+
+        validationRequestNumber++;
+
+        boldRiderIsValid =
+          false;
+
+        boldRiderValidatedId =
+          "";
+
+        boldRiderOwnerName =
+          "";
+
+        nameInput.value =
+          "";
+
+        if (
+          value.length < 8
+        ) {
+          boldRidersStatus.className =
+            "rider-status";
+
+          boldRidersStatus.textContent =
+            "";
+
+          return;
+        }
+
+        if (
+          value.length === 8
+        ) {
+          validateBoldRider();
+        }
+      }
+    );
+
+
+    /*
+     * TIKET UNDIAN
+     */
+    wantRaffleTicketInput.addEventListener(
+      "change",
+      function() {
+        updateRafflePurchaseFields();
+        hideMessage();
+      }
+    );
+
+
+    raffleQuantityInput.addEventListener(
+      "input",
+      updateRaffleTotal
+    );
+
+
+    paymentMethodInput.addEventListener(
+      "change",
+      updatePaymentAccount
+    );
+
+
+    /*
+     * SUBMIT
+     */
+    registrationForm.addEventListener(
+      "submit",
+      async function(event) {
+        event.preventDefault();
+
+        await submitRegistration();
+      }
+    );
+
+    /*
+     * WHATSAPP HELP
+     */
+    whatsappButton.addEventListener(
+      "click",
+      openWhatsAppHelp
+    );
+
+
+    openPaymentUploadButton.addEventListener(
+      "click",
+      function() {
+        paymentLookupBox.style.display =
+          "block";
+
+        paymentLookupBox.classList.add(
+          "show"
+        );
+
+        paymentLookupBox.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+    );
+
+
+    lookupPurchaseButton.addEventListener(
+      "click",
+      lookupPurchase
+    );
+
+
+    lookupPurchaseIdInput.addEventListener(
+      "input",
+      function() {
+        lookupPurchaseIdInput.value =
+          String(
+            lookupPurchaseIdInput.value || ""
+          )
+            .replace(/\D/g, "")
+            .slice(0, 6);
+
+        lookupPurchaseDetails.classList.add(
+          "hidden"
+        );
+      }
+    );
+
+
+    submitLookupPaymentProofButton.addEventListener(
+      "click",
+      submitLookupPaymentProof
+    );
+
+
+    saveRaffleNumbersButton.addEventListener(
+      "click",
+      saveRaffleNumbersAsJpg
+    );
+
+
+    /*
+     * SAVE QR + TICKET ID
+     */
+    saveQrButton.addEventListener(
+      "click",
+      saveQrAsJpg
+    );
+
+    /*
+     * INITIAL STATE
+     */
+    syncAccessUi();
+    loadProductSettings();
+
+    /*
+     * Beberapa browser memulihkan nilai form setelah script awal berjalan.
+     * Sinkronkan kembali supaya field ID BOLD RIDERS selalu muncul
+     * ketika Access yang aktif adalah BOLD RIDERS.
+     */
+    window.addEventListener(
+      "pageshow",
+      function() {
+        setTimeout(
+          syncAccessUi,
+          0
+        );
+      }
+    );
+
+  </script>
+
+</body>
+</html>

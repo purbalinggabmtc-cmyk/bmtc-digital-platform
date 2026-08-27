@@ -4,25 +4,25 @@
  * BOLD AFTER DARK
  * CENTRAL NAVIGATION CONFIGURATION
  *
- * Semua halaman menggunakan file ini sebagai
- * sumber alamat navigasi.
+ * Sekarang seluruh halaman scanner berada di:
+ * https://bmtc.my.id/bold-after-dark/
  */
 
 window.BOLD_AFTER_DARK_NAVIGATION = Object.freeze({
 
   home:
-    "https://boldafterdark.my.id/index.html",
+    "https://bmtc.my.id/bold-after-dark/index.html",
 
   admin:
-    "https://boldafterdark.my.id/admin.html",
+    "https://bmtc.my.id/bold-after-dark/admin.html",
 
   report:
-    "https://boldafterdark.my.id/report.html",
+    "https://bmtc.my.id/bold-after-dark/report.html",
 
   scanner:
-    "https://boldafterdark.my.id/scanner.html",
+    "https://bmtc.my.id/bold-after-dark/scanner.html",
 
   registration:
-    "https://boldafterdark.my.id/registration/index.html"
+    "https://bmtc.my.id/bold-after-dark/registration/index.html"
 
 });

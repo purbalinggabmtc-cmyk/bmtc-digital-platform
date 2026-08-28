@@ -8,7 +8,7 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>BOLD AFTER DARK — CHECK IN V6</title>
+  <title>BOLD AFTER DARK — HIGH-SPEED CHECK IN</title>
 
   <!-- =========================================================
        QR SCANNER LIBRARY
@@ -77,10 +77,16 @@
 
     button {
       cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    button:active {
+    button:active:not(:disabled) {
       transform: scale(0.98);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
     }
 
     .container {
@@ -160,6 +166,91 @@
       letter-spacing: 3px;
       color: #aaaaaa;
       margin-bottom: 24px;
+    }
+
+
+    /* =========================================================
+       CONNECTION + FEEDBACK CONTROL
+       ========================================================= */
+
+    .connection-panel {
+      margin-bottom: 12px;
+      padding: 10px;
+      border: 1px solid #333333;
+      border-radius: 11px;
+      background: rgba(0, 0, 0, 0.34);
+    }
+
+    .connection-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .connection-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 34px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.9px;
+    }
+
+    .connection-badge::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .connection-badge.online {
+      color: #7dffa9;
+      background: rgba(22, 199, 90, 0.14);
+      border: 1px solid rgba(22, 199, 90, 0.65);
+    }
+
+    .connection-badge.offline {
+      color: #ff8b8b;
+      background: rgba(224, 0, 0, 0.14);
+      border: 1px solid rgba(224, 0, 0, 0.65);
+    }
+
+    .audio-button {
+      min-height: 36px;
+      padding: 7px 10px;
+      border: 1px solid #555555;
+      border-radius: 8px;
+      background: #171717;
+      color: #dddddd;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.35px;
+    }
+
+    .audio-button.active {
+      color: #ffffff;
+      border-color: #16c75a;
+      background: rgba(22, 199, 90, 0.14);
+    }
+
+    .audio-button:disabled {
+      opacity: 0.55;
+    }
+
+    .connection-text {
+      margin-top: 7px;
+      color: #888888;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.45;
+      text-align: left;
     }
 
     /* =========================================================
@@ -361,6 +452,7 @@
       flex: 1;
 
       min-width: 0;
+      min-height: 54px;
 
       padding: 14px;
 
@@ -389,6 +481,7 @@
     }
 
     .manual button {
+      min-height: 54px;
       padding: 14px 18px;
 
       background: #e00000;
@@ -455,17 +548,26 @@
     .result.error {
       display: block;
 
-      background: #222222;
+      background: #300000;
 
-      border: 2px solid #777777;
+      border: 2px solid #e00000;
+    }
+
+    .result.loading {
+      display: block;
+      background: #151515;
+      border: 2px solid #666666;
     }
 
     .result-title {
-      font-size: 28px;
+      font-size: 36px;
 
       font-weight: 900;
 
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      line-height: 1.05;
+      letter-spacing: 0.4px;
+      overflow-wrap: anywhere;
     }
 
     .valid .result-title {
@@ -481,13 +583,17 @@
     }
 
     .error .result-title {
+      color: #ff4d4d;
+    }
+
+    .loading .result-title {
       color: #ffffff;
     }
 
     .detail {
-      margin-top: 8px;
+      margin-top: 10px;
 
-      font-size: 15px;
+      font-size: 16px;
 
       color: #dddddd;
 
@@ -496,6 +602,11 @@
 
     .detail strong {
       color: #ffffff;
+    }
+
+    .primary-detail {
+      font-size: 18px;
+      font-weight: 800;
     }
 
 
@@ -616,6 +727,7 @@
 
     .deliver-button {
       width: 100%;
+      min-height: 58px;
       margin-top: 14px;
       padding: 16px 14px;
       border: 0;
@@ -635,6 +747,38 @@
     .deliver-button:disabled {
       opacity: 0.55;
       cursor: wait;
+    }
+
+    .delivery-inline-message {
+      display: none;
+      margin-top: 10px;
+      padding: 11px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .delivery-inline-message.error {
+      display: block;
+      color: #ff9d9d;
+      background: rgba(224, 0, 0, 0.13);
+      border: 1px solid rgba(224, 0, 0, 0.55);
+    }
+
+    .delivery-inline-message.warning {
+      display: block;
+      color: #ffe16a;
+      background: rgba(226, 180, 0, 0.14);
+      border: 1px solid rgba(226, 180, 0, 0.55);
+    }
+
+    .delivery-inline-message.info {
+      display: block;
+      color: #d8d8d8;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.18);
     }
 
     .delivery-warning {
@@ -675,14 +819,36 @@
       }
     }
 
+
+    .auto-reset-notice {
+      display: none;
+      margin-top: 16px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      color: #dddddd;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.55px;
+      line-height: 1.4;
+    }
+
+    .auto-reset-notice.hold {
+      color: #ffe16a;
+      background: rgba(226, 180, 0, 0.13);
+      border-color: rgba(226, 180, 0, 0.65);
+    }
+
     /* =========================================================
        RESET
        ========================================================= */
 
     .reset {
-      margin-top: 18px;
+      margin-top: 14px;
 
       width: 100%;
+      min-height: 56px;
 
       padding: 14px;
 
@@ -726,7 +892,8 @@
     @media (max-width: 480px) {
 
       body {
-        padding: 14px;
+        padding: 10px;
+        align-items: flex-start;
       }
 
       .top-nav {
@@ -748,9 +915,18 @@
       }
 
       .scanner-card {
-        padding: 12px;
+        padding: 10px;
 
         border-radius: 15px;
+      }
+
+      .connection-row {
+        align-items: stretch;
+      }
+
+      .connection-badge,
+      .audio-button {
+        flex: 1;
       }
 
       #reader {
@@ -766,11 +942,27 @@
       }
 
       .result {
-        padding: 18px 14px;
+        padding: 18px 13px;
+        scroll-margin-top: 8px;
       }
 
       .result-title {
-        font-size: 22px;
+        font-size: 30px;
+      }
+
+      .detail {
+        font-size: 15px;
+      }
+
+      .primary-detail {
+        font-size: 17px;
+      }
+
+      .reset,
+      .deliver-button,
+      .manual button,
+      .manual input {
+        min-height: 58px;
       }
     }
 
@@ -816,6 +1008,34 @@
          ======================================================= -->
 
     <div class="scanner-card">
+
+      <div class="connection-panel">
+        <div class="connection-row">
+          <div
+            id="connectionBadge"
+            class="connection-badge offline"
+            role="status"
+            aria-live="polite"
+          >
+            <span id="connectionLabel">OFFLINE</span>
+          </div>
+
+          <button
+            type="button"
+            id="audioButton"
+            class="audio-button"
+          >
+            🔊 AKTIFKAN SUARA
+          </button>
+        </div>
+
+        <div
+          id="connectionText"
+          class="connection-text"
+        >
+          Memeriksa koneksi...
+        </div>
+      </div>
 
       <div id="reader">
 
@@ -886,6 +1106,8 @@
       <div
         id="result"
         class="result"
+        role="status"
+        aria-live="assertive"
       >
 
         <div
@@ -894,6 +1116,12 @@
         ></div>
 
         <div id="resultDetails"></div>
+
+        <div
+          id="autoResetNotice"
+          class="auto-reset-notice"
+          aria-live="polite"
+        ></div>
 
         <button
           type="button"
@@ -972,22 +1200,32 @@
        ========================================================= */
 
     let scanner = null;
+    let scannerPaused = false;
+    let cameraOperation = Promise.resolve();
 
     let processing = false;
-
+    let requestInFlight = false;
     let requestTimeout = null;
+    let requestController = null;
+    let requestSequence = 0;
 
-    let navigationConfig =
-      FALLBACK_NAVIGATION;
+    let autoResetTimeout = null;
+    let autoResetTicker = null;
+    let autoResetDeadline = 0;
+    let autoResetGeneration = 0;
 
-    let currentAdminAccess =
-      null;
+    let navigationConfig = FALLBACK_NAVIGATION;
+    let currentAdminAccess = null;
+    let currentPurchase = null;
 
-    let currentPurchase =
-      null;
+    let deliveryProcessing = false;
+    let deliveryRequestController = null;
+    let deliveryRequestTimeout = null;
 
-    let deliveryProcessing =
-      false;
+    let resetProcessing = false;
+
+    let audioContext = null;
+    let audioEnabled = false;
 
 
     /* =========================================================
@@ -995,59 +1233,788 @@
        ========================================================= */
 
     const homeButton =
-      document.getElementById(
-        "homeButton"
-      );
+      document.getElementById("homeButton");
 
     const reader =
-      document.getElementById(
-        "reader"
-      );
-
-    const cameraPlaceholder =
-      document.getElementById(
-        "cameraPlaceholder"
-      );
+      document.getElementById("reader");
 
     const scannerStatus =
-      document.getElementById(
-        "scannerStatus"
-      );
+      document.getElementById("scannerStatus");
 
     const navigationError =
-      document.getElementById(
-        "navigationError"
-      );
+      document.getElementById("navigationError");
 
     const manualToken =
-      document.getElementById(
-        "manualToken"
-      );
+      document.getElementById("manualToken");
 
     const manualButton =
-      document.getElementById(
-        "manualButton"
-      );
+      document.getElementById("manualButton");
 
     const result =
-      document.getElementById(
-        "result"
-      );
+      document.getElementById("result");
 
     const resultTitle =
-      document.getElementById(
-        "resultTitle"
-      );
+      document.getElementById("resultTitle");
 
     const resultDetails =
-      document.getElementById(
-        "resultDetails"
-      );
+      document.getElementById("resultDetails");
+
+    const autoResetNotice =
+      document.getElementById("autoResetNotice");
 
     const resetButton =
-      document.getElementById(
-        "resetButton"
+      document.getElementById("resetButton");
+
+    const connectionBadge =
+      document.getElementById("connectionBadge");
+
+    const connectionLabel =
+      document.getElementById("connectionLabel");
+
+    const connectionText =
+      document.getElementById("connectionText");
+
+    const audioButton =
+      document.getElementById("audioButton");
+
+
+    /* =========================================================
+       GENERAL HELPERS
+       ========================================================= */
+
+    function escapeHtml(value) {
+      return String(
+        value == null
+          ? ""
+          : value
+      )
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+
+    function setScannerStatus(text) {
+      scannerStatus.textContent =
+        text || "";
+    }
+
+
+    function scrollResultIntoView() {
+      window.requestAnimationFrame(
+        function() {
+          try {
+            result.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          } catch {
+            result.scrollIntoView();
+          }
+        }
       );
+    }
+
+
+    function scrollScannerIntoView() {
+      window.requestAnimationFrame(
+        function() {
+          try {
+            reader.scrollIntoView({
+              behavior: "smooth",
+              block: "center"
+            });
+          } catch {
+            reader.scrollIntoView();
+          }
+        }
+      );
+    }
+
+
+    function getCameraPlaceholder() {
+      return document.getElementById(
+        "cameraPlaceholder"
+      );
+    }
+
+
+    function hideCameraPlaceholder() {
+      const placeholder =
+        getCameraPlaceholder();
+
+      if (placeholder) {
+        placeholder.classList.add(
+          "hidden"
+        );
+      }
+    }
+
+
+    function showCameraPlaceholder(
+      title = "MEMULAI KAMERA",
+      text = "Izinkan akses kamera ketika browser memintanya.",
+      icon = "📷"
+    ) {
+      let placeholder =
+        getCameraPlaceholder();
+
+      if (!placeholder) {
+        placeholder =
+          document.createElement("div");
+
+        placeholder.id =
+          "cameraPlaceholder";
+
+        placeholder.className =
+          "camera-placeholder";
+
+        reader.appendChild(
+          placeholder
+        );
+      }
+
+      placeholder.innerHTML = `
+        <div class="camera-icon">
+          ${escapeHtml(icon)}
+        </div>
+
+        <div class="camera-placeholder-title">
+          ${escapeHtml(title)}
+        </div>
+
+        <div class="camera-placeholder-text">
+          ${escapeHtml(text)}
+        </div>
+      `;
+
+      placeholder.classList.remove(
+        "hidden"
+      );
+    }
+
+
+    function hasPendingApprovedDelivery() {
+      return Boolean(
+        currentPurchase &&
+        String(
+          currentPurchase.paymentStatus || ""
+        ).toUpperCase() === "APPROVED" &&
+        currentPurchase.itemDelivered !== true
+      );
+    }
+
+
+    function updateControlState() {
+      const online =
+        navigator.onLine;
+
+      const manualDisabled =
+        !online ||
+        processing ||
+        requestInFlight ||
+        deliveryProcessing ||
+        resetProcessing;
+
+      manualToken.disabled =
+        manualDisabled;
+
+      manualButton.disabled =
+        manualDisabled;
+
+      resetButton.disabled =
+        !online ||
+        requestInFlight ||
+        deliveryProcessing ||
+        resetProcessing;
+
+      if (resetProcessing) {
+        resetButton.textContent =
+          "MEMULAI SCANNER...";
+      } else {
+        resetButton.textContent =
+          "SCAN BERIKUTNYA";
+      }
+
+      const deliveryButton =
+        document.getElementById(
+          "deliverItemButton"
+        );
+
+      if (deliveryButton) {
+        deliveryButton.disabled =
+          !online ||
+          deliveryProcessing;
+      }
+    }
+
+
+    /* =========================================================
+       CONNECTION STATUS
+       ========================================================= */
+
+    function updateConnectionStatus() {
+      const online =
+        navigator.onLine;
+
+      connectionBadge.classList.toggle(
+        "online",
+        online
+      );
+
+      connectionBadge.classList.toggle(
+        "offline",
+        !online
+      );
+
+      connectionLabel.textContent =
+        online
+          ? "ONLINE"
+          : "OFFLINE";
+
+      connectionText.textContent =
+        online
+          ? "Check-in tersambung ke server Supabase."
+          : "Check-in dinonaktifkan sampai koneksi kembali.";
+
+      updateControlState();
+    }
+
+
+    async function handleOffline() {
+      updateConnectionStatus();
+      cancelAutoReset();
+
+      if (requestController) {
+        try {
+          requestController.abort();
+        } catch {
+          // No action required.
+        }
+      }
+
+      if (deliveryRequestController) {
+        try {
+          deliveryRequestController.abort();
+        } catch {
+          // No action required.
+        }
+      }
+
+      if (deliveryProcessing) {
+        setScannerStatus(
+          "Koneksi terputus. Penyerahan belum dapat disimpan."
+        );
+
+        return;
+      }
+
+      if (requestInFlight) {
+        return;
+      }
+
+      if (hasPendingApprovedDelivery()) {
+        setScannerStatus(
+          "OFFLINE. Barang belum boleh dikonfirmasi sampai koneksi kembali."
+        );
+
+        showHoldNotice(
+          "OFFLINE • MENUNGGU KONEKSI UNTUK PENYERAHAN"
+        );
+
+        return;
+      }
+
+      processing = true;
+      updateControlState();
+
+      await suspendScannerForResult();
+      showOfflineError();
+    }
+
+
+    async function handleOnline() {
+      updateConnectionStatus();
+
+      if (
+        deliveryProcessing ||
+        requestInFlight ||
+        resetProcessing
+      ) {
+        return;
+      }
+
+      if (hasPendingApprovedDelivery()) {
+        setScannerStatus(
+          "Online kembali. Selesaikan penyerahan barang."
+        );
+
+        showHoldNotice(
+          "TINDAKAN DIPERLUKAN • SERAHKAN BARANG"
+        );
+
+        updateControlState();
+        return;
+      }
+
+      await resetScanner({
+        automatic: true,
+        source: "connection-online"
+      });
+    }
+
+
+    /* =========================================================
+       AUDIO + VIBRATION FEEDBACK
+       ========================================================= */
+
+    const FEEDBACK_SOUNDS =
+      Object.freeze({
+        VALID: [
+          {
+            frequency: 700,
+            duration: 0.08,
+            gap: 0.025,
+            type: "sine",
+            gain: 0.14
+          },
+          {
+            frequency: 1040,
+            duration: 0.12,
+            gap: 0,
+            type: "sine",
+            gain: 0.16
+          }
+        ],
+
+        ALREADY_USED: [
+          {
+            frequency: 430,
+            duration: 0.11,
+            gap: 0.075,
+            type: "triangle",
+            gain: 0.14
+          },
+          {
+            frequency: 430,
+            duration: 0.11,
+            gap: 0,
+            type: "triangle",
+            gain: 0.14
+          }
+        ],
+
+        INVALID: [
+          {
+            frequency: 250,
+            duration: 0.16,
+            gap: 0.055,
+            type: "square",
+            gain: 0.1
+          },
+          {
+            frequency: 165,
+            duration: 0.2,
+            gap: 0,
+            type: "square",
+            gain: 0.1
+          }
+        ],
+
+        ITEM_DELIVERED: [
+          {
+            frequency: 620,
+            duration: 0.07,
+            gap: 0.025,
+            type: "sine",
+            gain: 0.13
+          },
+          {
+            frequency: 820,
+            duration: 0.07,
+            gap: 0.025,
+            type: "sine",
+            gain: 0.14
+          },
+          {
+            frequency: 1120,
+            duration: 0.14,
+            gap: 0,
+            type: "sine",
+            gain: 0.16
+          }
+        ]
+      });
+
+
+    const FEEDBACK_VIBRATIONS =
+      Object.freeze({
+        VALID: [110],
+        ALREADY_USED: [90, 70, 90],
+        INVALID: [220, 90, 220],
+        ITEM_DELIVERED: [70, 45, 70, 45, 150]
+      });
+
+
+    function getAudioContextClass() {
+      return (
+        window.AudioContext ||
+        window.webkitAudioContext ||
+        null
+      );
+    }
+
+
+    function updateAudioButton() {
+      if (!getAudioContextClass()) {
+        audioButton.textContent =
+          "🔇 SUARA TIDAK DIDUKUNG";
+
+        audioButton.disabled = true;
+        return;
+      }
+
+      audioButton.disabled = false;
+
+      audioButton.textContent =
+        audioEnabled
+          ? "🔊 SUARA AKTIF"
+          : "🔊 AKTIFKAN SUARA";
+
+      audioButton.classList.toggle(
+        "active",
+        audioEnabled
+      );
+    }
+
+
+    async function unlockAudio(
+      playConfirmation = false
+    ) {
+      const AudioContextClass =
+        getAudioContextClass();
+
+      if (!AudioContextClass) {
+        updateAudioButton();
+        return false;
+      }
+
+      try {
+        if (!audioContext) {
+          audioContext =
+            new AudioContextClass();
+        }
+
+        if (
+          audioContext.state ===
+          "suspended"
+        ) {
+          await audioContext.resume();
+        }
+
+        audioEnabled =
+          audioContext.state ===
+          "running";
+
+        updateAudioButton();
+
+        if (
+          playConfirmation &&
+          audioEnabled
+        ) {
+          playTonePattern([
+            {
+              frequency: 820,
+              duration: 0.08,
+              gap: 0,
+              type: "sine",
+              gain: 0.1
+            }
+          ]);
+        }
+
+        return audioEnabled;
+
+      } catch (error) {
+        console.warn(
+          "AUDIO UNLOCK ERROR:",
+          error
+        );
+
+        audioEnabled = false;
+        updateAudioButton();
+        return false;
+      }
+    }
+
+
+    function playTonePattern(pattern) {
+      if (
+        !audioContext ||
+        audioContext.state !== "running" ||
+        !Array.isArray(pattern)
+      ) {
+        return;
+      }
+
+      let cursor =
+        audioContext.currentTime + 0.015;
+
+      for (const step of pattern) {
+        const oscillator =
+          audioContext.createOscillator();
+
+        const gainNode =
+          audioContext.createGain();
+
+        const duration =
+          Math.max(
+            Number(step.duration || 0.08),
+            0.03
+          );
+
+        const peakGain =
+          Math.max(
+            Number(step.gain || 0.12),
+            0.01
+          );
+
+        oscillator.type =
+          step.type || "sine";
+
+        oscillator.frequency.setValueAtTime(
+          Number(step.frequency || 440),
+          cursor
+        );
+
+        gainNode.gain.setValueAtTime(
+          0.0001,
+          cursor
+        );
+
+        gainNode.gain.exponentialRampToValueAtTime(
+          peakGain,
+          cursor + 0.012
+        );
+
+        gainNode.gain.exponentialRampToValueAtTime(
+          0.0001,
+          cursor + duration
+        );
+
+        oscillator.connect(
+          gainNode
+        );
+
+        gainNode.connect(
+          audioContext.destination
+        );
+
+        oscillator.start(cursor);
+        oscillator.stop(
+          cursor + duration + 0.02
+        );
+
+        cursor +=
+          duration +
+          Number(step.gap || 0);
+      }
+    }
+
+
+    function triggerFeedback(type) {
+      const normalized =
+        String(type || "")
+          .toUpperCase();
+
+      const sound =
+        FEEDBACK_SOUNDS[normalized];
+
+      if (sound) {
+        playTonePattern(sound);
+      }
+
+      const vibration =
+        FEEDBACK_VIBRATIONS[normalized];
+
+      if (
+        vibration &&
+        typeof navigator.vibrate ===
+          "function"
+      ) {
+        try {
+          navigator.vibrate(
+            vibration
+          );
+        } catch (error) {
+          console.warn(
+            "VIBRATION ERROR:",
+            error
+          );
+        }
+      }
+    }
+
+
+    /* =========================================================
+       AUTO RESET
+       ========================================================= */
+
+    function clearAutoResetNotice() {
+      autoResetNotice.textContent = "";
+      autoResetNotice.style.display =
+        "none";
+
+      autoResetNotice.className =
+        "auto-reset-notice";
+    }
+
+
+    function showHoldNotice(text) {
+      autoResetNotice.textContent =
+        text || "";
+
+      autoResetNotice.className =
+        "auto-reset-notice hold";
+
+      autoResetNotice.style.display =
+        "block";
+    }
+
+
+    function cancelAutoReset() {
+      autoResetGeneration += 1;
+
+      if (autoResetTimeout) {
+        clearTimeout(
+          autoResetTimeout
+        );
+
+        autoResetTimeout = null;
+      }
+
+      if (autoResetTicker) {
+        clearInterval(
+          autoResetTicker
+        );
+
+        autoResetTicker = null;
+      }
+
+      autoResetDeadline = 0;
+      clearAutoResetNotice();
+    }
+
+
+    function updateAutoResetCountdown() {
+      if (!autoResetDeadline) {
+        return;
+      }
+
+      const remaining =
+        Math.max(
+          autoResetDeadline -
+          Date.now(),
+          0
+        );
+
+      const seconds =
+        Math.max(
+          Math.ceil(
+            remaining / 1000
+          ),
+          0
+        );
+
+      autoResetNotice.textContent =
+        remaining > 0
+          ? "SCAN BERIKUTNYA DALAM " +
+            String(seconds) +
+            " DETIK"
+          : "MEMULAI SCANNER...";
+    }
+
+
+    function scheduleAutoReset(
+      delay = 2500
+    ) {
+      cancelAutoReset();
+
+      if (
+        !navigator.onLine ||
+        requestInFlight ||
+        deliveryProcessing ||
+        resetProcessing ||
+        hasPendingApprovedDelivery()
+      ) {
+        if (hasPendingApprovedDelivery()) {
+          showHoldNotice(
+            "TINDAKAN DIPERLUKAN • SERAHKAN BARANG"
+          );
+        }
+
+        return;
+      }
+
+      const generation =
+        autoResetGeneration;
+
+      autoResetDeadline =
+        Date.now() + delay;
+
+      autoResetNotice.className =
+        "auto-reset-notice";
+
+      autoResetNotice.style.display =
+        "block";
+
+      updateAutoResetCountdown();
+
+      autoResetTicker =
+        setInterval(
+          updateAutoResetCountdown,
+          250
+        );
+
+      autoResetTimeout =
+        setTimeout(
+          function() {
+            if (
+              generation !==
+              autoResetGeneration
+            ) {
+              return;
+            }
+
+            if (
+              deliveryProcessing ||
+              requestInFlight ||
+              hasPendingApprovedDelivery() ||
+              !navigator.onLine
+            ) {
+              cancelAutoReset();
+
+              if (
+                hasPendingApprovedDelivery()
+              ) {
+                showHoldNotice(
+                  "TINDAKAN DIPERLUKAN • SERAHKAN BARANG"
+                );
+              }
+
+              return;
+            }
+
+            void resetScanner({
+              automatic: true,
+              source: "auto-reset"
+            });
+          },
+          delay
+        );
+    }
 
 
     /* =========================================================
@@ -1055,9 +2022,7 @@
        ========================================================= */
 
     async function requireScannerAccess() {
-
       try {
-
         currentAdminAccess =
           await window.BMTC_ADMIN_AUTH
             .requirePermission(
@@ -1067,28 +2032,19 @@
         return true;
 
       } catch (error) {
-
         const message =
-          error &&
-          error.message
+          error && error.message
             ? error.message
             : "Akses scanner gagal.";
 
-        if (
-          message === "AUTH_REQUIRED"
-        ) {
-
+        if (message === "AUTH_REQUIRED") {
           window.BMTC_ADMIN_AUTH
             .redirectToAdmin();
 
           return false;
-
         }
 
-        if (
-          message === "FORBIDDEN"
-        ) {
-
+        if (message === "FORBIDDEN") {
           document.body.innerHTML =
             '<div style="padding:30px;color:#fff;font-family:Arial;background:#050505;min-height:100vh">' +
             '<h2>Akses Ditolak</h2>' +
@@ -1097,22 +2053,25 @@
             '</div>';
 
           return false;
-
         }
 
-        showServerError({
-          message: message
-        });
+        showServerError(
+          {
+            message
+          },
+          {
+            autoReset: false,
+            feedback: false,
+            lockCycle: false
+          }
+        );
 
         return false;
-
       }
-
     }
 
 
     async function getScannerAuthHeaders() {
-
       const sessionResult =
         await window.BMTC_ADMIN_AUTH
           .client
@@ -1124,27 +2083,19 @@
         sessionResult.data.session;
 
       if (!session) {
-
         throw new Error(
           "AUTH_REQUIRED"
         );
-
       }
 
       return {
-
-        "Accept":
-          "application/json",
-
+        "Accept": "application/json",
         "apikey":
           SUPABASE_PUBLISHABLE_KEY,
-
         "Authorization":
           "Bearer " +
           session.access_token
-
       };
-
     }
 
 
@@ -1153,9 +2104,7 @@
        ========================================================= */
 
     function loadNavigationConfig() {
-
       try {
-
         const config =
           window.BOLD_AFTER_DARK_NAVIGATION;
 
@@ -1163,11 +2112,9 @@
           !config ||
           typeof config !== "object"
         ) {
-
           throw new Error(
             "window.BOLD_AFTER_DARK_NAVIGATION tidak ditemukan."
           );
-
         }
 
         const pages = [
@@ -1178,23 +2125,18 @@
           "registration"
         ];
 
-        for (
-          const page of pages
-        ) {
-
+        for (const page of pages) {
           if (
-            typeof config[page] !== "string" ||
+            typeof config[page] !==
+              "string" ||
             !config[page].trim()
           ) {
-
             throw new Error(
               "URL " +
               page +
               " tidak tersedia."
             );
-
           }
-
         }
 
         navigationConfig =
@@ -1203,7 +2145,8 @@
             admin: config.admin,
             report: config.report,
             scanner: config.scanner,
-            registration: config.registration
+            registration:
+              config.registration
           });
 
         homeButton.href =
@@ -1212,15 +2155,9 @@
         navigationError.style.display =
           "none";
 
-        console.log(
-          "Navigation loaded:",
-          navigationConfig
-        );
-
         return true;
 
       } catch (error) {
-
         console.warn(
           "Navigation config tidak dapat dimuat:",
           error
@@ -1228,11 +2165,6 @@
 
         navigationConfig =
           FALLBACK_NAVIGATION;
-
-        /*
-         * FALLBACK tetap membuat HOME
-         * mengarah ke alamat yang benar.
-         */
 
         homeButton.href =
           FALLBACK_NAVIGATION.home;
@@ -1245,88 +2177,178 @@
           "block";
 
         return false;
-
       }
-
     }
 
 
     /* =========================================================
-       HOME
+       CAMERA OPERATIONS
        ========================================================= */
 
-    homeButton.addEventListener(
-      "click",
-      function(event) {
-
-        event.preventDefault();
-
-        const target =
-          navigationConfig.home ||
-          FALLBACK_NAVIGATION.home;
-
-        window.location.href =
-          target;
-
-      }
-    );
-
-
-    /* =========================================================
-       STATUS
-       ========================================================= */
-
-    function setScannerStatus(
-      text
+    function queueCameraOperation(
+      operation
     ) {
+      const next =
+        cameraOperation
+          .catch(
+            function() {
+              // Keep the operation queue alive.
+            }
+          )
+          .then(operation);
 
-      scannerStatus.textContent =
-        text || "";
-
-    }
-
-
-    /* =========================================================
-       CAMERA PLACEHOLDER
-       ========================================================= */
-
-    function hideCameraPlaceholder() {
-
-      if (
-        cameraPlaceholder
-      ) {
-
-        cameraPlaceholder.classList.add(
-          "hidden"
+      cameraOperation =
+        next.catch(
+          function(error) {
+            console.warn(
+              "CAMERA OPERATION ERROR:",
+              error
+            );
+          }
         );
 
-      }
-
+      return next;
     }
 
 
-    function showCameraPlaceholder() {
+    async function stopScannerInternal() {
+      if (!scanner) {
+        scannerPaused = false;
+        return;
+      }
+
+      try {
+        await scanner.stop();
+      } catch (error) {
+        console.warn(
+          "Scanner stop:",
+          error
+        );
+      }
+
+      try {
+        await scanner.clear();
+      } catch (error) {
+        console.warn(
+          "Scanner clear:",
+          error
+        );
+      }
+
+      scanner = null;
+      scannerPaused = false;
+    }
+
+
+    async function stopScanner() {
+      return queueCameraOperation(
+        stopScannerInternal
+      );
+    }
+
+
+    async function suspendScannerInternal() {
+      if (!scanner) {
+        return;
+      }
 
       if (
-        cameraPlaceholder
+        !scannerPaused &&
+        typeof scanner.pause ===
+          "function"
       ) {
-
-        cameraPlaceholder.classList.remove(
-          "hidden"
-        );
-
+        try {
+          scanner.pause(true);
+          scannerPaused = true;
+          return;
+        } catch (error) {
+          console.warn(
+            "Scanner pause fallback:",
+            error
+          );
+        }
       }
 
+      await stopScannerInternal();
     }
 
 
-    /* =========================================================
-       START CAMERA
-       ========================================================= */
+    async function suspendScannerForResult() {
+      return queueCameraOperation(
+        suspendScannerInternal
+      );
+    }
 
-    async function startScanner() {
 
-      processing = false;
+    function createReaderPlaceholder() {
+      reader.innerHTML = "";
+
+      showCameraPlaceholder(
+        "MEMULAI KAMERA",
+        "Izinkan akses kamera ketika browser memintanya.",
+        "📷"
+      );
+    }
+
+
+    async function startScannerInternal() {
+      if (!navigator.onLine) {
+        showCameraPlaceholder(
+          "OFFLINE",
+          "Kamera check-in akan aktif kembali setelah internet tersambung.",
+          "📡"
+        );
+
+        setScannerStatus(
+          "OFFLINE. Check-in dinonaktifkan."
+        );
+
+        return false;
+      }
+
+      if (
+        scanner &&
+        scannerPaused &&
+        typeof scanner.resume ===
+          "function"
+      ) {
+        try {
+          scanner.resume();
+          scannerPaused = false;
+          hideCameraPlaceholder();
+
+          setScannerStatus(
+            "Kamera aktif. Arahkan kamera ke QR code."
+          );
+
+          processing = false;
+          updateControlState();
+          return true;
+
+        } catch (error) {
+          console.warn(
+            "Scanner resume fallback:",
+            error
+          );
+
+          await stopScannerInternal();
+        }
+      }
+
+      if (
+        scanner &&
+        !scannerPaused
+      ) {
+        hideCameraPlaceholder();
+
+        setScannerStatus(
+          "Kamera aktif. Arahkan kamera ke QR code."
+        );
+
+        processing = false;
+        updateControlState();
+        return true;
+      }
 
       showCameraPlaceholder();
 
@@ -1334,107 +2356,27 @@
         "Mencari kamera..."
       );
 
-      /*
-       * Pastikan library tersedia.
-       */
-
       if (
-        typeof Html5Qrcode === "undefined"
+        typeof Html5Qrcode ===
+        "undefined"
       ) {
-
-        console.error(
-          "Html5Qrcode library tidak tersedia."
+        showServerError(
+          {
+            message:
+              "Library scanner QR tidak berhasil dimuat."
+          },
+          {
+            autoReset: false,
+            feedback: false,
+            lockCycle: false
+          }
         );
 
-        showServerError({
-          message:
-            "Library scanner QR tidak berhasil dimuat."
-        });
-
-        return;
-
+        return false;
       }
 
-      /*
-       * Hentikan scanner lama jika ada.
-       */
-
-      if (scanner) {
-
-        try {
-
-          await scanner.stop();
-
-        } catch (error) {
-
-          console.warn(
-            "Scanner stop:",
-            error
-          );
-
-        }
-
-        try {
-
-          await scanner.clear();
-
-        } catch (error) {
-
-          console.warn(
-            "Scanner clear:",
-            error
-          );
-
-        }
-
-        scanner =
-          null;
-
-      }
-
-      /*
-       * Bersihkan reader.
-       */
-
-      reader.innerHTML = "";
-
-      /*
-       * Buat kembali placeholder.
-       */
-
-      const placeholder =
-        document.createElement(
-          "div"
-        );
-
-      placeholder.id =
-        "cameraPlaceholder";
-
-      placeholder.className =
-        "camera-placeholder";
-
-      placeholder.innerHTML = `
-        <div class="camera-icon">
-          📷
-        </div>
-
-        <div class="camera-placeholder-title">
-          MEMULAI KAMERA
-        </div>
-
-        <div class="camera-placeholder-text">
-          Izinkan akses kamera ketika browser memintanya.
-        </div>
-      `;
-
-      reader.appendChild(
-        placeholder
-      );
-
-
-      /* =======================================================
-         CREATE SCANNER
-         ======================================================= */
+      await stopScannerInternal();
+      createReaderPlaceholder();
 
       scanner =
         new Html5Qrcode(
@@ -1444,65 +2386,70 @@
           }
         );
 
-
-      /* =======================================================
-         GET CAMERAS
-         ======================================================= */
-
       let cameras = [];
 
       try {
-
         cameras =
           await Html5Qrcode.getCameras();
-
       } catch (error) {
-
         console.error(
           "GET CAMERAS ERROR:",
           error
         );
 
-        showCameraPlaceholder();
-
         setScannerStatus(
           "Browser tidak memberikan akses kamera."
         );
 
-        showServerError({
-          message:
-            "Kamera tidak dapat diakses. Pastikan izin kamera browser sudah diberikan."
-        });
+        showServerError(
+          {
+            message:
+              "Kamera tidak dapat diakses. Pastikan izin kamera browser sudah diberikan."
+          },
+          {
+            autoReset: false,
+            feedback: false,
+            lockCycle: false
+          }
+        );
 
-        return;
+        showCameraPlaceholder(
+          "KAMERA TIDAK TERSEDIA",
+          "Periksa izin kamera atau gunakan token manual.",
+          "⚠"
+        );
 
+        return false;
       }
-
 
       if (
         !cameras ||
         cameras.length === 0
       ) {
-
-        showCameraPlaceholder();
-
         setScannerStatus(
           "Tidak ada kamera yang ditemukan."
         );
 
-        showServerError({
-          message:
-            "Tidak ada kamera yang tersedia pada perangkat ini."
-        });
+        showServerError(
+          {
+            message:
+              "Tidak ada kamera yang tersedia pada perangkat ini."
+          },
+          {
+            autoReset: false,
+            feedback: false,
+            lockCycle: false
+          }
+        );
 
-        return;
+        showCameraPlaceholder(
+          "KAMERA TIDAK DITEMUKAN",
+          "Gunakan token manual untuk melakukan check-in.",
+          "⚠"
+        );
 
+        return false;
       }
-
-
-      /* =======================================================
-         SELECT CAMERA
-         ======================================================= */
 
       let selectedCamera =
         cameras[0];
@@ -1510,7 +2457,6 @@
       const backCamera =
         cameras.find(
           function(camera) {
-
             const label =
               String(
                 camera.label || ""
@@ -1519,46 +2465,25 @@
             return (
               label.includes("back") ||
               label.includes("rear") ||
-              label.includes("environment")
+              label.includes(
+                "environment"
+              )
             );
-
           }
         );
 
-      if (
-        backCamera
-      ) {
-
+      if (backCamera) {
         selectedCamera =
           backCamera;
-
       }
 
-
-      console.log(
-        "CAMERAS:",
-        cameras
-      );
-
-      console.log(
-        "SELECTED CAMERA:",
-        selectedCamera
-      );
-
-
-      /* =======================================================
-         START CAMERA
-         ======================================================= */
-
       try {
-
         setScannerStatus(
           "Mengaktifkan kamera..."
         );
 
         await scanner.start(
           selectedCamera.id,
-
           {
             fps: 10,
 
@@ -1566,7 +2491,6 @@
               viewfinderWidth,
               viewfinderHeight
             ) {
-
               const minDimension =
                 Math.min(
                   viewfinderWidth,
@@ -1585,166 +2509,206 @@
                 width: size,
                 height: size
               };
-
             },
 
-            aspectRatio:
-              1.0,
-
-            disableFlip:
-              false
-
+            aspectRatio: 1.0,
+            disableFlip: false
           },
-
           onScanSuccess,
-
           onScanError
-
         );
 
+        scannerPaused = false;
         hideCameraPlaceholder();
 
         setScannerStatus(
           "Kamera aktif. Arahkan kamera ke QR code."
         );
 
-        console.log(
-          "CAMERA STARTED SUCCESSFULLY"
-        );
+        processing = false;
+        updateControlState();
+        return true;
 
       } catch (error) {
-
         console.error(
           "CAMERA START ERROR:",
           error
         );
 
-        showCameraPlaceholder();
+        await stopScannerInternal();
 
         setScannerStatus(
           "Kamera gagal diaktifkan."
         );
 
-        showServerError({
-          message:
-            "Kamera gagal diaktifkan. Pastikan izin kamera browser diberikan dan halaman dibuka melalui HTTPS."
-        });
+        showServerError(
+          {
+            message:
+              "Kamera gagal diaktifkan. Pastikan izin kamera diberikan dan halaman dibuka melalui HTTPS."
+          },
+          {
+            autoReset: false,
+            feedback: false,
+            lockCycle: false
+          }
+        );
 
+        showCameraPlaceholder(
+          "KAMERA GAGAL AKTIF",
+          "Periksa izin kamera atau gunakan token manual.",
+          "⚠"
+        );
+
+        return false;
       }
+    }
 
+
+    async function startScanner() {
+      return queueCameraOperation(
+        startScannerInternal
+      );
     }
 
 
     /* =========================================================
-       QR SUCCESS
+       SCAN PROCESS
        ========================================================= */
 
-    function onScanSuccess(
-      decodedText
-    ) {
-
-      if (
-        processing
-      ) {
-
-        return;
-
-      }
-
+    function onScanSuccess(decodedText) {
       const token =
         String(
           decodedText || ""
         ).trim();
 
-      if (
-        !token
-      ) {
-
+      if (!token) {
         return;
-
       }
 
-      processing =
-        true;
+      void beginCheckIn(
+        token,
+        "camera"
+      );
+    }
 
-      stopScanner();
 
-      processToken(
-        token
+    function onScanError() {
+      // Normal frame misses are intentionally ignored.
+    }
+
+
+    async function beginCheckIn(
+      token,
+      source
+    ) {
+      if (
+        processing ||
+        requestInFlight ||
+        deliveryProcessing ||
+        resetProcessing
+      ) {
+        return;
+      }
+
+      const cleanToken =
+        String(token || "").trim();
+
+      if (!cleanToken) {
+        showTemporaryError(
+          "QR TOKEN KOSONG"
+        );
+
+        return;
+      }
+
+      processing = true;
+      cancelAutoReset();
+      updateControlState();
+
+      setScannerStatus(
+        source === "manual"
+          ? "Memeriksa token manual..."
+          : "QR terbaca. Memeriksa ke server..."
       );
 
+      await suspendScannerForResult();
+
+      if (!navigator.onLine) {
+        showOfflineError();
+        return;
+      }
+
+      await processToken(
+        cleanToken
+      );
     }
 
 
-    /* =========================================================
-       QR SCAN ERROR
-       ========================================================= */
-
-    function onScanError(
-      errorMessage
+    function clearCheckInRequestState(
+      sequence
     ) {
+      if (
+        sequence !==
+        requestSequence
+      ) {
+        return false;
+      }
 
-      /*
-       * Error scan biasa sengaja
-       * tidak ditampilkan.
-       */
+      if (requestTimeout) {
+        clearTimeout(
+          requestTimeout
+        );
 
+        requestTimeout = null;
+      }
+
+      requestController = null;
+      requestInFlight = false;
+      updateControlState();
+      return true;
     }
 
 
-    /* =========================================================
-       STOP SCANNER
-       ========================================================= */
+    function abortActiveCheckInRequest() {
+      requestSequence += 1;
 
-    async function stopScanner() {
+      if (requestTimeout) {
+        clearTimeout(
+          requestTimeout
+        );
 
-      if (
-        !scanner
-      ) {
+        requestTimeout = null;
+      }
+
+      if (requestController) {
+        try {
+          requestController.abort();
+        } catch {
+          // No action required.
+        }
+      }
+
+      requestController = null;
+      requestInFlight = false;
+    }
+
+
+    async function processToken(token) {
+      const cleanToken =
+        String(token || "").trim();
+
+      if (!cleanToken) {
+        showServerError({
+          message: "QR token kosong."
+        });
 
         return;
-
       }
 
-      try {
-
-        await scanner.stop();
-
-      } catch (error) {
-
-        console.warn(
-          "Scanner stop:",
-          error
-        );
-
+      if (!navigator.onLine) {
+        showOfflineError();
+        return;
       }
-
-      try {
-
-        await scanner.clear();
-
-      } catch (error) {
-
-        console.warn(
-          "Scanner clear:",
-          error
-        );
-
-      }
-
-      scanner =
-        null;
-
-    }
-
-
-    /* =========================================================
-       PROCESS TOKEN
-       ========================================================= */
-
-    async function processToken(
-      token
-    ) {
 
       showLoading();
 
@@ -1752,144 +2716,82 @@
         "Menghubungi server Supabase..."
       );
 
-      const cleanToken =
-        String(
-          token || ""
-        ).trim();
+      requestInFlight = true;
+      updateControlState();
 
-      if (
-        !cleanToken
-      ) {
+      const sequence =
+        ++requestSequence;
 
-        showServerError({
-          message:
-            "QR token kosong."
-        });
+      const controller =
+        new AbortController();
 
-        processing =
-          false;
+      requestController =
+        controller;
 
-        return;
-
-      }
-
-
-      const requestUrl =
-        API_URL +
-        "?action=checkIn&token=" +
-        encodeURIComponent(
-          cleanToken
-        );
-
-
-      if (
-        requestTimeout
-      ) {
-
-        clearTimeout(
-          requestTimeout
-        );
-
-        requestTimeout =
-          null;
-
-      }
-
-
-      let finished =
-        false;
-
+      let timedOut = false;
 
       requestTimeout =
         setTimeout(
           function() {
+            timedOut = true;
 
-            if (
-              finished
-            ) {
-
-              return;
-
+            try {
+              controller.abort();
+            } catch {
+              // No action required.
             }
-
-            finished =
-              true;
-
-            requestTimeout =
-              null;
-
-            showServerError({
-              message:
-                "Server check-in tidak memberikan respons dalam 15 detik."
-            });
-
           },
           15000
         );
 
-
       try {
-
         const response =
           await fetch(
-            requestUrl,
+            API_URL +
+              "?action=checkIn",
             {
-              method: "GET",
-
+              method: "POST",
               cache: "no-store",
-
-              headers:
-                await getScannerAuthHeaders()
+              signal: controller.signal,
+              headers: {
+                ...(
+                  await getScannerAuthHeaders()
+                ),
+                "Content-Type":
+                  "application/json"
+              },
+              body: JSON.stringify({
+                token: cleanToken
+              })
             }
           );
 
-
         if (
-          finished
+          sequence !==
+          requestSequence
         ) {
-
           return;
-
         }
-
-        finished =
-          true;
-
-
-        if (
-          requestTimeout
-        ) {
-
-          clearTimeout(
-            requestTimeout
-          );
-
-          requestTimeout =
-            null;
-
-        }
-
 
         const rawResponse =
           await response.text();
 
-        let data =
-          null;
-
+        let data = null;
 
         try {
-
           data =
             JSON.parse(
               rawResponse
             );
-
         } catch (error) {
-
           console.error(
             "JSON PARSE ERROR:",
             error,
             rawResponse
+          );
+
+          clearCheckInRequestState(
+            sequence
           );
 
           showServerError({
@@ -1898,105 +2800,76 @@
           });
 
           return;
-
         }
 
-
-        showResult(
-          data
+        clearCheckInRequestState(
+          sequence
         );
 
+        showResult(data);
 
       } catch (error) {
-
         if (
-          finished
+          sequence !==
+          requestSequence
         ) {
-
           return;
-
         }
 
-        finished =
-          true;
-
-
-        if (
-          requestTimeout
-        ) {
-
-          clearTimeout(
-            requestTimeout
-          );
-
-          requestTimeout =
-            null;
-
-        }
-
+        clearCheckInRequestState(
+          sequence
+        );
 
         console.error(
           "CHECK-IN REQUEST ERROR:",
           error
         );
 
+        if (!navigator.onLine) {
+          showOfflineError();
+          return;
+        }
+
+        if (
+          error &&
+          error.name === "AbortError" &&
+          timedOut
+        ) {
+          showServerError({
+            message:
+              "Server check-in tidak memberikan respons dalam 15 detik."
+          });
+
+          return;
+        }
 
         showServerError({
           message:
-            error &&
-            error.message
+            error && error.message
               ? error.message
               : "Tidak dapat menghubungi server check-in."
         });
-
       }
-
     }
 
 
-    /* =========================================================
-       MANUAL CHECK-IN
-       ========================================================= */
-
     function manualCheckIn() {
-
-      if (
-        processing
-      ) {
-
-        return;
-
-      }
-
-
       const token =
         manualToken.value.trim();
 
-
-      if (
-        !token
-      ) {
-
+      if (!token) {
         showTemporaryError(
           "QR TOKEN KOSONG"
         );
 
         manualToken.focus();
-
         return;
-
       }
 
-
-      processing =
-        true;
-
-      stopScanner();
-
-      processToken(
-        token
+      void beginCheckIn(
+        token,
+        "manual"
       );
-
     }
 
 
@@ -2004,10 +2877,7 @@
        PURCHASE HELPERS
        ========================================================= */
 
-    function formatCurrency(
-      value
-    ) {
-
+    function formatCurrency(value) {
       const number =
         Number(value || 0);
 
@@ -2019,14 +2889,10 @@
           maximumFractionDigits: 0
         }
       ).format(number);
-
     }
 
 
-    function formatDateTime(
-      value
-    ) {
-
+    function formatDateTime(value) {
       if (!value) {
         return "-";
       }
@@ -2050,48 +2916,33 @@
           timeZone: "Asia/Jakarta"
         }
       ).format(date);
-
     }
 
 
-    function getPaymentClass(
-      status
-    ) {
-
+    function getPaymentClass(status) {
       const normalized =
-        String(
-          status || ""
-        ).toUpperCase();
+        String(status || "")
+          .toUpperCase();
 
-      if (
-        normalized === "APPROVED"
-      ) {
+      if (normalized === "APPROVED") {
         return "payment-approved";
       }
 
-      if (
-        normalized === "REJECTED"
-      ) {
+      if (normalized === "REJECTED") {
         return "payment-rejected";
       }
 
       return "payment-pending";
-
     }
 
 
-    function buildPurchaseHtml(
-      purchase
-    ) {
-
+    function buildPurchaseHtml(purchase) {
       if (!purchase) {
-
         return `
           <div class="no-purchase">
             TIDAK ADA PEMBELIAN TAMBAHAN
           </div>
         `;
-
       }
 
       const paymentStatus =
@@ -2102,14 +2953,12 @@
       const itemDelivered =
         purchase.itemDelivered === true;
 
-      let deliveryHtml =
-        "";
+      let deliveryHtml = "";
 
       if (
         paymentStatus === "APPROVED" &&
         itemDelivered
       ) {
-
         deliveryHtml = `
           <div class="delivery-badge delivery-done">
             ✓ BARANG SUDAH DIBERIKAN
@@ -2132,7 +2981,6 @@
       } else if (
         paymentStatus === "APPROVED"
       ) {
-
         deliveryHtml = `
           <div class="delivery-badge delivery-ready">
             BARANG SIAP DISERAHKAN
@@ -2149,12 +2997,18 @@
               purchase.unitName || "UNIT"
             )}
           </button>
+
+          <div
+            id="deliveryInlineMessage"
+            class="delivery-inline-message"
+            role="status"
+            aria-live="polite"
+          ></div>
         `;
 
       } else if (
         paymentStatus === "REJECTED"
       ) {
-
         deliveryHtml = `
           <div class="delivery-badge delivery-blocked">
             ✕ JANGAN SERAHKAN BARANG
@@ -2166,7 +3020,6 @@
         `;
 
       } else {
-
         deliveryHtml = `
           <div class="delivery-badge delivery-blocked">
             ⚠ JANGAN SERAHKAN BARANG
@@ -2176,12 +3029,10 @@
             PEMBAYARAN BELUM APPROVED
           </div>
         `;
-
       }
 
       return `
         <div class="purchase-panel">
-
           <div class="purchase-heading">
             BARANG PEMBELIAN
           </div>
@@ -2202,7 +3053,6 @@
           </div>
 
           <div class="purchase-grid">
-
             <div class="purchase-field">
               <div class="purchase-field-label">
                 PURCHASE ID
@@ -2226,7 +3076,6 @@
                 )}
               </div>
             </div>
-
           </div>
 
           <div class="payment-badge ${getPaymentClass(
@@ -2238,15 +3087,12 @@
           </div>
 
           ${deliveryHtml}
-
         </div>
       `;
-
     }
 
 
     function bindDeliveryButton() {
-
       const button =
         document.getElementById(
           "deliverItemButton"
@@ -2261,204 +3107,38 @@
         deliverCurrentItem
       );
 
+      updateControlState();
     }
 
 
-    async function deliverCurrentItem() {
-
-      if (
-        deliveryProcessing ||
-        !currentPurchase ||
-        !currentPurchase.purchaseId
-      ) {
-        return;
-      }
-
-      if (
-        String(
-          currentPurchase.paymentStatus || ""
-        ).toUpperCase() !== "APPROVED"
-      ) {
-
-        alert(
-          "Barang tidak boleh diserahkan karena pembayaran belum APPROVED."
-        );
-
-        return;
-      }
-
-      if (
-        currentPurchase.itemDelivered === true
-      ) {
-
-        alert(
-          "Barang sudah pernah diserahkan."
-        );
-
-        return;
-      }
-
-      const confirmed =
-        window.confirm(
-          "Konfirmasi barang sudah benar-benar diberikan?\n\n" +
-          String(
-            currentPurchase.productName || "Produk"
-          ) +
-          "\n" +
-          String(
-            currentPurchase.quantity || 0
-          ) +
-          " " +
-          String(
-            currentPurchase.unitName || "unit"
-          )
-        );
-
-      if (!confirmed) {
-        return;
-      }
-
-      const button =
+    function showDeliveryInlineMessage(
+      message,
+      type = "error"
+    ) {
+      const box =
         document.getElementById(
-          "deliverItemButton"
+          "deliveryInlineMessage"
         );
 
-      deliveryProcessing =
-        true;
-
-      if (button) {
-        button.disabled = true;
-        button.textContent =
-          "MENYIMPAN...";
+      if (!box) {
+        return;
       }
 
-      try {
+      box.textContent =
+        message || "";
 
-        const response =
-          await fetch(
-            API_URL +
-              "?action=deliverItem",
-            {
-              method: "POST",
-              cache: "no-store",
-              headers: {
-                ...(
-                  await getScannerAuthHeaders()
-                ),
-                "Content-Type":
-                  "application/json"
-              },
-              body:
-                JSON.stringify({
-                  purchaseId:
-                    currentPurchase.purchaseId
-                })
-            }
-          );
+      box.className =
+        "delivery-inline-message " +
+        type;
 
-        const raw =
-          await response.text();
-
-        let data =
-          null;
-
-        try {
-
-          data =
-            JSON.parse(raw);
-
-        } catch {
-
-          throw new Error(
-            "Server mengembalikan response penyerahan yang tidak valid."
-          );
-
-        }
-
-        if (
-          data &&
-          data.purchase
-        ) {
-
-          currentPurchase =
-            data.purchase;
-
-        }
-
-        if (
-          data &&
-          (
-            data.status === "DELIVERED" ||
-            data.status === "ALREADY_DELIVERED"
-          )
-        ) {
-
-          if (
-            data.status ===
-            "ALREADY_DELIVERED"
-          ) {
-
-            alert(
-              data.message ||
-              "Barang sudah dikonfirmasi oleh petugas lain."
-            );
-
-          }
-
-          refreshPurchaseDisplay();
-
-          setScannerStatus(
-            data.status === "DELIVERED"
-              ? "Barang berhasil dikonfirmasi sudah diserahkan."
-              : "Barang sudah pernah diserahkan."
-          );
-
-          return;
-        }
-
-        throw new Error(
-          data &&
-          data.message
-            ? data.message
-            : "Gagal mengonfirmasi penyerahan barang."
-        );
-
-      } catch (error) {
-
-        console.error(
-          "DELIVER ITEM ERROR:",
-          error
-        );
-
-        alert(
-          error &&
-          error.message
-            ? error.message
-            : "Gagal mengonfirmasi penyerahan barang."
-        );
-
-      } finally {
-
-        deliveryProcessing =
-          false;
-
-        const latestButton =
-          document.getElementById(
-            "deliverItemButton"
-          );
-
-        if (latestButton) {
-          latestButton.disabled =
-            false;
-        }
-
-      }
-
+      box.style.display =
+        message
+          ? "block"
+          : "none";
     }
 
 
     function refreshPurchaseDisplay() {
-
       const purchaseContainer =
         document.getElementById(
           "purchaseResultContainer"
@@ -2474,37 +3154,355 @@
         );
 
       bindDeliveryButton();
+    }
 
+
+    function clearDeliveryRequestState() {
+      if (deliveryRequestTimeout) {
+        clearTimeout(
+          deliveryRequestTimeout
+        );
+
+        deliveryRequestTimeout = null;
+      }
+
+      deliveryRequestController =
+        null;
+
+      deliveryProcessing = false;
+      updateControlState();
+    }
+
+
+    async function deliverCurrentItem() {
+      if (
+        deliveryProcessing ||
+        !currentPurchase ||
+        !currentPurchase.purchaseId
+      ) {
+        return;
+      }
+
+      cancelAutoReset();
+
+      if (!navigator.onLine) {
+        showDeliveryInlineMessage(
+          "OFFLINE. Sambungkan internet sebelum mengonfirmasi penyerahan."
+        );
+
+        setScannerStatus(
+          "OFFLINE. Penyerahan tidak dikirim ke server."
+        );
+
+        return;
+      }
+
+      if (
+        String(
+          currentPurchase.paymentStatus || ""
+        ).toUpperCase() !== "APPROVED"
+      ) {
+        showDeliveryInlineMessage(
+          "Barang tidak boleh diserahkan karena pembayaran belum APPROVED."
+        );
+
+        return;
+      }
+
+      if (
+        currentPurchase.itemDelivered ===
+        true
+      ) {
+        showDeliveryInlineMessage(
+          "Barang sudah pernah diserahkan.",
+          "warning"
+        );
+
+        return;
+      }
+
+      deliveryProcessing = true;
+      updateControlState();
+
+      const confirmed =
+        window.confirm(
+          "Konfirmasi barang sudah benar-benar diberikan?\n\n" +
+          String(
+            currentPurchase.productName ||
+            "Produk"
+          ) +
+          "\n" +
+          String(
+            currentPurchase.quantity || 0
+          ) +
+          " " +
+          String(
+            currentPurchase.unitName ||
+            "unit"
+          )
+        );
+
+      if (!confirmed) {
+        deliveryProcessing = false;
+
+        showHoldNotice(
+          "TINDAKAN DIPERLUKAN • SERAHKAN BARANG"
+        );
+
+        updateControlState();
+        return;
+      }
+
+      const button =
+        document.getElementById(
+          "deliverItemButton"
+        );
+
+      if (button) {
+        button.disabled = true;
+        button.textContent =
+          "MENYIMPAN...";
+      }
+
+      showDeliveryInlineMessage(
+        "Menyimpan konfirmasi ke server...",
+        "info"
+      );
+
+      setScannerStatus(
+        "Menyimpan penyerahan barang..."
+      );
+
+      const controller =
+        new AbortController();
+
+      deliveryRequestController =
+        controller;
+
+      let timedOut = false;
+      let completed = false;
+
+      deliveryRequestTimeout =
+        setTimeout(
+          function() {
+            timedOut = true;
+
+            try {
+              controller.abort();
+            } catch {
+              // No action required.
+            }
+          },
+          15000
+        );
+
+      try {
+        const response =
+          await fetch(
+            API_URL +
+              "?action=deliverItem",
+            {
+              method: "POST",
+              cache: "no-store",
+              signal: controller.signal,
+              headers: {
+                ...(
+                  await getScannerAuthHeaders()
+                ),
+                "Content-Type":
+                  "application/json"
+              },
+              body: JSON.stringify({
+                purchaseId:
+                  currentPurchase.purchaseId
+              })
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data = null;
+
+        try {
+          data = JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Server mengembalikan response penyerahan yang tidak valid."
+          );
+        }
+
+        if (
+          data &&
+          data.purchase
+        ) {
+          currentPurchase = {
+            ...currentPurchase,
+            ...data.purchase
+          };
+        }
+
+        if (
+          data &&
+          (
+            data.status === "DELIVERED" ||
+            data.status ===
+              "ALREADY_DELIVERED"
+          )
+        ) {
+          completed = true;
+
+          currentPurchase = {
+            ...currentPurchase,
+            itemDelivered: true
+          };
+
+          refreshPurchaseDisplay();
+
+          setScannerStatus(
+            data.status === "DELIVERED"
+              ? "Barang berhasil dikonfirmasi sudah diserahkan."
+              : "Barang sudah dikonfirmasi oleh petugas lain."
+          );
+
+          clearDeliveryRequestState();
+          triggerFeedback(
+            "ITEM_DELIVERED"
+          );
+
+          scheduleAutoReset(2200);
+          return;
+        }
+
+        throw new Error(
+          data && data.message
+            ? data.message
+            : "Gagal mengonfirmasi penyerahan barang."
+        );
+
+      } catch (error) {
+        console.error(
+          "DELIVER ITEM ERROR:",
+          error
+        );
+
+        let message =
+          error && error.message
+            ? error.message
+            : "Gagal mengonfirmasi penyerahan barang.";
+
+        if (!navigator.onLine) {
+          message =
+            "Koneksi terputus. Penyerahan belum tersimpan di server.";
+        } else if (
+          error &&
+          error.name === "AbortError" &&
+          timedOut
+        ) {
+          message =
+            "Server penyerahan tidak memberikan respons dalam 15 detik.";
+        }
+
+        showDeliveryInlineMessage(
+          message
+        );
+
+        setScannerStatus(
+          message
+        );
+
+      } finally {
+        if (!completed) {
+          clearDeliveryRequestState();
+
+          const latestButton =
+            document.getElementById(
+              "deliverItemButton"
+            );
+
+          if (latestButton) {
+            latestButton.textContent =
+              "✓ SERAHKAN " +
+              String(
+                currentPurchase.quantity ||
+                0
+              ) +
+              " " +
+              String(
+                currentPurchase.unitName ||
+                "UNIT"
+              );
+          }
+
+          if (hasPendingApprovedDelivery()) {
+            showHoldNotice(
+              "TINDAKAN DIPERLUKAN • SERAHKAN BARANG"
+            );
+          }
+        }
+      }
     }
 
 
     /* =========================================================
-       RESULT
+       RESULT UI
        ========================================================= */
 
-    function showResult(
-      data
-    ) {
+    function prepareResult(className) {
+      cancelAutoReset();
 
       result.className =
-        "result";
+        "result " + className;
 
       result.style.display =
         "block";
 
+      processing = true;
+      updateControlState();
+    }
 
-      /* =======================================================
-         VALID
-         ======================================================= */
 
-      if (
-        data &&
-        data.status === "VALID"
-      ) {
+    function finalizeResult(options) {
+      const feedback =
+        options && options.feedback;
 
-        result.classList.add(
-          "valid"
+      const autoResetDelay =
+        options &&
+        Number(options.autoResetDelay || 0);
+
+      if (feedback) {
+        triggerFeedback(feedback);
+      }
+
+      updateControlState();
+      scrollResultIntoView();
+
+      if (hasPendingApprovedDelivery()) {
+        showHoldNotice(
+          "TINDAKAN DIPERLUKAN • SERAHKAN BARANG"
         );
+
+        return;
+      }
+
+      if (autoResetDelay > 0) {
+        scheduleAutoReset(
+          autoResetDelay
+        );
+      }
+    }
+
+
+    function showResult(data) {
+      const status =
+        String(
+          data && data.status
+            ? data.status
+            : ""
+        ).toUpperCase();
+
+      if (status === "VALID") {
+        prepareResult("valid");
 
         resultTitle.textContent =
           "✓ ENTRY APPROVED";
@@ -2512,9 +3510,8 @@
         currentPurchase =
           data.purchase || null;
 
-        resultDetails.innerHTML =
-          `
-          <div class="detail">
+        resultDetails.innerHTML = `
+          <div class="detail primary-detail">
             <strong>NAMA</strong><br>
             ${escapeHtml(data.name)}
           </div>
@@ -2543,34 +3540,29 @@
               currentPurchase
             )}
           </div>
-          `;
+        `;
 
         bindDeliveryButton();
 
         setScannerStatus(
-          "Check-in berhasil."
+          hasPendingApprovedDelivery()
+            ? "Check-in berhasil. Serahkan barang sebelum melanjutkan."
+            : "Check-in berhasil."
         );
+
+        finalizeResult({
+          feedback: "VALID",
+          autoResetDelay: 2500
+        });
 
         return;
-
       }
 
-
-      /* =======================================================
-         ALREADY USED
-         ======================================================= */
-
       if (
-        data &&
-        (
-          data.status === "ALREADY_USED" ||
-          data.status === "USED"
-        )
+        status === "ALREADY_USED" ||
+        status === "USED"
       ) {
-
-        result.classList.add(
-          "used"
-        );
+        prepareResult("used");
 
         resultTitle.textContent =
           "⚠ ALREADY USED";
@@ -2578,9 +3570,8 @@
         currentPurchase =
           data.purchase || null;
 
-        resultDetails.innerHTML =
-          `
-          <div class="detail">
+        resultDetails.innerHTML = `
+          <div class="detail primary-detail">
             <strong>QR INI SUDAH DIGUNAKAN</strong>
           </div>
 
@@ -2613,107 +3604,106 @@
               currentPurchase
             )}
           </div>
-          `;
+        `;
 
         bindDeliveryButton();
 
         setScannerStatus(
-          currentPurchase &&
-          currentPurchase.itemDelivered === true
-            ? "QR sudah digunakan dan barang sudah pernah diserahkan."
-            : "QR sudah pernah digunakan."
+          hasPendingApprovedDelivery()
+            ? "QR sudah digunakan. Barang masih harus diserahkan."
+            : currentPurchase &&
+              currentPurchase.itemDelivered ===
+                true
+              ? "QR sudah digunakan dan barang sudah pernah diserahkan."
+              : "QR sudah pernah digunakan."
         );
+
+        finalizeResult({
+          feedback: "ALREADY_USED",
+          autoResetDelay: 2700
+        });
 
         return;
-
       }
 
+      const invalidStatuses =
+        new Set([
+          "INVALID",
+          "NOT_FOUND",
+          "CANCELLED",
+          "BLOCKED",
+          "INVALID_PASS_STATUS"
+        ]);
 
-      /* =======================================================
-         INVALID
-         ======================================================= */
-
-      if (
-        data &&
-        (
-          data.status === "INVALID" ||
-          data.status === "NOT_FOUND"
-        )
-      ) {
-
-        currentPurchase =
-          null;
-
-        result.classList.add(
-          "invalid"
-        );
+      if (invalidStatuses.has(status)) {
+        prepareResult("invalid");
+        currentPurchase = null;
 
         resultTitle.textContent =
-          "✕ INVALID QR";
+          status === "CANCELLED"
+            ? "✕ PASS CANCELLED"
+            : "✕ INVALID QR";
 
-        resultDetails.innerHTML =
-          `
-          <div class="detail">
+        resultDetails.innerHTML = `
+          <div class="detail primary-detail">
             ${escapeHtml(
               data.message ||
               "QR tidak terdaftar."
             )}
           </div>
-          `;
+        `;
 
         setScannerStatus(
           "QR tidak valid."
         );
 
-        return;
+        finalizeResult({
+          feedback: "INVALID",
+          autoResetDelay: 2600
+        });
 
+        return;
       }
 
+      if (
+        status === "UNAUTHORIZED" ||
+        status === "FORBIDDEN"
+      ) {
+        showServerError(
+          {
+            message:
+              data && data.message
+                ? data.message
+                : "Sesi scanner tidak valid."
+          },
+          {
+            autoReset: false,
+            feedback: true
+          }
+        );
 
-      /* =======================================================
-         SERVER ERROR
-         ======================================================= */
+        showHoldNotice(
+          "SESI TIDAK VALID • KEMBALI KE ADMIN"
+        );
 
-      currentPurchase =
-        null;
+        return;
+      }
 
-      result.classList.add(
-        "error"
-      );
-
-      resultTitle.textContent =
-        "SYSTEM ERROR";
-
-      resultDetails.innerHTML =
-        `
-        <div class="detail">
-          ${escapeHtml(
-            data &&
-            data.message
-              ? data.message
-              : "Terjadi kesalahan pada server check-in."
-          )}
-        </div>
-        `;
-
-      setScannerStatus(
-        "Terjadi kesalahan."
-      );
-
+      showServerError({
+        message:
+          data && data.message
+            ? data.message
+            : "Terjadi kesalahan pada server check-in."
+      });
     }
 
 
-    /* =========================================================
-       LOADING
-       ========================================================= */
-
     function showLoading() {
-
-      currentPurchase =
-        null;
+      cancelAutoReset();
+      currentPurchase = null;
 
       result.className =
-        "result error";
+        "result loading";
 
       result.style.display =
         "block";
@@ -2721,26 +3711,30 @@
       resultTitle.textContent =
         "CHECKING...";
 
-      resultDetails.innerHTML =
-        `
-        <div class="detail">
+      resultDetails.innerHTML = `
+        <div class="detail primary-detail">
           Memverifikasi QR ke Supabase...
         </div>
-        `;
+      `;
 
+      clearAutoResetNotice();
+      updateControlState();
+      scrollResultIntoView();
     }
 
 
-    /* =========================================================
-       SERVER ERROR
-       ========================================================= */
-
     function showServerError(
-      error
+      error,
+      options = {}
     ) {
+      cancelAutoReset();
+      currentPurchase = null;
 
-      currentPurchase =
-        null;
+      if (
+        options.lockCycle !== false
+      ) {
+        processing = true;
+      }
 
       result.className =
         "result error";
@@ -2751,56 +3745,99 @@
       resultTitle.textContent =
         "SYSTEM ERROR";
 
-      resultDetails.innerHTML =
-        `
-        <div class="detail">
+      resultDetails.innerHTML = `
+        <div class="detail primary-detail">
           ${escapeHtml(
-            error &&
-            error.message
+            error && error.message
               ? error.message
               : "Tidak dapat menghubungi server check-in."
           )}
         </div>
-        `;
+      `;
 
       setScannerStatus(
         "Terjadi kesalahan."
       );
 
+      if (options.feedback !== false) {
+        triggerFeedback("INVALID");
+      }
+
+      updateControlState();
+      scrollResultIntoView();
+
+      if (
+        options.autoReset !== false &&
+        navigator.onLine
+      ) {
+        scheduleAutoReset(3000);
+      }
     }
 
 
-    /* =========================================================
-       TEMPORARY ERROR
-       ========================================================= */
-
-    function showTemporaryError(
-      message
-    ) {
-
-      currentPurchase =
-        null;
+    function showOfflineError() {
+      cancelAutoReset();
+      currentPurchase = null;
+      processing = true;
 
       result.className =
-        "result invalid";
+        "result error";
 
       result.style.display =
         "block";
 
       resultTitle.textContent =
+        "OFFLINE";
+
+      resultDetails.innerHTML = `
+        <div class="detail primary-detail">
+          Check-in tidak dikirim dan tidak disimpan secara lokal.
+          Sambungkan internet agar server Supabase dapat memverifikasi QR.
+        </div>
+      `;
+
+      showHoldNotice(
+        "MENUNGGU KONEKSI INTERNET"
+      );
+
+      showCameraPlaceholder(
+        "OFFLINE",
+        "Scanner akan aktif kembali setelah internet tersambung.",
+        "📡"
+      );
+
+      setScannerStatus(
+        "OFFLINE. Check-in dinonaktifkan."
+      );
+
+      updateControlState();
+      scrollResultIntoView();
+    }
+
+
+    function showTemporaryError(message) {
+      processing = true;
+      currentPurchase = null;
+
+      prepareResult("invalid");
+
+      resultTitle.textContent =
         "✕ INVALID";
 
-      resultDetails.innerHTML =
-        `
-        <div class="detail">
+      resultDetails.innerHTML = `
+        <div class="detail primary-detail">
           ${escapeHtml(message)}
         </div>
-        `;
+      `;
 
       setScannerStatus(
         "Input tidak valid."
       );
 
+      finalizeResult({
+        feedback: "INVALID",
+        autoResetDelay: 2000
+      });
     }
 
 
@@ -2808,21 +3845,35 @@
        RESET
        ========================================================= */
 
-    async function resetScanner() {
+    async function resetScanner(
+      options = {}
+    ) {
+      const automatic =
+        options.automatic === true;
 
       if (
-        requestTimeout
+        resetProcessing ||
+        requestInFlight ||
+        deliveryProcessing
       ) {
-
-        clearTimeout(
-          requestTimeout
-        );
-
-        requestTimeout =
-          null;
-
+        return;
       }
 
+      if (
+        automatic &&
+        hasPendingApprovedDelivery()
+      ) {
+        showHoldNotice(
+          "TINDAKAN DIPERLUKAN • SERAHKAN BARANG"
+        );
+
+        return;
+      }
+
+      resetProcessing = true;
+      cancelAutoReset();
+      abortActiveCheckInRequest();
+      updateControlState();
 
       result.style.display =
         "none";
@@ -2830,70 +3881,48 @@
       result.className =
         "result";
 
-      resultTitle.textContent =
-        "";
+      resultTitle.textContent = "";
+      resultDetails.innerHTML = "";
+      clearAutoResetNotice();
 
-      resultDetails.innerHTML =
-        "";
+      manualToken.value = "";
+      currentPurchase = null;
+      processing = false;
 
-      manualToken.value =
-        "";
+      try {
+        if (!navigator.onLine) {
+          showOfflineError();
+          return;
+        }
 
-      currentPurchase =
-        null;
+        await startScanner();
+        scrollScannerIntoView();
 
-      deliveryProcessing =
-        false;
-
-      processing =
-        false;
-
-
-      await startScanner();
-
-    }
-
-
-    /* =========================================================
-       ESCAPE HTML
-       ========================================================= */
-
-    function escapeHtml(
-      value
-    ) {
-
-      return String(
-        value == null
-          ? ""
-          : value
-      )
-        .replace(
-          /&/g,
-          "&amp;"
-        )
-        .replace(
-          /</g,
-          "&lt;"
-        )
-        .replace(
-          />/g,
-          "&gt;"
-        )
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-        .replace(
-          /'/g,
-          "&#039;"
-        );
-
+      } finally {
+        resetProcessing = false;
+        updateControlState();
+      }
     }
 
 
     /* =========================================================
        EVENTS
        ========================================================= */
+
+    homeButton.addEventListener(
+      "click",
+      function(event) {
+        event.preventDefault();
+
+        const target =
+          navigationConfig.home ||
+          FALLBACK_NAVIGATION.home;
+
+        window.location.href =
+          target;
+      }
+    );
+
 
     manualButton.addEventListener(
       "click",
@@ -2903,74 +3932,137 @@
 
     resetButton.addEventListener(
       "click",
-      resetScanner
+      function() {
+        void resetScanner({
+          automatic: false,
+          source: "manual-button"
+        });
+      }
     );
 
 
     manualToken.addEventListener(
       "keydown",
       function(event) {
-
-        if (
-          event.key === "Enter"
-        ) {
-
+        if (event.key === "Enter") {
           event.preventDefault();
-
           manualCheckIn();
+        }
+      }
+    );
 
+
+    manualToken.addEventListener(
+      "input",
+      updateControlState
+    );
+
+
+    audioButton.addEventListener(
+      "click",
+      function() {
+        void unlockAudio(true);
+      }
+    );
+
+
+    document.addEventListener(
+      "pointerdown",
+      function() {
+        void unlockAudio(false);
+      },
+      {
+        once: true,
+        passive: true,
+        capture: true
+      }
+    );
+
+
+    window.addEventListener(
+      "online",
+      function() {
+        void handleOnline();
+      }
+    );
+
+
+    window.addEventListener(
+      "offline",
+      function() {
+        void handleOffline();
+      }
+    );
+
+
+    window.addEventListener(
+      "beforeunload",
+      function() {
+        cancelAutoReset();
+        abortActiveCheckInRequest();
+
+        if (deliveryRequestController) {
+          try {
+            deliveryRequestController.abort();
+          } catch {
+            // No action required.
+          }
         }
 
+        if (scanner) {
+          try {
+            const stopResult =
+              scanner.stop();
+
+            if (
+              stopResult &&
+              typeof stopResult.catch ===
+                "function"
+            ) {
+              stopResult.catch(
+                function() {
+                  // Page is closing.
+                }
+              );
+            }
+          } catch {
+            // Page is closing.
+          }
+        }
       }
     );
 
 
     /* =========================================================
        PAGE INITIALIZATION
-       =========================================================
-
-       PENTING:
-
-       Navigation dimuat terlebih dahulu,
-       tetapi kegagalannya TIDAK menghentikan kamera.
-
        ========================================================= */
 
     window.addEventListener(
       "DOMContentLoaded",
       async function() {
-
         console.log(
-          "BOLD AFTER DARK SCANNER INITIALIZING..."
+          "BOLD AFTER DARK HIGH-SPEED SCANNER INITIALIZING..."
         );
 
-
-        /*
-         * Navigation tidak boleh
-         * menghentikan scanner.
-         */
-
         loadNavigationConfig();
-
-
-        /*
-         * Scanner hanya boleh aktif
-         * setelah permission scanner.use
-         * tervalidasi.
-         */
+        updateConnectionStatus();
+        updateAudioButton();
+        updateControlState();
 
         const allowed =
           await requireScannerAccess();
 
         if (!allowed) {
-
           return;
-
         }
 
+        if (!navigator.onLine) {
+          processing = true;
+          showOfflineError();
+          return;
+        }
 
         await startScanner();
-
       }
     );
 
@@ -2982,14 +4074,14 @@
     window.addEventListener(
       "error",
       function(event) {
-
         console.error(
           "PAGE ERROR:",
-          event.error || event.message
+          event.error ||
+          event.message
         );
-
       }
     );
+
 
   </script>
 

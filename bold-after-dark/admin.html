@@ -599,7 +599,21 @@
         width: 100%;
       }
     }
+
+    /* Central auth mode: this module never accepts its own credentials. */
+    #loginScreen #loginForm {
+      display: none;
+    }
+
+    #loginScreen .login-subtitle {
+      margin-bottom: 10px;
+    }
+
   </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/admin/js/admin-auth.js"></script>
+
 </head>
 
 <body>
@@ -949,14 +963,14 @@
 
 
     /* ============================================================
-       ADMIN LOGIN
+       CENTRAL AUTHORIZATION
        ============================================================ */
 
-    const ADMIN_EMAIL =
-      "admin@admin.com";
+    const REQUIRED_PERMISSION =
+      "registration.view";
 
-    const ADMIN_PASSWORD =
-      "22Jun!2002";
+    let currentAdminAccess =
+      null;
 
 
     /* ============================================================
@@ -1071,69 +1085,108 @@
     }
 
 
-    loginForm.addEventListener(
-      "submit",
-      function(event) {
+    async function startCentralAdminSession() {
 
-        event.preventDefault();
+      clearLoginError();
 
-        clearLoginError();
+      loginButton.disabled =
+        true;
 
-        const email =
-          loginEmail.value.trim();
+      loginButton.textContent =
+        "MEMERIKSA AKSES...";
 
-        const password =
-          loginPassword.value;
+      try {
+
+        currentAdminAccess =
+          await window.BMTC_ADMIN_AUTH
+            .requirePermission(
+              REQUIRED_PERMISSION
+            );
+
+        loginScreen.classList.add(
+          "hidden"
+        );
+
+        dashboardScreen.classList.remove(
+          "hidden"
+        );
+
+        adminEmail.textContent =
+          currentAdminAccess.profile.full_name +
+          " • " +
+          currentAdminAccess.roles
+            .map(function(role) {
+              return role.name;
+            })
+            .join(", ");
+
+        await loadRegistrations();
+
+      } catch (error) {
+
+        const message =
+          error &&
+          error.message
+            ? error.message
+            : "Akses admin tidak tersedia.";
 
         if (
-          email !== ADMIN_EMAIL ||
-          password !== ADMIN_PASSWORD
+          message === "AUTH_REQUIRED"
         ) {
 
+          loginForm.classList.add(
+            "hidden"
+          );
+
           showLoginError(
-            "Email atau password admin salah."
+            "Sesi admin belum tersedia. Silakan login melalui BMTC Admin."
+          );
+
+          setTimeout(
+            function() {
+              window.BMTC_ADMIN_AUTH
+                .redirectToAdmin();
+            },
+            700
           );
 
           return;
-
         }
 
-        loginButton.disabled = true;
+        if (
+          message === "FORBIDDEN"
+        ) {
 
-        loginButton.textContent =
-          "LOGIN...";
+          loginForm.classList.add(
+            "hidden"
+          );
 
-        setTimeout(
-          async function() {
+          showLoginError(
+            "Akun Anda tidak memiliki izin untuk melihat Data Registrasi."
+          );
 
-            loginScreen.classList.add(
-              "hidden"
-            );
+          return;
+        }
 
-            dashboardScreen.classList.remove(
-              "hidden"
-            );
-
-            adminEmail.textContent =
-              ADMIN_EMAIL;
-
-            loginPassword.value =
-              "";
-
-            loginButton.disabled =
-              false;
-
-            loginButton.textContent =
-              "LOGIN";
-
-            await loadRegistrations();
-
-          },
-          150
+        loginForm.classList.add(
+          "hidden"
         );
 
+        showLoginError(
+          message
+        );
+
+      } finally {
+
+        loginButton.disabled =
+          false;
+
+        loginButton.textContent =
+          "LOGIN";
+
       }
-    );
+
+    }
 
 
     /* ============================================================
@@ -1543,28 +1596,18 @@
 
     logoutButton.addEventListener(
       "click",
-      function() {
+      async function() {
 
-        registrations = [];
-
-        selectedIds.clear();
-
-        dashboardScreen.classList.add(
-          "hidden"
-        );
-
-        loginScreen.classList.remove(
-          "hidden"
-        );
-
-        loginPassword.value =
-          "";
-
-        clearDashboardError();
-
-        clearDashboardSuccess();
-
-        renderTable();
+        try {
+          await window.BMTC_ADMIN_AUTH
+            .client
+            .auth
+            .signOut();
+        } finally {
+          window.location.replace(
+            "/admin/"
+          );
+        }
 
       }
     );
@@ -2700,6 +2743,8 @@
     updateStatistics();
 
     updateSelectionUI();
+
+    startCentralAdminSession();
 
   </script>
 

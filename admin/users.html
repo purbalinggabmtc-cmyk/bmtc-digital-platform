@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMTC — Manajemen Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+:root{--red:#e00000;--bg:#0b0b0b;--panel:#111;--border:#303030;--muted:#888;--green:#20d96b}
+html,body{margin:0;min-height:100%;background:var(--bg);color:#fff;font-family:Arial,Helvetica,sans-serif}
+body{padding:18px}button,input{font:inherit}.hidden{display:none!important}
+.wrap{max-width:1400px;margin:auto}
+.header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px}
+.header h1{margin:0 0 5px;font-size:22px}.header p{margin:0;color:#777;font-size:12px}
+.btn{min-height:40px;padding:9px 13px;border-radius:8px;border:1px solid #3a3a3a;background:#181818;color:#fff;font-weight:800;cursor:pointer}
+.btn-primary{background:var(--red);border-color:var(--red)}.btn-danger{background:#8e0000;border-color:#b80000}.btn:disabled{opacity:.45;cursor:not-allowed}
+.message{display:none;margin-bottom:14px;padding:12px;border-radius:8px;font-size:12px;white-space:pre-wrap}.message.show{display:block}.message.error{background:#300000;border:1px solid #8d0000;color:#ff9999}.message.success{background:#052b14;border:1px solid #13743b;color:#69e99b}
+.card{border:1px solid var(--border);border-radius:12px;background:var(--panel);overflow:hidden}
+.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:1050px}
+th{padding:12px 14px;text-align:left;background:#181818;color:#888;font-size:10px;letter-spacing:.8px;text-transform:uppercase}
+td{padding:13px 14px;border-top:1px solid #252525;font-size:12px;vertical-align:middle}
+.badge{display:inline-block;margin:2px 4px 2px 0;padding:4px 8px;border-radius:20px;background:#222;border:1px solid #3a3a3a;font-size:10px;font-weight:800}
+.status-on{color:#5de68d}.status-off{color:#ff8f8f}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.modal{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.75)}
+.modal-card{width:100%;max-width:620px;max-height:90vh;overflow:auto;padding:20px;border:1px solid #333;border-radius:14px;background:#111}
+.modal-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:18px}.modal-head h2{margin:0;font-size:18px}
+.field{margin-bottom:14px}.field label{display:block;margin-bottom:7px;color:#ddd;font-size:11px;font-weight:800}
+.field input{width:100%;min-height:44px;padding:11px 12px;border:1px solid #3a3a3a;border-radius:8px;background:#191919;color:#fff;outline:none}
+.role-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.role-item{display:flex;align-items:center;gap:8px;padding:10px;border:1px solid #2f2f2f;border-radius:8px;background:#171717;font-size:11px}
+.role-item input{width:16px;height:16px}
+.toggle-row{display:flex;align-items:center;gap:8px;font-size:12px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+@media(max-width:650px){body{padding:10px}.header{flex-direction:column}.role-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div>
+      <h1>Manajemen Admin</h1>
+      <p>Tambah, edit, nonaktifkan, reset password, dan hapus akun admin.</p>
+    </div>
+    <button id="addButton" class="btn btn-primary" type="button">TAMBAH ADMIN</button>
+  </div>
+
+  <div id="message" class="message"></div>
+
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Login Terakhir</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="adminBody">
+          <tr><td colspan="6">Memuat data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="adminModal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="modalTitle">Tambah Admin</h2>
+      <button id="closeModalButton" class="btn" type="button">TUTUP</button>
+    </div>
+
+    <form id="adminForm">
+      <input id="editUserId" type="hidden">
+
+      <div class="field">
+        <label for="fullName">NAMA LENGKAP</label>
+        <input id="fullName" type="text" required>
+      </div>
+
+      <div id="emailField" class="field">
+        <label for="email">EMAIL</label>
+        <input id="email" type="email" autocomplete="off">
+      </div>
+
+      <div id="passwordField" class="field">
+        <label for="password">PASSWORD AWAL</label>
+        <input id="password" type="password" autocomplete="new-password">
+      </div>
+
+      <div id="activeField" class="field hidden">
+        <label>STATUS</label>
+        <label class="toggle-row">
+          <input id="isActive" type="checkbox" checked>
+          Admin aktif
+        </label>
+      </div>
+
+      <div class="field">
+        <label>ROLE / HAK AKSES</label>
+        <div id="roleGrid" class="role-grid"></div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="saveButton" class="btn btn-primary" type="submit">SIMPAN</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="passwordModal" class="modal hidden">
+  <div class="modal-card" style="max-width:450px">
+    <div class="modal-head">
+      <h2>Reset Password</h2>
+      <button id="closePasswordButton" class="btn" type="button">TUTUP</button>
+    </div>
+    <form id="passwordForm">
+      <input id="passwordUserId" type="hidden">
+      <div class="field">
+        <label for="newPassword">PASSWORD BARU</label>
+        <input id="newPassword" type="password" minlength="8" required>
+      </div>
+      <div class="modal-actions">
+        <button id="savePasswordButton" class="btn btn-primary" type="submit">UBAH PASSWORD</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+const SUPABASE_URL="https://yrvnmmascklkuzpjkwxn.supabase.co";
+const SUPABASE_KEY="sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
+const SERVICE_URL=SUPABASE_URL+"/functions/v1/admin-user-service";
+
+const client=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
+  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
+});
+
+const adminBody=document.getElementById("adminBody");
+const message=document.getElementById("message");
+const addButton=document.getElementById("addButton");
+const adminModal=document.getElementById("adminModal");
+const closeModalButton=document.getElementById("closeModalButton");
+const adminForm=document.getElementById("adminForm");
+const modalTitle=document.getElementById("modalTitle");
+const editUserId=document.getElementById("editUserId");
+const fullName=document.getElementById("fullName");
+const email=document.getElementById("email");
+const password=document.getElementById("password");
+const emailField=document.getElementById("emailField");
+const passwordField=document.getElementById("passwordField");
+const activeField=document.getElementById("activeField");
+const isActive=document.getElementById("isActive");
+const roleGrid=document.getElementById("roleGrid");
+const saveButton=document.getElementById("saveButton");
+
+const passwordModal=document.getElementById("passwordModal");
+const closePasswordButton=document.getElementById("closePasswordButton");
+const passwordForm=document.getElementById("passwordForm");
+const passwordUserId=document.getElementById("passwordUserId");
+const newPassword=document.getElementById("newPassword");
+const savePasswordButton=document.getElementById("savePasswordButton");
+
+let admins=[];
+let roles=[];
+
+function showMessage(type,text){
+  message.textContent=text;
+  message.className="message show "+type;
+}
+function clearMessage(){
+  message.textContent="";
+  message.className="message";
+}
+function escapeHtml(value){
+  return String(value==null?"":value)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+function formatDate(value){
+  if(!value)return "—";
+  const d=new Date(value);
+  if(Number.isNaN(d.getTime()))return "—";
+  return d.toLocaleString("id-ID",{dateStyle:"short",timeStyle:"short"});
+}
+
+async function callService(action,method="GET",body){
+  const sessionResult=await client.auth.getSession();
+  const session=sessionResult.data&&sessionResult.data.session;
+  if(!session)throw new Error("Sesi admin tidak tersedia. Login ulang.");
+
+  const options={
+    method,
+    headers:{
+      "Accept":"application/json",
+      "Content-Type":"application/json",
+      "apikey":SUPABASE_KEY,
+      "Authorization":"Bearer "+session.access_token
+    }
+  };
+  if(body!==undefined)options.body=JSON.stringify(body);
+
+  const response=await fetch(SERVICE_URL+"?action="+encodeURIComponent(action),options);
+  const raw=await response.text();
+  let data;
+  try{data=raw?JSON.parse(raw):null;}catch{throw new Error("Response server tidak valid.");}
+  if(!response.ok||!data||data.success!==true){
+    throw new Error(data&&data.message?data.message:"Request gagal.");
+  }
+  return data;
+}
+
+function renderRoles(selectedCodes=[]){
+  const selected=new Set(selectedCodes);
+  roleGrid.innerHTML=roles.map(function(role){
+    const checked=selected.has(role.code)?"checked":"";
+    return '<label class="role-item">'+
+      '<input type="checkbox" class="role-check" value="'+escapeHtml(role.code)+'" '+checked+'>'+
+      '<span><strong>'+escapeHtml(role.name)+'</strong><br><span style="color:#777">'+escapeHtml(role.code)+'</span></span>'+
+      '</label>';
+  }).join("");
+}
+function getSelectedRoles(){
+  return Array.from(document.querySelectorAll(".role-check:checked"))
+    .map(function(el){return el.value;});
+}
+function renderAdmins(){
+  if(!admins.length){
+    adminBody.innerHTML='<tr><td colspan="6">Belum ada admin.</td></tr>';
+    return;
+  }
+
+  adminBody.innerHTML=admins.map(function(item){
+    const roleHtml=(item.roles||[]).map(function(role){
+      return '<span class="badge">'+escapeHtml(role.name)+'</span>';
+    }).join("")||"—";
+
+    return '<tr>'+
+      '<td><strong>'+escapeHtml(item.full_name)+'</strong></td>'+
+      '<td>'+escapeHtml(item.email||"—")+'</td>'+
+      '<td>'+roleHtml+'</td>'+
+      '<td class="'+(item.is_active?"status-on":"status-off")+'">'+(item.is_active?"AKTIF":"NONAKTIF")+'</td>'+
+      '<td>'+formatDate(item.last_sign_in_at)+'</td>'+
+      '<td><div class="actions">'+
+        '<button class="btn edit-btn" data-id="'+escapeHtml(item.user_id)+'" type="button">EDIT</button>'+
+        '<button class="btn pass-btn" data-id="'+escapeHtml(item.user_id)+'" type="button">PASSWORD</button>'+
+        '<button class="btn btn-danger delete-btn" data-id="'+escapeHtml(item.user_id)+'" type="button">HAPUS</button>'+
+      '</div></td>'+
+    '</tr>';
+  }).join("");
+
+  document.querySelectorAll(".edit-btn").forEach(function(btn){
+    btn.addEventListener("click",function(){openEdit(btn.dataset.id);});
+  });
+  document.querySelectorAll(".pass-btn").forEach(function(btn){
+    btn.addEventListener("click",function(){openPassword(btn.dataset.id);});
+  });
+  document.querySelectorAll(".delete-btn").forEach(function(btn){
+    btn.addEventListener("click",function(){deleteAdmin(btn.dataset.id);});
+  });
+}
+
+async function loadData(){
+  clearMessage();
+  adminBody.innerHTML='<tr><td colspan="6">Memuat data...</td></tr>';
+  try{
+    const data=await callService("list");
+    admins=data.admins||[];
+    roles=data.roles||[];
+    renderAdmins();
+  }catch(error){
+    adminBody.innerHTML='<tr><td colspan="6">Gagal memuat data.</td></tr>';
+    showMessage("error",error.message||"Gagal memuat admin.");
+  }
+}
+
+function openCreate(){
+  adminForm.reset();
+  editUserId.value="";
+  modalTitle.textContent="Tambah Admin";
+  emailField.classList.remove("hidden");
+  passwordField.classList.remove("hidden");
+  activeField.classList.add("hidden");
+  email.required=true;
+  password.required=true;
+  renderRoles([]);
+  adminModal.classList.remove("hidden");
+}
+function openEdit(userId){
+  const item=admins.find(function(row){return row.user_id===userId;});
+  if(!item)return;
+  adminForm.reset();
+  editUserId.value=userId;
+  fullName.value=item.full_name||"";
+  isActive.checked=item.is_active===true;
+  modalTitle.textContent="Edit Admin";
+  emailField.classList.add("hidden");
+  passwordField.classList.add("hidden");
+  activeField.classList.remove("hidden");
+  email.required=false;
+  password.required=false;
+  renderRoles((item.roles||[]).map(function(role){return role.code;}));
+  adminModal.classList.remove("hidden");
+}
+function openPassword(userId){
+  passwordForm.reset();
+  passwordUserId.value=userId;
+  passwordModal.classList.remove("hidden");
+}
+
+addButton.addEventListener("click",openCreate);
+closeModalButton.addEventListener("click",function(){adminModal.classList.add("hidden");});
+closePasswordButton.addEventListener("click",function(){passwordModal.classList.add("hidden");});
+
+adminForm.addEventListener("submit",async function(event){
+  event.preventDefault();
+  clearMessage();
+  const userId=editUserId.value.trim();
+  const selectedRoles=getSelectedRoles();
+
+  if(!selectedRoles.length){
+    showMessage("error","Pilih minimal satu role.");
+    return;
+  }
+
+  saveButton.disabled=true;
+  saveButton.textContent="MENYIMPAN...";
+
+  try{
+    if(userId){
+      await callService("update","POST",{
+        user_id:userId,
+        full_name:fullName.value.trim(),
+        is_active:isActive.checked,
+        roles:selectedRoles
+      });
+      showMessage("success","Admin berhasil diperbarui.");
+    }else{
+      await callService("create","POST",{
+        full_name:fullName.value.trim(),
+        email:email.value.trim(),
+        password:password.value,
+        roles:selectedRoles
+      });
+      showMessage("success","Admin baru berhasil dibuat.");
+    }
+
+    adminModal.classList.add("hidden");
+    await loadData();
+  }catch(error){
+    showMessage("error",error.message||"Gagal menyimpan admin.");
+  }finally{
+    saveButton.disabled=false;
+    saveButton.textContent="SIMPAN";
+  }
+});
+
+passwordForm.addEventListener("submit",async function(event){
+  event.preventDefault();
+  clearMessage();
+  savePasswordButton.disabled=true;
+  savePasswordButton.textContent="MEMPROSES...";
+  try{
+    await callService("resetPassword","POST",{
+      user_id:passwordUserId.value,
+      password:newPassword.value
+    });
+    passwordModal.classList.add("hidden");
+    showMessage("success","Password berhasil diubah.");
+  }catch(error){
+    showMessage("error",error.message||"Gagal mengubah password.");
+  }finally{
+    savePasswordButton.disabled=false;
+    savePasswordButton.textContent="UBAH PASSWORD";
+  }
+});
+
+async function deleteAdmin(userId){
+  const item=admins.find(function(row){return row.user_id===userId;});
+  if(!item)return;
+  const ok=window.confirm(
+    "Hapus admin '"+item.full_name+"'?\n\nAkun Auth dan seluruh mapping role admin akan dihapus."
+  );
+  if(!ok)return;
+
+  clearMessage();
+  try{
+    await callService("delete","POST",{user_id:userId});
+    showMessage("success","Admin berhasil dihapus.");
+    await loadData();
+  }catch(error){
+    showMessage("error",error.message||"Gagal menghapus admin.");
+  }
+}
+
+loadData();
+</script>
+</body>
+</html>

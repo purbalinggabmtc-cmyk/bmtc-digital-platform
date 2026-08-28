@@ -972,6 +972,57 @@
     let currentAdminAccess =
       null;
 
+    function hasPermission(
+      permission
+    ) {
+      return Boolean(
+        currentAdminAccess &&
+        currentAdminAccess.permissions &&
+        currentAdminAccess.permissions.has(
+          permission
+        )
+      );
+    }
+
+
+    async function getFreshAdminHeaders(
+      includeJson = true
+    ) {
+      const sessionResult =
+        await window.BMTC_ADMIN_AUTH
+          .client
+          .auth
+          .getSession();
+
+      const session =
+        sessionResult.data &&
+        sessionResult.data.session;
+
+      if (!session) {
+        throw new Error(
+          "AUTH_REQUIRED"
+        );
+      }
+
+      const headers = {
+        "Accept":
+          "application/json",
+        "apikey":
+          SUPABASE_PUBLISHABLE_KEY,
+        "Authorization":
+          "Bearer " +
+          session.access_token
+      };
+
+      if (includeJson) {
+        headers["Content-Type"] =
+          "application/json";
+      }
+
+      return headers;
+    }
+
+
 
     /* ============================================================
        ELEMENTS
@@ -1684,10 +1735,10 @@
 
       const fetchOptions = {
         method,
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_PUBLISHABLE_KEY
-        }
+        headers:
+          await getFreshAdminHeaders(
+            true
+          )
       };
 
       if (
@@ -2219,7 +2270,22 @@
         " selected";
 
       deleteSelectedButton.disabled =
-        count === 0;
+        count === 0 ||
+        !hasPermission(
+          "registration.delete"
+        );
+
+      if (
+        !hasPermission(
+          "registration.delete"
+        )
+      ) {
+        deleteSelectedButton.title =
+          "Tidak memiliki permission registration.delete";
+      } else {
+        deleteSelectedButton.title =
+          "";
+      }
 
       updateSelectAllCheckbox();
 
@@ -2367,6 +2433,19 @@
     deleteSelectedButton.addEventListener(
       "click",
       async function() {
+
+        if (
+          !hasPermission(
+            "registration.delete"
+          )
+        ) {
+          showDashboardError(
+            "Anda tidak memiliki hak akses registration.delete."
+          );
+
+          return;
+        }
+
 
         const ids =
           Array.from(

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>BOLD AFTER DARK — REGISTRATION</title>
+  <title>BOLD AFTER DARK — REGISTRATION V6</title>
 
   <style>
     * {
@@ -1362,13 +1362,21 @@
     </div>
 
     <div class="footer">
-      BOLD AFTER DARK • REGISTRATION
+      BOLD AFTER DARK • REGISTRATION • V6
     </div>
 
   </div>
 
   <script>
     "use strict";
+
+    window.BOLD_AFTER_DARK_REGISTRATION_VERSION =
+      "V6-DIRECT-STATUS";
+
+    console.info(
+      "BOLD AFTER DARK REGISTRATION:",
+      window.BOLD_AFTER_DARK_REGISTRATION_VERSION
+    );
 
     const API_URL =
       "https://yrvnmmascklkuzpjkwxn.supabase.co/functions/v1/dynamic-service";
@@ -2339,7 +2347,7 @@ const submitButton =
             "hidden"
           );
 
-          whatsappConfirmationBox.classList.add(
+          paymentStatusBox.classList.add(
             "hidden"
           );
 
@@ -2380,7 +2388,7 @@ const submitButton =
           "hidden"
         );
 
-        whatsappConfirmationBox.classList.add(
+        paymentStatusBox.classList.add(
           "hidden"
         );
 
@@ -2990,6 +2998,17 @@ const submitButton =
         behavior: "smooth"
       });
     }
+
+
+    window.addEventListener(
+      "error",
+      function(event) {
+        console.error(
+          "REGISTRATION RUNTIME ERROR:",
+          event.error || event.message
+        );
+      }
+    );
 
 
     function showMessage(type, message) {

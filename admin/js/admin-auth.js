@@ -1,12 +1,15 @@
 "use strict";
 
 /*
- * BMTC CENTRAL ADMIN AUTH GUARD
- * Shared by admin modules under bmtc.my.id.
+ * BMTC CENTRAL ADMIN AUTH GUARD V5
  *
- * Requires:
- *   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
- *   <script src="/admin/js/admin-auth.js"></script>
+ * Mode 1 — module dibuka di dalam /admin/ iframe:
+ *   Session + RBAC diambil dari same-origin BMTC_ADMIN_BRIDGE.
+ *
+ * Mode 2 — module dibuka langsung:
+ *   Session + RBAC dibaca melalui Supabase seperti biasa.
+ *
+ * Backend tetap wajib memvalidasi JWT + permission.
  */
 
 (function () {
@@ -18,7 +21,7 @@
     "sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
 
 
-  const client =
+  const supabaseClient =
     supabase.createClient(
       SUPABASE_URL,
       SUPABASE_KEY,
@@ -32,14 +35,159 @@
     );
 
 
-  async function loadAccess(userId) {
+  function getParentBridge() {
+
+    try {
+
+      if (
+        window.parent &&
+        window.parent !== window &&
+        window.parent.location.origin ===
+          window.location.origin &&
+        window.parent.BMTC_ADMIN_BRIDGE
+      ) {
+
+        return (
+          window.parent
+            .BMTC_ADMIN_BRIDGE
+        );
+
+      }
+
+    } catch (error) {
+
+      /*
+       * Jika iframe bukan same-origin,
+       * jangan mencoba membaca parent.
+       */
+
+    }
+
+
+    return null;
+
+  }
+
+
+
+  /*
+   * Facade client.
+   *
+   * Modul lama tetap dapat memanggil:
+   *
+   * BMTC_ADMIN_AUTH.client.auth.getSession()
+   * BMTC_ADMIN_AUTH.client.auth.getUser()
+   * BMTC_ADMIN_AUTH.client.auth.signOut()
+   *
+   * Jika embedded, operasi auth tersebut
+   * diarahkan ke parent dashboard.
+   */
+
+  const client =
+    Object.freeze({
+
+      auth:
+        Object.freeze({
+
+          getSession:
+            async function () {
+
+              const bridge =
+                getParentBridge();
+
+
+              if (bridge) {
+
+                return bridge
+                  .getSession();
+
+              }
+
+
+              return await supabaseClient
+                .auth
+                .getSession();
+
+            },
+
+
+          getUser:
+            async function () {
+
+              const bridge =
+                getParentBridge();
+
+
+              if (bridge) {
+
+                return bridge
+                  .getUser();
+
+              }
+
+
+              return await supabaseClient
+                .auth
+                .getUser();
+
+            },
+
+
+          signOut:
+            async function () {
+
+              const bridge =
+                getParentBridge();
+
+
+              if (bridge) {
+
+                return await bridge
+                  .signOut();
+
+              }
+
+
+              return await supabaseClient
+                .auth
+                .signOut();
+
+            }
+
+        }),
+
+
+      from:
+        function (...args) {
+
+          return supabaseClient
+            .from(...args);
+
+        },
+
+
+      rpc:
+        function (...args) {
+
+          return supabaseClient
+            .rpc(...args);
+
+        }
+
+    });
+
+
+
+  async function loadAccess(
+    userId
+  ) {
 
     /*
      * Ambil profil admin.
      */
 
     const profileResult =
-      await client
+      await supabaseClient
         .from("admin_profiles")
         .select(
           "user_id, full_name, is_active"
@@ -88,7 +236,7 @@
      */
 
     const roleResult =
-      await client
+      await supabaseClient
         .from("admin_user_roles")
         .select(`
           role_id,
@@ -141,7 +289,7 @@
 
 
     /*
-     * Ambil seluruh permission dari role.
+     * Ambil seluruh permission role.
      */
 
     const roleIds =
@@ -155,7 +303,7 @@
 
 
     const permissionResult =
-      await client
+      await supabaseClient
         .from(
           "admin_role_permissions"
         )
@@ -218,13 +366,7 @@
 
 
   /*
-   * Digunakan setiap modul admin.
-   *
-   * Contoh:
-   *
-   * await BMTC_ADMIN_AUTH.requirePermission(
-   *   "registration.view"
-   * );
+   * Validasi permission module.
    */
 
   async function requirePermission(
@@ -232,11 +374,56 @@
   ) {
 
     /*
-     * Pastikan ada session login.
+     * Jika module berada di iframe /admin/,
+     * gunakan session + RBAC milik dashboard.
+     */
+
+    const bridge =
+      getParentBridge();
+
+
+    if (bridge) {
+
+      const context =
+        bridge.getContext(
+          permission
+        );
+
+
+      return {
+
+        client,
+
+        session:
+          context.session,
+
+        user:
+          context.user,
+
+        profile:
+          context.profile,
+
+        roles:
+          context.roles,
+
+        permissions:
+          context.permissions
+
+      };
+
+    }
+
+
+
+    /*
+     * Jika module dibuka langsung,
+     * gunakan Supabase Auth lokal.
      */
 
     const sessionResult =
-      await client.auth.getSession();
+      await supabaseClient
+        .auth
+        .getSession();
 
 
     const session =
@@ -255,11 +442,13 @@
 
 
     /*
-     * Validasi user dari Supabase server.
+     * Validasi user ke Supabase Auth server.
      */
 
     const userResult =
-      await client.auth.getUser();
+      await supabaseClient
+        .auth
+        .getUser();
 
 
     if (
@@ -281,7 +470,7 @@
 
 
     /*
-     * Ambil role + permission.
+     * Ambil role dan permission.
      */
 
     const access =
@@ -289,11 +478,6 @@
         user.id
       );
 
-
-    /*
-     * Jika modul meminta permission tertentu,
-     * cek apakah user memilikinya.
-     */
 
     if (
       permission &&
@@ -333,11 +517,7 @@
 
 
   /*
-   * Redirect ke halaman admin utama.
-   *
-   * returnTo disimpan agar nanti dashboard
-   * bisa dikembangkan untuk kembali ke modul
-   * yang sebelumnya diminta.
+   * Redirect menuju admin dashboard.
    */
 
   function redirectToAdmin() {
@@ -347,13 +527,47 @@
       window.location.search;
 
 
-    window.location.replace(
-
+    const target =
       "/admin/?returnTo=" +
       encodeURIComponent(
         returnTo
-      )
+      );
 
+
+    /*
+     * Jika sedang berada di dalam iframe,
+     * redirect parent/top dashboard,
+     * bukan membuka /admin/ di dalam iframe.
+     */
+
+    try {
+
+      if (
+        window.top &&
+        window.top !== window &&
+        window.top.location.origin ===
+          window.location.origin
+      ) {
+
+        window.top.location.replace(
+          target
+        );
+
+        return;
+
+      }
+
+    } catch (error) {
+
+      /*
+       * fallback ke redirect lokal
+       */
+
+    }
+
+
+    window.location.replace(
+      target
     );
 
   }
@@ -361,7 +575,7 @@
 
 
   /*
-   * Expose API global.
+   * Expose global API.
    */
 
   window.BMTC_ADMIN_AUTH =

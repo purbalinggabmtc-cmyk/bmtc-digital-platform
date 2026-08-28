@@ -477,7 +477,27 @@
         width: 100%;
       }
     }
+
+    /* CENTRAL BMTC AUTH */
+    #secretScreen {
+      display: none !important;
+    }
+
+    body.embedded-admin .header {
+      display: none;
+    }
+
+    body.embedded-admin {
+      padding: 12px;
+      background: #0b0b0b;
+    }
+
+    body.embedded-admin .container {
+      max-width: none;
+    }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/admin/js/admin-auth.js"></script>
 </head>
 
 <body>
@@ -500,7 +520,7 @@
       class="card login-card"
     >
       <div class="section-title">
-        ADMIN PAYMENT ACCESS
+        MEMERIKSA AKSES PAYMENT ADMIN
       </div>
 
       <div
@@ -508,30 +528,9 @@
         class="message"
       ></div>
 
-      <div class="field">
-        <label for="adminSecretInput">
-          PURCHASE ADMIN SECRET
-        </label>
-
-        <input
-          id="adminSecretInput"
-          type="password"
-          autocomplete="current-password"
-          placeholder="Masukkan admin secret"
-        >
-
-        <div class="field-help">
-          Secret hanya disimpan selama tab browser ini terbuka dan tidak ditulis ke source GitHub.
-        </div>
+      <div class="field-help">
+        Sistem menggunakan sesi BMTC Admin dan hak akses RBAC.
       </div>
-
-      <button
-        id="enterDashboardButton"
-        class="btn btn-red btn-full"
-        type="button"
-      >
-        BUKA PAYMENT ADMIN
-      </button>
     </section>
 
 
@@ -845,12 +844,6 @@
     const dashboardScreen =
       document.getElementById("dashboardScreen");
 
-    const adminSecretInput =
-      document.getElementById("adminSecretInput");
-
-    const enterDashboardButton =
-      document.getElementById("enterDashboardButton");
-
     const secretMessage =
       document.getElementById("secretMessage");
 
@@ -951,14 +944,80 @@
       document.getElementById("sendRaffleWhatsappLink");
 
 
-    let adminSecret =
-      sessionStorage.getItem(
-        "bad_purchase_admin_secret"
-      ) || "";
+    const IS_EMBEDDED =
+      window.self !== window.top;
+
+    if (IS_EMBEDDED) {
+      document.body.classList.add(
+        "embedded-admin"
+      );
+    }
+
+    let currentAdminAccess =
+      null;
 
     let purchases = [];
 
     let currentPurchase = null;
+
+
+    function hasPermission(
+      permission
+    ) {
+      return Boolean(
+        currentAdminAccess &&
+        currentAdminAccess.permissions &&
+        currentAdminAccess.permissions.has(
+          permission
+        )
+      );
+    }
+
+
+    function getAdminAccessToken() {
+      return (
+        currentAdminAccess &&
+        currentAdminAccess.session &&
+        currentAdminAccess.session.access_token
+      ) || "";
+    }
+
+
+    function getAdminHeaders() {
+      return {
+        "Accept":
+          "application/json",
+        "apikey":
+          SUPABASE_PUBLISHABLE_KEY,
+        "Authorization":
+          "Bearer " +
+          getAdminAccessToken()
+      };
+    }
+
+
+    function requireLocalPermission(
+      permission,
+      messageElement
+    ) {
+      if (
+        hasPermission(
+          permission
+        )
+      ) {
+        return true;
+      }
+
+      showMessage(
+        messageElement,
+        "error",
+        "Anda tidak memiliki hak akses " +
+        permission +
+        "."
+      );
+
+      return false;
+    }
 
 
     function formatRupiah(value) {
@@ -1362,6 +1421,15 @@
         productSettingsMessage
       );
 
+      if (
+        !requireLocalPermission(
+          "payment.settings",
+          productSettingsMessage
+        )
+      ) {
+        return;
+      }
+
       const productName =
         productNameInput.value.trim();
 
@@ -1429,13 +1497,7 @@
                   "application/json",
                 "Accept":
                   "application/json",
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-                "Authorization":
-                  "Bearer " +
-                  SUPABASE_PUBLISHABLE_KEY,
-                "x-admin-secret":
-                  adminSecret
+                ...getAdminHeaders()
               },
               body:
                 JSON.stringify({
@@ -1583,15 +1645,7 @@
               method: "GET",
               cache: "no-store",
               headers: {
-                "Accept":
-                  "application/json",
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-                "Authorization":
-                  "Bearer " +
-                  SUPABASE_PUBLISHABLE_KEY,
-                "x-admin-secret":
-                  adminSecret
+                ...getAdminHeaders()
               }
             }
           );
@@ -1929,10 +1983,16 @@
         "APPROVED";
 
       approveButton.disabled =
-        isApproved;
+        isApproved ||
+        !hasPermission(
+          "payment.approve"
+        );
 
       rejectButton.disabled =
-        isApproved;
+        isApproved ||
+        !hasPermission(
+          "payment.reject"
+        );
 
       reviewModal.classList.remove(
         "hidden"
@@ -2036,6 +2096,20 @@
         return;
       }
 
+      const permission =
+        decision === "APPROVE"
+          ? "payment.approve"
+          : "payment.reject";
+
+      if (
+        !requireLocalPermission(
+          permission,
+          modalMessage
+        )
+      ) {
+        return;
+      }
+
       const reason =
         rejectionReason.value.trim();
 
@@ -2070,15 +2144,7 @@
               headers: {
                 "Content-Type":
                   "application/json",
-                "Accept":
-                  "application/json",
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-                "Authorization":
-                  "Bearer " +
-                  SUPABASE_PUBLISHABLE_KEY,
-                "x-admin-secret":
-                  adminSecret
+                ...getAdminHeaders()
               },
               body:
                 JSON.stringify({
@@ -2086,9 +2152,7 @@
                     currentPurchase.purchaseId,
                   decision,
                   rejectionReason:
-                    reason,
-                  verifiedBy:
-                    "PAYMENT ADMIN"
+                    reason
                 })
             }
           );
@@ -2180,97 +2244,32 @@
             "APPROVED"
         ) {
           approveButton.disabled =
-            false;
+            !hasPermission(
+              "payment.approve"
+            );
 
           rejectButton.disabled =
-            false;
+            !hasPermission(
+              "payment.reject"
+            );
         }
       }
     }
 
 
-    async function enterDashboard() {
-      const value =
-        adminSecretInput.value.trim();
+    async function startCentralPaymentAdmin() {
 
-      if (!value) {
-        showMessage(
-          secretMessage,
-          "error",
-          "Admin secret wajib diisi."
-        );
-        return;
-      }
-
-      adminSecret =
-        value;
-
-      enterDashboardButton.disabled =
-        true;
-
-      enterDashboardButton.textContent =
-        "MEMERIKSA...";
+      hideMessage(
+        secretMessage
+      );
 
       try {
-        sessionStorage.setItem(
-          "bad_purchase_admin_secret",
-          adminSecret
-        );
 
-        const response =
-          await fetch(
-            PURCHASE_SERVICE_URL +
-            "?action=adminListPurchases&status=PENDING",
-            {
-              method: "GET",
-              cache: "no-store",
-              headers: {
-                "Accept":
-                  "application/json",
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-                "Authorization":
-                  "Bearer " +
-                  SUPABASE_PUBLISHABLE_KEY,
-                "x-admin-secret":
-                  adminSecret
-              }
-            }
-          );
-
-        const raw =
-          await response.text();
-
-        let data;
-
-        try {
-          data =
-            JSON.parse(raw);
-        } catch {
-          throw new Error(
-            "Server mengembalikan response tidak valid."
-          );
-        }
-
-        if (
-          !response.ok ||
-          !data ||
-          data.success !== true
-        ) {
-          throw new Error(
-            data &&
-            data.message
-              ? data.message
-              : "Admin secret tidak valid."
-          );
-        }
-
-        purchases =
-          Array.isArray(
-            data.purchases
-          )
-            ? data.purchases
-            : [];
+        currentAdminAccess =
+          await window.BMTC_ADMIN_AUTH
+            .requirePermission(
+              "payment.view"
+            );
 
         secretScreen.classList.add(
           "hidden"
@@ -2280,85 +2279,81 @@
           "hidden"
         );
 
-        hideMessage(
-          secretMessage
-        );
+        if (
+          !hasPermission(
+            "payment.settings"
+          )
+        ) {
+          saveProductSettingsButton.disabled =
+            true;
 
-        updateStatistics();
-        renderTable();
+          saveProductSettingsButton.title =
+            "Tidak memiliki permission payment.settings";
+        }
+
+        await loadPurchases();
 
         await loadProductSettings();
 
       } catch (error) {
-        sessionStorage.removeItem(
-          "bad_purchase_admin_secret"
-        );
 
-        adminSecret =
-          "";
+        const message =
+          error &&
+          error.message
+            ? error.message
+            : "Akses payment admin gagal.";
+
+        if (
+          message === "AUTH_REQUIRED"
+        ) {
+          window.BMTC_ADMIN_AUTH
+            .redirectToAdmin();
+
+          return;
+        }
+
+        if (
+          message === "FORBIDDEN"
+        ) {
+          document.body.innerHTML =
+            '<div style="padding:30px;color:#fff;font-family:Arial;background:#0b0b0b;min-height:100vh">' +
+            '<h2>Akses Ditolak</h2>' +
+            '<p>Akun Anda tidak memiliki permission <strong>payment.view</strong>.</p>' +
+            '<p><a href="/admin/" style="color:#ff6b6b">Kembali ke Admin Dashboard</a></p>' +
+            '</div>';
+
+          return;
+        }
 
         showMessage(
           secretMessage,
           "error",
-          error &&
-          error.message
-            ? error.message
-            : "Admin secret tidak valid."
+          message
         );
 
+      }
+
+    }
+
+
+    async function logoutAdmin() {
+
+      try {
+
+        await window.BMTC_ADMIN_AUTH
+          .client
+          .auth
+          .signOut();
+
       } finally {
-        enterDashboardButton.disabled =
-          false;
 
-        enterDashboardButton.textContent =
-          "BUKA PAYMENT ADMIN";
+        window.location.replace(
+          "/admin/"
+        );
+
       }
+
     }
-
-
-    function logoutAdmin() {
-      sessionStorage.removeItem(
-        "bad_purchase_admin_secret"
-      );
-
-      adminSecret =
-        "";
-
-      purchases = [];
-
-      dashboardScreen.classList.add(
-        "hidden"
-      );
-
-      secretScreen.classList.remove(
-        "hidden"
-      );
-
-      adminSecretInput.value =
-        "";
-
-      updateStatistics();
-      renderTable();
-    }
-
-
-    enterDashboardButton.addEventListener(
-      "click",
-      enterDashboard
-    );
-
-
-    adminSecretInput.addEventListener(
-      "keydown",
-      function(event) {
-        if (
-          event.key === "Enter"
-        ) {
-          event.preventDefault();
-          enterDashboard();
-        }
-      }
-    );
 
 
     saveProductSettingsButton.addEventListener(
@@ -2437,12 +2432,7 @@
     );
 
 
-    if (adminSecret) {
-      adminSecretInput.value =
-        adminSecret;
-
-      enterDashboard();
-    }
+    startCentralPaymentAdmin();
 
   </script>
 

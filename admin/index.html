@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BMTC — Central Admin Dashboard V5</title>
+<title>BMTC — Central Admin Dashboard V6</title>
+<script>
+if (window.self !== window.top) {
+  window.top.location.replace("/admin/");
+}
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
@@ -21,14 +26,14 @@ html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-f
 .topbar{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 22px;background:#0b0b0b;border-bottom:1px solid var(--border)}
 .page-title{font-size:18px;font-weight:900}.page-description{margin-top:4px;color:#707070;font-size:11px;line-height:1.4}
 .topbar-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.topbar-link{display:inline-flex;align-items:center;min-height:38px;padding:9px 12px;border:1px solid #383838;border-radius:8px;background:#171717;color:#ddd;font-size:11px;font-weight:800;text-decoration:none}
+.topbar-link{display:inline-flex;align-items:center;min-height:38px;padding:9px 12px;border:1px solid #383838;border-radius:8px;background:#171717;color:#ddd;font-size:11px;font-weight:800;text-decoration:none;cursor:pointer;position:relative;z-index:10}
 .content{flex:1;min-height:0;padding:18px}
 .frame-card{position:relative;width:100%;height:calc(100vh - 106px);min-height:640px;overflow:hidden;border:1px solid var(--border);border-radius:12px;background:var(--panel)}
 .loading{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;background:var(--panel);color:#777;font-size:12px;font-weight:700}.loading.hidden{display:none}
 iframe{width:100%;height:100%;border:0;background:#fff}.hidden{display:none!important}
 .dashboard-home{width:100%;height:100%;overflow:auto;padding:24px;background:radial-gradient(circle at top left,#220000 0%,#0d0d0d 34%,#080808 100%)}
 .welcome-title{margin:0 0 7px;font-size:26px;font-weight:900}.welcome-text{max-width:760px;margin:0 0 24px;color:#8d8d8d;font-size:13px;line-height:1.6}
-.quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.quick-card{min-height:150px;padding:18px;border:1px solid #303030;border-radius:12px;background:rgba(17,17,17,.94)}
+.quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.quick-card{min-height:150px;padding:18px;border:1px solid #303030;border-radius:12px;background:rgba(17,17,17,.94);cursor:pointer;transition:.15s ease}.quick-card:hover{border-color:#6e0000;background:#171111;transform:translateY(-1px)}
 .quick-label{margin-bottom:8px;color:#777;font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase}.quick-title{margin-bottom:8px;font-size:16px;font-weight:900}.quick-text{color:#8a8a8a;font-size:11px;line-height:1.55}
 @media(max-width:1050px){.quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:820px){.admin-layout{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--border)}.menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.frame-card{height:calc(100vh - 360px);min-height:560px}}
@@ -110,12 +115,12 @@ iframe{width:100%;height:100%;border:0;background:#fff}.hidden{display:none!impo
 <h1 class="welcome-title">BMTC Admin Dashboard</h1>
 <p class="welcome-text">Gunakan menu di sebelah kiri untuk mengakses administrasi BOLD AFTER DARK, operasional scanner, verifikasi pembayaran, laporan, Live Raffle, dan pratinjau website BMTC.</p>
 <div class="quick-grid">
-<div class="quick-card" data-card-permission="registration.view"><div class="quick-label">BOLD AFTER DARK</div><div class="quick-title">Registrasi & Peserta</div><div class="quick-text">Kelola data peserta, akses REGULER/BOLD RIDERS, status tiket, dan hasil check-in.</div></div>
-<div class="quick-card" data-card-permission="payment.view"><div class="quick-label">PAYMENT</div><div class="quick-title">Verifikasi Pembayaran</div><div class="quick-text">Approve atau reject pembayaran, mengatur produk, serta menerbitkan nomor undian.</div></div>
-<div class="quick-card" data-card-permission="scanner.use"><div class="quick-label">OPERASIONAL</div><div class="quick-title">QR Scanner</div><div class="quick-text">Akses scanner tiket untuk petugas pada saat event berlangsung.</div></div>
-<div class="quick-card" data-card-permission="raffle.view"><div class="quick-label">RAFFLE</div><div class="quick-title">Live Raffle</div><div class="quick-text">Jalankan pengundian, tampilkan atau sembunyikan Live Raffle, serta kelola riwayat pemenang.</div></div>
-<div class="quick-card" data-card-permission="report.view"><div class="quick-label">REPORT</div><div class="quick-title">Laporan Event</div><div class="quick-text">Lihat ringkasan peserta, filter data, print, dan download CSV.</div></div>
-<div class="quick-card" data-card-permission="website.manage"><div class="quick-label">WEBSITE</div><div class="quick-title">Website BMTC</div><div class="quick-text">Pratinjau halaman publik BMTC langsung dari dashboard.</div></div>
+<div class="quick-card" data-card-permission="registration.view" data-card-url="/bold-after-dark/admin.html" data-card-title="Data Registrasi" data-card-description="Kelola peserta, status tiket, dan data check-in."><div class="quick-label">BOLD AFTER DARK</div><div class="quick-title">Registrasi & Peserta</div><div class="quick-text">Kelola data peserta, akses REGULER/BOLD RIDERS, status tiket, dan hasil check-in.</div></div>
+<div class="quick-card" data-card-permission="payment.view" data-card-url="/bold-after-dark/purchase-admin.html" data-card-title="Verifikasi Pembayaran" data-card-description="Verifikasi pembayaran, konfigurasi produk, dan nomor undian."><div class="quick-label">PAYMENT</div><div class="quick-title">Verifikasi Pembayaran</div><div class="quick-text">Approve atau reject pembayaran, mengatur produk, serta menerbitkan nomor undian.</div></div>
+<div class="quick-card" data-card-permission="scanner.use" data-card-url="/bold-after-dark/scanner.html" data-card-title="QR Scanner" data-card-description="Scanner tiket masuk untuk operasional check-in."><div class="quick-label">OPERASIONAL</div><div class="quick-title">QR Scanner</div><div class="quick-text">Akses scanner tiket untuk petugas pada saat event berlangsung.</div></div>
+<div class="quick-card" data-card-permission="raffle.view" data-card-url="/draw-admin.html" data-card-title="Pengundian" data-card-description="Kontrol START/STOP, tampilan website, riwayat, dan data raffle."><div class="quick-label">RAFFLE</div><div class="quick-title">Live Raffle</div><div class="quick-text">Jalankan pengundian, tampilkan atau sembunyikan Live Raffle, serta kelola riwayat pemenang.</div></div>
+<div class="quick-card" data-card-permission="report.view" data-card-url="/bold-after-dark/report.html" data-card-title="Laporan Event" data-card-description="Laporan peserta dan status penggunaan tiket."><div class="quick-label">REPORT</div><div class="quick-title">Laporan Event</div><div class="quick-text">Lihat ringkasan peserta, filter data, print, dan download CSV.</div></div>
+<div class="quick-card" data-card-permission="website.manage" data-card-url="/index.html" data-card-title="Website Preview" data-card-description="Pratinjau halaman utama BMTC."><div class="quick-label">WEBSITE</div><div class="quick-title">Website BMTC</div><div class="quick-text">Pratinjau halaman publik BMTC langsung dari dashboard.</div></div>
 </div></div>
 <iframe id="contentFrame" class="hidden" src="about:blank" title="BMTC Admin Content"></iframe>
 </div></div>
@@ -393,6 +398,73 @@ function openModule(button){
     moduleUrl.search;
 }
 menuButtons.forEach(button=>button.addEventListener("click",()=>{if(button.dataset.mode==="home")showHome(button);else openModule(button)}));
+
+document.querySelectorAll(".quick-card[data-card-url]").forEach(card=>{
+  card.addEventListener("click",()=>{
+    const permission=card.dataset.cardPermission;
+
+    if(
+      permission &&
+      !currentPermissions.has(permission)
+    ){
+      return;
+    }
+
+    const url=card.dataset.cardUrl;
+
+    const matchingButton=
+      Array.from(menuButtons)
+        .find(button=>{
+          return (
+            button.dataset.url === url &&
+            !button.classList.contains("hidden")
+          );
+        });
+
+    if(matchingButton){
+      openModule(matchingButton);
+      return;
+    }
+
+    const virtualButton={
+      dataset:{
+        permission,
+        url,
+        title:card.dataset.cardTitle||"Admin",
+        description:card.dataset.cardDescription||""
+      },
+      classList:{
+        add(){},
+        remove(){}
+      }
+    };
+
+    const moduleUrl=
+      new URL(
+        url,
+        window.location.origin
+      );
+
+    pageTitle.textContent=
+      card.dataset.cardTitle||"Admin";
+
+    pageDescription.textContent=
+      card.dataset.cardDescription||"";
+
+    dashboardHome.classList.add("hidden");
+    contentFrame.classList.remove("hidden");
+    loading.classList.remove("hidden");
+
+    openFullPageLink.href=url;
+    openFullPageLink.style.display="inline-flex";
+
+    moduleUrl.searchParams.set("_adminv","6");
+
+    contentFrame.src=
+      moduleUrl.pathname+
+      moduleUrl.search;
+  });
+});
 contentFrame.addEventListener("load",()=>loading.classList.add("hidden"));
 client.auth.onAuthStateChange((event)=>{
   if(event==="SIGNED_OUT"){

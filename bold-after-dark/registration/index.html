@@ -1344,7 +1344,7 @@
     </div>
 
     <div class="footer">
-      BOLD AFTER DARK • REGISTRATION • V6
+      BOLD AFTER DARK • REGISTRATION • V7
     </div>
 
   </div>
@@ -1353,7 +1353,7 @@
     "use strict";
 
     window.BOLD_AFTER_DARK_REGISTRATION_VERSION =
-      "V6-DIRECT-STATUS";
+      "V7-STATUS-BUTTON-FIX";
 
     console.info(
       "BOLD AFTER DARK REGISTRATION:",
@@ -2331,6 +2331,24 @@ const submitButton =
           submitLookupPaymentProofButton.classList.remove(
             "hidden"
           );
+
+          const currentStatus =
+            String(
+              purchase.paymentStatus || "PENDING"
+            ).toUpperCase();
+
+          setPaymentStatusDisplay(
+            currentStatus === "REJECTED"
+              ? "REJECTED"
+              : "PENDING",
+            currentStatus === "REJECTED"
+              ? (
+                  purchase.rejectionReason
+                    ? "Alasan: " + purchase.rejectionReason + ". Silakan upload ulang bukti pembayaran."
+                    : "Pembayaran ditolak. Silakan upload ulang bukti pembayaran."
+                )
+              : "Status pembayaran belum disetujui. Setelah bukti dikirim, status akan diperiksa otomatis dan dapat dicek manual."
+          );
         }
 
         lookupPurchaseDetails.classList.remove(
@@ -2396,6 +2414,15 @@ const submitButton =
         "hidden"
       );
 
+      // Tombol cek status harus tetap tersedia setelah bukti pembayaran dikirim.
+      // Ini menjadi fallback jika polling otomatis berhenti, halaman sempat sleep,
+      // atau approval admin terjadi setelah request polling sebelumnya.
+      checkPaymentStatusButton.classList.remove(
+        "hidden"
+      );
+      checkPaymentStatusButton.style.display =
+        "block";
+
       if (normalized === "APPROVED") {
         paymentStatusText.textContent =
           "PEMBAYARAN DISETUJUI";
@@ -2405,6 +2432,11 @@ const submitButton =
           "Pembayaran sudah disetujui. Nomor undian Anda tersedia.";
 
         stopPaymentStatusPolling();
+
+        checkPaymentStatusButton.disabled =
+          false;
+        checkPaymentStatusButton.textContent =
+          "CEK STATUS SEKARANG";
 
         return;
       }
@@ -2832,10 +2864,36 @@ const submitButton =
 
         setPaymentStatusDisplay(
           "PENDING",
-          "Bukti pembayaran sudah diterima dan sedang menunggu verifikasi admin. Status akan diperiksa otomatis."
+          "Bukti pembayaran sudah diterima dan sedang menunggu verifikasi admin. Status akan diperiksa otomatis. Anda juga dapat menekan CEK STATUS SEKARANG kapan saja."
         );
 
-        schedulePaymentStatusPolling();
+        // Pastikan panel dan tombol status tidak hilang setelah submit.
+        paymentStatusBox.classList.remove(
+          "hidden"
+        );
+        checkPaymentStatusButton.classList.remove(
+          "hidden"
+        );
+        checkPaymentStatusButton.style.display =
+          "block";
+        checkPaymentStatusButton.disabled =
+          false;
+        checkPaymentStatusButton.textContent =
+          "CEK STATUS SEKARANG";
+
+        // Cek sekali langsung setelah upload. Jika admin sudah sangat cepat approve,
+        // nomor undian bisa langsung tampil tanpa menunggu interval polling pertama.
+        const immediateStatus =
+          await refreshPaymentStatus(
+            true
+          );
+
+        if (
+          immediateStatus !== "APPROVED" &&
+          immediateStatus !== "REJECTED"
+        ) {
+          schedulePaymentStatusPolling();
+        }
 
       } catch (error) {
         console.error(

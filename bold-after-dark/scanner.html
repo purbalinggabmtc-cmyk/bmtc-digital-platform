@@ -35,6 +35,8 @@
        ========================================================= -->
 
   <script src="/bold-after-dark/config/navigation.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/admin/js/admin-auth.js"></script>
 
   <style>
 
@@ -801,6 +803,9 @@
     let navigationConfig =
       FALLBACK_NAVIGATION;
 
+    let currentAdminAccess =
+      null;
+
 
     /* =========================================================
        ELEMENTS
@@ -860,6 +865,104 @@
       document.getElementById(
         "resetButton"
       );
+
+
+    /* =========================================================
+       CENTRAL ADMIN AUTH / RBAC
+       ========================================================= */
+
+    async function requireScannerAccess() {
+
+      try {
+
+        currentAdminAccess =
+          await window.BMTC_ADMIN_AUTH
+            .requirePermission(
+              "scanner.use"
+            );
+
+        return true;
+
+      } catch (error) {
+
+        const message =
+          error &&
+          error.message
+            ? error.message
+            : "Akses scanner gagal.";
+
+        if (
+          message === "AUTH_REQUIRED"
+        ) {
+
+          window.BMTC_ADMIN_AUTH
+            .redirectToAdmin();
+
+          return false;
+
+        }
+
+        if (
+          message === "FORBIDDEN"
+        ) {
+
+          document.body.innerHTML =
+            '<div style="padding:30px;color:#fff;font-family:Arial;background:#050505;min-height:100vh">' +
+            '<h2>Akses Ditolak</h2>' +
+            '<p>Akun Anda tidak memiliki permission <strong>scanner.use</strong>.</p>' +
+            '<p><a href="/admin/" style="color:#ff6b6b">Kembali ke Admin Dashboard</a></p>' +
+            '</div>';
+
+          return false;
+
+        }
+
+        showServerError({
+          message: message
+        });
+
+        return false;
+
+      }
+
+    }
+
+
+    async function getScannerAuthHeaders() {
+
+      const sessionResult =
+        await window.BMTC_ADMIN_AUTH
+          .client
+          .auth
+          .getSession();
+
+      const session =
+        sessionResult.data &&
+        sessionResult.data.session;
+
+      if (!session) {
+
+        throw new Error(
+          "AUTH_REQUIRED"
+        );
+
+      }
+
+      return {
+
+        "Accept":
+          "application/json",
+
+        "apikey":
+          SUPABASE_PUBLISHABLE_KEY,
+
+        "Authorization":
+          "Bearer " +
+          session.access_token
+
+      };
+
+    }
 
 
     /* =========================================================
@@ -1552,17 +1655,8 @@
 
               cache: "no-store",
 
-              headers: {
-                "Accept":
-                  "application/json",
-
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
-                "Authorization":
-                  "Bearer " +
-                  SUPABASE_PUBLISHABLE_KEY
-              }
+              headers:
+                await getScannerAuthHeaders()
             }
           );
 
@@ -2145,8 +2239,20 @@
 
 
         /*
-         * Scanner dijalankan terpisah.
+         * Scanner hanya boleh aktif
+         * setelah permission scanner.use
+         * tervalidasi.
          */
+
+        const allowed =
+          await requireScannerAccess();
+
+        if (!allowed) {
+
+          return;
+
+        }
+
 
         await startScanner();
 

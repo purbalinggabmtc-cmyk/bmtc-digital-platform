@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BMTC — Admin Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
 :root{--bg:#070707;--sidebar:#0d0d0d;--panel:#111;--border:#2c2c2c;--red:#e00000;--red-dark:#760000;--text:#fff;--muted:#858585}
@@ -32,36 +33,65 @@ iframe{width:100%;height:100%;border:0;background:#fff}.hidden{display:none!impo
 @media(max-width:1050px){.quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:820px){.admin-layout{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--border)}.menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.frame-card{height:calc(100vh - 360px);min-height:560px}}
 @media(max-width:560px){.topbar{align-items:flex-start;flex-direction:column}.topbar-actions{width:100%;justify-content:flex-start}.quick-grid{grid-template-columns:1fr}.content{padding:10px}}
+
+.hidden{display:none!important}
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at top,#240000 0%,#0b0b0b 38%,#000 100%)}
+.login-card{width:100%;max-width:430px;padding:28px;border:1px solid #333;border-radius:16px;background:#111;box-shadow:0 20px 60px rgba(0,0,0,.55)}
+.login-brand{text-align:center;font-size:26px;font-weight:900;letter-spacing:2px;margin-bottom:5px}.login-brand .red{color:var(--red)}
+.login-subtitle{text-align:center;margin-bottom:24px;color:#777;font-size:11px;letter-spacing:2px}
+.login-field{margin-bottom:16px}.login-field label{display:block;margin-bottom:7px;color:#ddd;font-size:12px;font-weight:800}.login-field input{width:100%;min-height:46px;padding:12px 13px;border:1px solid #3a3a3a;border-radius:8px;background:#181818;color:#fff;outline:none}.login-field input:focus{border-color:var(--red);box-shadow:0 0 0 2px rgba(224,0,0,.12)}
+.login-button{width:100%;min-height:48px;border:0;border-radius:8px;background:var(--red);color:#fff;font-weight:900;cursor:pointer}.login-button:disabled{opacity:.5;cursor:not-allowed}.login-message{display:none;margin-top:14px;padding:12px;border-radius:8px;font-size:12px;line-height:1.5}.login-message.error{display:block;background:rgba(224,0,0,.12);border:1px solid rgba(224,0,0,.35);color:#ff9292}
+.account-box{margin:0 8px 20px;padding:12px;border:1px solid #282828;border-radius:9px;background:#131313}.account-name{font-size:12px;font-weight:900;margin-bottom:4px}.account-role{color:#888;font-size:10px;line-height:1.4}
+
 </style>
 </head>
 <body>
-<div class="admin-layout">
+<section id="loginScreen">
+  <div class="login-card">
+    <div class="login-brand">BMTC <span class="red">ADMIN</span></div>
+    <div class="login-subtitle">SECURE ADMIN ACCESS</div>
+    <form id="loginForm">
+      <div class="login-field"><label for="loginEmail">EMAIL</label><input id="loginEmail" type="email" autocomplete="username" required></div>
+      <div class="login-field"><label for="loginPassword">PASSWORD</label><input id="loginPassword" type="password" autocomplete="current-password" required></div>
+      <button id="loginButton" class="login-button" type="submit">LOGIN</button>
+    </form>
+    <div id="loginMessage" class="login-message"></div>
+  </div>
+</section>
+
+<div id="appScreen" class="admin-layout hidden">
 <aside class="sidebar">
 <div class="brand">BMTC <span class="red">ADMIN</span></div>
 <div class="brand-subtitle">BRALINK MOTOR TIGER CLUB</div>
+<div class="account-box"><div id="accountName" class="account-name">-</div><div id="accountRole" class="account-role">-</div></div>
 
 <div class="menu-group"><div class="menu-title">Dashboard</div><div class="menu">
-<button class="menu-button active" type="button" data-mode="home" data-title="Dashboard" data-description="Pusat administrasi BMTC dan BOLD AFTER DARK.">Ringkasan</button>
+<button class="menu-button active" type="button" data-mode="home" data-permission="dashboard.view" data-title="Dashboard" data-description="Pusat administrasi BMTC dan BOLD AFTER DARK.">Ringkasan</button>
 </div></div>
 
 <div class="menu-group"><div class="menu-title">BOLD AFTER DARK</div><div class="menu">
-<button class="menu-button" type="button" data-url="/bold-after-dark/admin.html" data-title="Data Registrasi" data-description="Kelola peserta, status tiket, dan data check-in.">Data Registrasi</button>
-<button class="menu-button" type="button" data-url="/bold-after-dark/purchase-admin.html" data-title="Verifikasi Pembayaran" data-description="Verifikasi pembayaran, konfigurasi produk, dan nomor undian.">Verifikasi Pembayaran</button>
-<button class="menu-button" type="button" data-url="/bold-after-dark/scanner.html" data-title="QR Scanner" data-description="Scanner tiket masuk untuk operasional check-in.">QR Scanner</button>
-<button class="menu-button" type="button" data-url="/bold-after-dark/report.html" data-title="Laporan Event" data-description="Laporan peserta dan status penggunaan tiket.">Laporan</button>
-<button class="menu-button" type="button" data-url="/bold-after-dark/registration/" data-title="Registration Preview" data-description="Pratinjau halaman registrasi yang dilihat peserta.">Registration Preview</button>
+<button class="menu-button" type="button" data-url="/bold-after-dark/admin.html" data-permission="registration.view" data-title="Data Registrasi" data-description="Kelola peserta, status tiket, dan data check-in.">Data Registrasi</button>
+<button class="menu-button" type="button" data-url="/bold-after-dark/purchase-admin.html" data-permission="payment.view" data-title="Verifikasi Pembayaran" data-description="Verifikasi pembayaran, konfigurasi produk, dan nomor undian.">Verifikasi Pembayaran</button>
+<button class="menu-button" type="button" data-url="/bold-after-dark/scanner.html" data-permission="scanner.use" data-title="QR Scanner" data-description="Scanner tiket masuk untuk operasional check-in.">QR Scanner</button>
+<button class="menu-button" type="button" data-url="/bold-after-dark/report.html" data-permission="report.view" data-title="Laporan Event" data-description="Laporan peserta dan status penggunaan tiket.">Laporan</button>
+<button class="menu-button" type="button" data-url="/bold-after-dark/registration/" data-permission="registration.view" data-title="Registration Preview" data-description="Pratinjau halaman registrasi yang dilihat peserta.">Registration Preview</button>
 </div></div>
 
 <div class="menu-group"><div class="menu-title">Live Raffle</div><div class="menu">
-<button class="menu-button" type="button" data-url="/draw-admin.html" data-title="Pengundian" data-description="Kontrol START/STOP, tampilan website, riwayat, dan data raffle.">Pengundian</button>
-<button class="menu-button" type="button" data-url="/raffle-live.html" data-title="Live Screen" data-description="Pratinjau layar live pengundian.">Live Screen</button>
+<button class="menu-button" type="button" data-url="/draw-admin.html" data-permission="raffle.view" data-title="Pengundian" data-description="Kontrol START/STOP, tampilan website, riwayat, dan data raffle.">Pengundian</button>
+<button class="menu-button" type="button" data-url="/raffle-live.html" data-permission="raffle.view" data-title="Live Screen" data-description="Pratinjau layar live pengundian.">Live Screen</button>
 </div></div>
 
 <div class="menu-group"><div class="menu-title">Website BMTC</div><div class="menu">
-<button class="menu-button" type="button" data-url="/index.html" data-title="Website Preview" data-description="Pratinjau halaman utama BMTC.">Website Preview</button>
-<button class="menu-button" type="button" data-url="/kegiatan.html" data-title="Kegiatan" data-description="Pratinjau halaman kegiatan BMTC.">Kegiatan</button>
-<button class="menu-button" type="button" data-url="/galeri.html" data-title="Galeri" data-description="Pratinjau halaman galeri BMTC.">Galeri</button>
-<button class="menu-button" type="button" data-url="/bold-riders.html" data-title="BOLD Riders" data-description="Pratinjau halaman BOLD Riders.">BOLD Riders</button>
+<button class="menu-button" type="button" data-url="/index.html" data-permission="website.manage" data-title="Website Preview" data-description="Pratinjau halaman utama BMTC.">Website Preview</button>
+<button class="menu-button" type="button" data-url="/kegiatan.html" data-permission="website.manage" data-title="Kegiatan" data-description="Pratinjau halaman kegiatan BMTC.">Kegiatan</button>
+<button class="menu-button" type="button" data-url="/galeri.html" data-permission="website.manage" data-title="Galeri" data-description="Pratinjau halaman galeri BMTC.">Galeri</button>
+<button class="menu-button" type="button" data-url="/bold-riders.html" data-permission="website.manage" data-title="BOLD Riders" data-description="Pratinjau halaman BOLD Riders.">BOLD Riders</button>
+</div></div>
+
+<div class="menu-group"><div class="menu-title">Sistem</div><div class="menu">
+<button class="menu-button" type="button" data-url="/admin/users.html" data-permission="admin.view" data-title="Manajemen Admin" data-description="Kelola akun admin dan status akses.">Manajemen Admin</button>
+<button class="menu-button" type="button" data-url="/admin/roles.html" data-permission="role.manage" data-title="Role & Permission" data-description="Kelola role dan hak akses.">Role & Permission</button>
 </div></div>
 </aside>
 
@@ -70,7 +100,7 @@ iframe{width:100%;height:100%;border:0;background:#fff}.hidden{display:none!impo
 <div><div id="pageTitle" class="page-title">Dashboard</div><div id="pageDescription" class="page-description">Pusat administrasi BMTC dan BOLD AFTER DARK.</div></div>
 <div class="topbar-actions">
 <a id="openFullPageLink" class="topbar-link" href="/" target="_blank" rel="noopener noreferrer" style="display:none;">BUKA HALAMAN PENUH ↗</a>
-<a class="topbar-link" href="/" target="_blank" rel="noopener noreferrer">BUKA BMTC ↗</a>
+<button id="logoutButton" class="topbar-link" type="button">LOGOUT</button>
 </div>
 </header>
 <div class="content">
@@ -94,6 +124,20 @@ iframe{width:100%;height:100%;border:0;background:#fff}.hidden{display:none!impo
 
 <script>
 "use strict";
+const SUPABASE_URL="https://yrvnmmascklkuzpjkwxn.supabase.co";
+const SUPABASE_KEY="sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
+const client=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+
+const loginScreen=document.getElementById("loginScreen");
+const appScreen=document.getElementById("appScreen");
+const loginForm=document.getElementById("loginForm");
+const loginEmail=document.getElementById("loginEmail");
+const loginPassword=document.getElementById("loginPassword");
+const loginButton=document.getElementById("loginButton");
+const loginMessage=document.getElementById("loginMessage");
+const logoutButton=document.getElementById("logoutButton");
+const accountName=document.getElementById("accountName");
+const accountRole=document.getElementById("accountRole");
 const menuButtons=document.querySelectorAll(".menu-button");
 const pageTitle=document.getElementById("pageTitle");
 const pageDescription=document.getElementById("pageDescription");
@@ -101,41 +145,80 @@ const contentFrame=document.getElementById("contentFrame");
 const dashboardHome=document.getElementById("dashboardHome");
 const loading=document.getElementById("loading");
 const openFullPageLink=document.getElementById("openFullPageLink");
+let currentProfile=null,currentRoles=[],currentPermissions=new Set();
 
-function activateButton(selected){
-  menuButtons.forEach(function(button){button.classList.remove("active");});
-  selected.classList.add("active");
+function showLoginError(m){loginMessage.textContent=m;loginMessage.className="login-message error"}
+function clearLoginError(){loginMessage.textContent="";loginMessage.className="login-message"}
+
+async function loadAdminAccess(userId){
+  const pr=await client.from("admin_profiles").select("user_id, full_name, is_active").eq("user_id",userId).maybeSingle();
+  if(pr.error) throw pr.error;
+  if(!pr.data) throw new Error("Akun ini belum terdaftar sebagai admin BMTC.");
+  if(pr.data.is_active!==true) throw new Error("Akun admin ini sedang dinonaktifkan.");
+
+  const rr=await client.from("admin_user_roles").select("role_id, admin_roles(id,code,name)").eq("user_id",userId);
+  if(rr.error) throw rr.error;
+  const roles=(rr.data||[]).map(r=>r.admin_roles).filter(Boolean);
+  if(!roles.length) throw new Error("Akun admin belum memiliki role.");
+
+  const roleIds=roles.map(r=>r.id);
+  const xr=await client.from("admin_role_permissions").select("permission_id, admin_permissions(code,name)").in("role_id",roleIds);
+  if(xr.error) throw xr.error;
+  const perms=new Set((xr.data||[]).map(r=>r.admin_permissions&&r.admin_permissions.code).filter(Boolean));
+  currentProfile=pr.data;currentRoles=roles;currentPermissions=perms;
 }
-function showHome(button){
-  activateButton(button);
-  pageTitle.textContent=button.dataset.title||"Dashboard";
-  pageDescription.textContent=button.dataset.description||"";
-  contentFrame.classList.add("hidden");
-  dashboardHome.classList.remove("hidden");
-  loading.classList.add("hidden");
-  openFullPageLink.style.display="none";
-  contentFrame.src="about:blank";
-}
-function openModule(button){
-  const url=button.dataset.url;
-  if(!url)return;
-  activateButton(button);
-  pageTitle.textContent=button.dataset.title||"Admin";
-  pageDescription.textContent=button.dataset.description||"";
-  dashboardHome.classList.add("hidden");
-  contentFrame.classList.remove("hidden");
-  loading.classList.remove("hidden");
-  openFullPageLink.href=url;
-  openFullPageLink.style.display="inline-flex";
-  contentFrame.src=url;
-}
-menuButtons.forEach(function(button){
-  button.addEventListener("click",function(){
-    if(button.dataset.mode==="home"){showHome(button);return;}
-    openModule(button);
+
+function applyPermissions(){
+  document.querySelectorAll("[data-permission]").forEach(el=>{
+    if(currentPermissions.has(el.dataset.permission)) el.classList.remove("hidden"); else el.classList.add("hidden");
   });
+  document.querySelectorAll(".menu-group").forEach(g=>{
+    const visible=g.querySelectorAll(".menu-button:not(.hidden)");
+    if(!visible.length) g.classList.add("hidden"); else g.classList.remove("hidden");
+  });
+}
+
+function showApp(){
+  accountName.textContent=currentProfile.full_name;
+  accountRole.textContent=currentRoles.map(r=>r.name).join(", ");
+  applyPermissions();
+  loginScreen.classList.add("hidden");appScreen.classList.remove("hidden");
+}
+
+async function establishSession(session){
+  if(!session||!session.user) return false;
+  const ur=await client.auth.getUser();
+  if(ur.error||!ur.data||!ur.data.user) return false;
+  await loadAdminAccess(ur.data.user.id);showApp();return true;
+}
+
+loginForm.addEventListener("submit",async e=>{
+  e.preventDefault();clearLoginError();loginButton.disabled=true;loginButton.textContent="LOGIN...";
+  try{
+    const r=await client.auth.signInWithPassword({email:loginEmail.value.trim(),password:loginPassword.value});
+    if(r.error) throw r.error;
+    await establishSession(r.data.session);loginPassword.value="";
+  }catch(err){await client.auth.signOut();showLoginError(err&&err.message?err.message:"Login gagal.")}
+  finally{loginButton.disabled=false;loginButton.textContent="LOGIN"}
 });
-contentFrame.addEventListener("load",function(){loading.classList.add("hidden");});
+
+logoutButton.addEventListener("click",async()=>{
+  await client.auth.signOut();currentProfile=null;currentRoles=[];currentPermissions=new Set();
+  contentFrame.src="about:blank";contentFrame.classList.add("hidden");dashboardHome.classList.remove("hidden");
+  appScreen.classList.add("hidden");loginScreen.classList.remove("hidden");loginEmail.focus();
+});
+
+function activateButton(selected){menuButtons.forEach(b=>b.classList.remove("active"));selected.classList.add("active")}
+function showHome(button){activateButton(button);pageTitle.textContent=button.dataset.title||"Dashboard";pageDescription.textContent=button.dataset.description||"";contentFrame.classList.add("hidden");dashboardHome.classList.remove("hidden");loading.classList.add("hidden");openFullPageLink.style.display="none";contentFrame.src="about:blank"}
+function openModule(button){const p=button.dataset.permission;if(p&&!currentPermissions.has(p))return;const url=button.dataset.url;if(!url)return;activateButton(button);pageTitle.textContent=button.dataset.title||"Admin";pageDescription.textContent=button.dataset.description||"";dashboardHome.classList.add("hidden");contentFrame.classList.remove("hidden");loading.classList.remove("hidden");openFullPageLink.href=url;openFullPageLink.style.display="inline-flex";contentFrame.src=url}
+menuButtons.forEach(button=>button.addEventListener("click",()=>{if(button.dataset.mode==="home")showHome(button);else openModule(button)}));
+contentFrame.addEventListener("load",()=>loading.classList.add("hidden"));
+client.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){appScreen.classList.add("hidden");loginScreen.classList.remove("hidden")}});
+
+(async function start(){
+  try{const sr=await client.auth.getSession();if(sr.data&&sr.data.session)await establishSession(sr.data.session)}
+  catch(err){await client.auth.signOut();showLoginError(err&&err.message?err.message:"Sesi admin tidak valid.")}
+})();
 </script>
 </body>
 </html>

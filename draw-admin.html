@@ -410,6 +410,8 @@
       }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/admin/js/admin-auth.js"></script>
 </head>
 
 <body>
@@ -432,7 +434,7 @@
       class="card"
     >
       <div class="section-title">
-        ADMIN ACCESS
+        MEMERIKSA AKSES RAFFLE ADMIN
       </div>
 
       <div
@@ -440,26 +442,9 @@
         class="message"
       ></div>
 
-      <div class="field">
-        <label for="adminSecretInput">
-          PURCHASE ADMIN SECRET
-        </label>
-
-        <input
-          id="adminSecretInput"
-          type="password"
-          autocomplete="current-password"
-          placeholder="Masukkan admin secret"
-        >
+      <div style="color:#888;font-size:12px;line-height:1.6;">
+        Sistem menggunakan sesi BMTC Admin dan hak akses RBAC.
       </div>
-
-      <button
-        id="loginButton"
-        class="btn btn-red"
-        type="button"
-      >
-        MASUK
-      </button>
     </section>
 
 
@@ -665,12 +650,6 @@
     const dashboard =
       document.getElementById("dashboard");
 
-    const adminSecretInput =
-      document.getElementById("adminSecretInput");
-
-    const loginButton =
-      document.getElementById("loginButton");
-
     const loginMessage =
       document.getElementById("loginMessage");
 
@@ -723,16 +702,63 @@
       document.getElementById("resetTestButton");
 
 
-    let adminSecret =
-      sessionStorage.getItem(
-        "bad_raffle_admin_secret"
-      ) || "";
+    let currentAdminAccess =
+      null;
 
     let currentState =
       "IDLE";
 
     let animationTimer =
       null;
+
+
+    function hasPermission(
+      permission
+    ) {
+      return Boolean(
+        currentAdminAccess &&
+        currentAdminAccess.permissions &&
+        currentAdminAccess.permissions.has(
+          permission
+        )
+      );
+    }
+
+
+    function getAccessToken() {
+      return (
+        currentAdminAccess &&
+        currentAdminAccess.session &&
+        currentAdminAccess.session.access_token
+      ) || "";
+    }
+
+
+    function getAdminHeaders() {
+      return {
+        "Accept":
+          "application/json",
+        "apikey":
+          SUPABASE_PUBLISHABLE_KEY,
+        "Authorization":
+          "Bearer " +
+          getAccessToken()
+      };
+    }
+
+
+    function denyPermission(
+      permission,
+      element
+    ) {
+      showMessage(
+        element,
+        "error",
+        "Anda tidak memiliki hak akses " +
+        permission +
+        "."
+      );
+    }
 
 
     function showMessage(
@@ -961,6 +987,11 @@
         drawButton.className =
           "draw-button stop";
 
+        drawButton.disabled =
+          !hasPermission(
+            "raffle.stop"
+          );
+
         winnerName.textContent =
           "Pengundian sedang berjalan...";
 
@@ -976,6 +1007,11 @@
 
       drawButton.className =
         "draw-button start";
+
+      drawButton.disabled =
+        !hasPermission(
+          "raffle.start"
+        );
 
 
       if (
@@ -1107,6 +1143,19 @@
     async function runAdminAction(
       action
     ) {
+      const permission =
+        action === "stop"
+          ? "raffle.stop"
+          : "raffle.start";
+
+      if (!hasPermission(permission)) {
+        denyPermission(
+          permission,
+          dashboardMessage
+        );
+        return;
+      }
+
       drawButton.disabled =
         true;
 
@@ -1126,15 +1175,7 @@
               method:
                 "POST",
               headers: {
-                "Accept":
-                  "application/json",
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-                "Authorization":
-                  "Bearer " +
-                  SUPABASE_PUBLISHABLE_KEY,
-                "x-admin-secret":
-                  adminSecret
+                ...getAdminHeaders()
               }
             }
           );
@@ -1217,7 +1258,13 @@
 
       } finally {
         drawButton.disabled =
-          false;
+          currentState === "RUNNING"
+            ? !hasPermission(
+                "raffle.stop"
+              )
+            : !hasPermission(
+                "raffle.start"
+              );
       }
     }
 
@@ -1226,6 +1273,21 @@
       hideMessage(
         visibilityMessage
       );
+
+      if (
+        !hasPermission(
+          "raffle.visibility"
+        )
+      ) {
+        visibilityToggle.checked =
+          !visibilityToggle.checked;
+
+        denyPermission(
+          "raffle.visibility",
+          visibilityMessage
+        );
+        return;
+      }
 
       visibilityToggle.disabled =
         true;
@@ -1244,15 +1306,7 @@
               headers: {
                 "Content-Type":
                   "application/json",
-                "Accept":
-                  "application/json",
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-                "Authorization":
-                  "Bearer " +
-                  SUPABASE_PUBLISHABLE_KEY,
-                "x-admin-secret":
-                  adminSecret
+                ...getAdminHeaders()
               },
               body:
                 JSON.stringify({
@@ -1337,6 +1391,18 @@
         maintenanceMessage
       );
 
+      if (
+        !hasPermission(
+          "raffle.reset"
+        )
+      ) {
+        denyPermission(
+          "raffle.reset",
+          maintenanceMessage
+        );
+        return;
+      }
+
       const isReset =
         action ===
         "resettest";
@@ -1383,15 +1449,7 @@
               method:
                 "POST",
               headers: {
-                "Accept":
-                  "application/json",
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-                "Authorization":
-                  "Bearer " +
-                  SUPABASE_PUBLISHABLE_KEY,
-                "x-admin-secret":
-                  adminSecret
+                ...getAdminHeaders()
               }
             }
           );
@@ -1465,45 +1523,17 @@
     }
 
 
-    async function login() {
+    async function startCentralRaffleAdmin() {
       hideMessage(
         loginMessage
       );
 
-      const value =
-        adminSecretInput.value.trim();
-
-      if (!value) {
-        showMessage(
-          loginMessage,
-          "error",
-          "Admin secret wajib diisi."
-        );
-        return;
-      }
-
-      adminSecret =
-        value;
-
-      loginButton.disabled =
-        true;
-
-      loginButton.textContent =
-        "MEMERIKSA...";
-
       try {
-        /*
-         * Validasi secret dengan action START tidak aman karena bisa
-         * mengubah state. Jadi kita gunakan request state publik dulu,
-         * lalu secret baru benar-benar divalidasi saat START/STOP.
-         * Secret disimpan hanya selama session browser aktif.
-         */
-        await requestState();
-
-        sessionStorage.setItem(
-          "bad_raffle_admin_secret",
-          adminSecret
-        );
+        currentAdminAccess =
+          await window.BMTC_ADMIN_AUTH
+            .requirePermission(
+              "raffle.view"
+            );
 
         loginCard.classList.add(
           "hidden"
@@ -1513,48 +1543,74 @@
           "hidden"
         );
 
+        visibilityToggle.disabled =
+          !hasPermission(
+            "raffle.visibility"
+          );
+
+        clearHistoryButton.disabled =
+          !hasPermission(
+            "raffle.reset"
+          );
+
+        resetTestButton.disabled =
+          !hasPermission(
+            "raffle.reset"
+          );
+
         await loadState();
 
       } catch (error) {
-        showMessage(
-          loginMessage,
-          "error",
+        const message =
           error &&
           error.message
             ? error.message
-            : "Tidak dapat membuka raffle admin."
+            : "Akses raffle admin gagal.";
+
+        if (
+          message === "AUTH_REQUIRED"
+        ) {
+          window.BMTC_ADMIN_AUTH
+            .redirectToAdmin();
+
+          return;
+        }
+
+        if (
+          message === "FORBIDDEN"
+        ) {
+          document.body.innerHTML =
+            '<div style="padding:30px;color:#fff;font-family:Arial;background:#0b0b0b;min-height:100vh">' +
+            '<h2>Akses Ditolak</h2>' +
+            '<p>Akun Anda tidak memiliki permission <strong>raffle.view</strong>.</p>' +
+            '<p><a href="/admin/" style="color:#ff6b6b">Kembali ke Admin Dashboard</a></p>' +
+            '</div>';
+
+          return;
+        }
+
+        showMessage(
+          loginMessage,
+          "error",
+          message
         );
-
-      } finally {
-        loginButton.disabled =
-          false;
-
-        loginButton.textContent =
-          "MASUK";
       }
     }
 
 
-    function logout() {
+    async function logout() {
       stopVisualAnimation();
 
-      sessionStorage.removeItem(
-        "bad_raffle_admin_secret"
-      );
-
-      adminSecret =
-        "";
-
-      adminSecretInput.value =
-        "";
-
-      dashboard.classList.add(
-        "hidden"
-      );
-
-      loginCard.classList.remove(
-        "hidden"
-      );
+      try {
+        await window.BMTC_ADMIN_AUTH
+          .client
+          .auth
+          .signOut();
+      } finally {
+        window.location.replace(
+          "/admin/"
+        );
+      }
     }
 
 
@@ -1615,32 +1671,7 @@
     );
 
 
-    loginButton.addEventListener(
-      "click",
-      login
-    );
-
-
-    adminSecretInput.addEventListener(
-      "keydown",
-      function(event) {
-        if (
-          event.key ===
-          "Enter"
-        ) {
-          event.preventDefault();
-          login();
-        }
-      }
-    );
-
-
-    if (adminSecret) {
-      adminSecretInput.value =
-        adminSecret;
-
-      login();
-    }
+    startCentralRaffleAdmin();
 
   </script>
 

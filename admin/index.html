@@ -110,12 +110,12 @@ iframe{width:100%;height:100%;border:0;background:#fff}.hidden{display:none!impo
 <h1 class="welcome-title">BMTC Admin Dashboard</h1>
 <p class="welcome-text">Gunakan menu di sebelah kiri untuk mengakses administrasi BOLD AFTER DARK, operasional scanner, verifikasi pembayaran, laporan, Live Raffle, dan pratinjau website BMTC.</p>
 <div class="quick-grid">
-<div class="quick-card"><div class="quick-label">BOLD AFTER DARK</div><div class="quick-title">Registrasi & Peserta</div><div class="quick-text">Kelola data peserta, akses REGULER/BOLD RIDERS, status tiket, dan hasil check-in.</div></div>
-<div class="quick-card"><div class="quick-label">PAYMENT</div><div class="quick-title">Verifikasi Pembayaran</div><div class="quick-text">Approve atau reject pembayaran, mengatur produk, serta menerbitkan nomor undian.</div></div>
-<div class="quick-card"><div class="quick-label">OPERASIONAL</div><div class="quick-title">QR Scanner</div><div class="quick-text">Akses scanner tiket untuk petugas pada saat event berlangsung.</div></div>
-<div class="quick-card"><div class="quick-label">RAFFLE</div><div class="quick-title">Live Raffle</div><div class="quick-text">Jalankan pengundian, tampilkan atau sembunyikan Live Raffle, serta kelola riwayat pemenang.</div></div>
-<div class="quick-card"><div class="quick-label">REPORT</div><div class="quick-title">Laporan Event</div><div class="quick-text">Lihat ringkasan peserta, filter data, print, dan download CSV.</div></div>
-<div class="quick-card"><div class="quick-label">WEBSITE</div><div class="quick-title">Website BMTC</div><div class="quick-text">Pratinjau halaman publik BMTC langsung dari dashboard.</div></div>
+<div class="quick-card" data-card-permission="registration.view"><div class="quick-label">BOLD AFTER DARK</div><div class="quick-title">Registrasi & Peserta</div><div class="quick-text">Kelola data peserta, akses REGULER/BOLD RIDERS, status tiket, dan hasil check-in.</div></div>
+<div class="quick-card" data-card-permission="payment.view"><div class="quick-label">PAYMENT</div><div class="quick-title">Verifikasi Pembayaran</div><div class="quick-text">Approve atau reject pembayaran, mengatur produk, serta menerbitkan nomor undian.</div></div>
+<div class="quick-card" data-card-permission="scanner.use"><div class="quick-label">OPERASIONAL</div><div class="quick-title">QR Scanner</div><div class="quick-text">Akses scanner tiket untuk petugas pada saat event berlangsung.</div></div>
+<div class="quick-card" data-card-permission="raffle.view"><div class="quick-label">RAFFLE</div><div class="quick-title">Live Raffle</div><div class="quick-text">Jalankan pengundian, tampilkan atau sembunyikan Live Raffle, serta kelola riwayat pemenang.</div></div>
+<div class="quick-card" data-card-permission="report.view"><div class="quick-label">REPORT</div><div class="quick-title">Laporan Event</div><div class="quick-text">Lihat ringkasan peserta, filter data, print, dan download CSV.</div></div>
+<div class="quick-card" data-card-permission="website.manage"><div class="quick-label">WEBSITE</div><div class="quick-title">Website BMTC</div><div class="quick-text">Pratinjau halaman publik BMTC langsung dari dashboard.</div></div>
 </div></div>
 <iframe id="contentFrame" class="hidden" src="about:blank" title="BMTC Admin Content"></iframe>
 </div></div>
@@ -173,6 +173,11 @@ function applyPermissions(){
   document.querySelectorAll("[data-permission]").forEach(el=>{
     if(currentPermissions.has(el.dataset.permission)) el.classList.remove("hidden"); else el.classList.add("hidden");
   });
+
+  document.querySelectorAll("[data-card-permission]").forEach(card=>{
+    if(currentPermissions.has(card.dataset.cardPermission)) card.classList.remove("hidden"); else card.classList.add("hidden");
+  });
+
   document.querySelectorAll(".menu-group").forEach(g=>{
     const visible=g.querySelectorAll(".menu-button:not(.hidden)");
     if(!visible.length) g.classList.add("hidden"); else g.classList.remove("hidden");

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BMTC — Admin Dashboard</title>
+<title>BMTC — Central Admin Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
@@ -63,7 +63,7 @@ iframe{width:100%;height:100%;border:0;background:#fff}.hidden{display:none!impo
 <aside class="sidebar">
 <div class="brand">BMTC <span class="red">ADMIN</span></div>
 <div class="brand-subtitle">BRALINK MOTOR TIGER CLUB</div>
-<div class="account-box"><div id="accountName" class="account-name">-</div><div id="accountRole" class="account-role">-</div></div>
+<div class="account-box"><div id="accountName" class="account-name">-</div><div id="accountRole" class="account-role">-</div><div id="accountPermissionCount" class="account-role" style="margin-top:5px;">-</div></div>
 
 <div class="menu-group"><div class="menu-title">Dashboard</div><div class="menu">
 <button class="menu-button active" type="button" data-mode="home" data-permission="dashboard.view" data-title="Dashboard" data-description="Pusat administrasi BMTC dan BOLD AFTER DARK.">Ringkasan</button>
@@ -74,7 +74,7 @@ iframe{width:100%;height:100%;border:0;background:#fff}.hidden{display:none!impo
 <button class="menu-button" type="button" data-url="/bold-after-dark/purchase-admin.html" data-permission="payment.view" data-title="Verifikasi Pembayaran" data-description="Verifikasi pembayaran, konfigurasi produk, dan nomor undian.">Verifikasi Pembayaran</button>
 <button class="menu-button" type="button" data-url="/bold-after-dark/scanner.html" data-permission="scanner.use" data-title="QR Scanner" data-description="Scanner tiket masuk untuk operasional check-in.">QR Scanner</button>
 <button class="menu-button" type="button" data-url="/bold-after-dark/report.html" data-permission="report.view" data-title="Laporan Event" data-description="Laporan peserta dan status penggunaan tiket.">Laporan</button>
-<button class="menu-button" type="button" data-url="/bold-after-dark/registration/" data-permission="registration.view" data-title="Registration Preview" data-description="Pratinjau halaman registrasi yang dilihat peserta.">Registration Preview</button>
+<button class="menu-button" type="button" data-url="/bold-after-dark/registration/" data-permission="website.manage" data-title="Registration Preview" data-description="Pratinjau halaman registrasi yang dilihat peserta.">Registration Preview</button>
 </div></div>
 
 <div class="menu-group"><div class="menu-title">Live Raffle</div><div class="menu">
@@ -138,6 +138,7 @@ const loginMessage=document.getElementById("loginMessage");
 const logoutButton=document.getElementById("logoutButton");
 const accountName=document.getElementById("accountName");
 const accountRole=document.getElementById("accountRole");
+const accountPermissionCount=document.getElementById("accountPermissionCount");
 const menuButtons=document.querySelectorAll(".menu-button");
 const pageTitle=document.getElementById("pageTitle");
 const pageDescription=document.getElementById("pageDescription");
@@ -181,6 +182,7 @@ function applyPermissions(){
 function showApp(){
   accountName.textContent=currentProfile.full_name;
   accountRole.textContent=currentRoles.map(r=>r.name).join(", ");
+  accountPermissionCount.textContent=currentPermissions.size+" permission aktif";
   applyPermissions();
   loginScreen.classList.add("hidden");appScreen.classList.remove("hidden");
 }
@@ -215,9 +217,53 @@ menuButtons.forEach(button=>button.addEventListener("click",()=>{if(button.datas
 contentFrame.addEventListener("load",()=>loading.classList.add("hidden"));
 client.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){appScreen.classList.add("hidden");loginScreen.classList.remove("hidden")}});
 
+function getSafeReturnTo(){
+  const params=new URLSearchParams(window.location.search);
+  const value=params.get("returnTo");
+  if(!value) return "";
+
+  try{
+    const target=new URL(value,window.location.origin);
+    if(target.origin!==window.location.origin) return "";
+    if(!target.pathname.startsWith("/")) return "";
+    return target.pathname+target.search;
+  }catch{
+    return "";
+  }
+}
+
+function openReturnToIfAllowed(){
+  const returnTo=getSafeReturnTo();
+  if(!returnTo) return false;
+
+  const targetUrl=new URL(returnTo,window.location.origin);
+
+  const button=Array.from(
+    document.querySelectorAll(".menu-button[data-url]")
+  ).find(btn=>{
+    const btnUrl=new URL(btn.dataset.url,window.location.origin);
+    return btnUrl.pathname===targetUrl.pathname;
+  });
+
+  if(!button||button.classList.contains("hidden")) return false;
+
+  openModule(button);
+  window.history.replaceState({},"","/admin/");
+  return true;
+}
+
 (async function start(){
-  try{const sr=await client.auth.getSession();if(sr.data&&sr.data.session)await establishSession(sr.data.session)}
-  catch(err){await client.auth.signOut();showLoginError(err&&err.message?err.message:"Sesi admin tidak valid.")}
+  try{
+    const sr=await client.auth.getSession();
+    if(sr.data&&sr.data.session){
+      await establishSession(sr.data.session);
+      openReturnToIfAllowed();
+    }
+  }
+  catch(err){
+    await client.auth.signOut();
+    showLoginError(err&&err.message?err.message:"Sesi admin tidak valid.");
+  }
 })();
 </script>
 </body>

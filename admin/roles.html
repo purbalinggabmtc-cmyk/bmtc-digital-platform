@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMTC — Role & Permission</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+:root{--red:#e00000;--bg:#0b0b0b;--panel:#111;--border:#303030;--muted:#888;--green:#20d96b}
+html,body{margin:0;min-height:100%;background:var(--bg);color:#fff;font-family:Arial,Helvetica,sans-serif}
+body{padding:18px}button,input,textarea{font:inherit}.hidden{display:none!important}
+.wrap{max-width:1400px;margin:auto}
+.header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px}
+.header h1{margin:0 0 5px;font-size:22px}.header p{margin:0;color:#777;font-size:12px;line-height:1.5}
+.btn{min-height:40px;padding:9px 13px;border-radius:8px;border:1px solid #3a3a3a;background:#181818;color:#fff;font-weight:800;cursor:pointer}
+.btn-primary{background:var(--red);border-color:var(--red)}.btn-danger{background:#8e0000;border-color:#b80000}.btn:disabled{opacity:.45;cursor:not-allowed}
+.message{display:none;margin-bottom:14px;padding:12px;border-radius:8px;font-size:12px;white-space:pre-wrap}.message.show{display:block}.message.error{background:#300000;border:1px solid #8d0000;color:#ff9999}.message.success{background:#052b14;border:1px solid #13743b;color:#69e99b}
+.role-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.role-card{padding:16px;border:1px solid var(--border);border-radius:12px;background:var(--panel)}
+.role-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.role-name{font-size:16px;font-weight:900}.role-code{margin-top:3px;color:#777;font-size:10px;letter-spacing:.7px}.role-desc{min-height:32px;margin-bottom:12px;color:#8a8a8a;font-size:11px;line-height:1.45}
+.badge{display:inline-block;margin:2px 4px 2px 0;padding:4px 7px;border-radius:20px;border:1px solid #393939;background:#1a1a1a;color:#ccc;font-size:9px;font-weight:800}
+.system-badge{color:#ffb2b2;border-color:#6d2525;background:#2d0c0c}
+.role-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+.modal{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.78)}
+.modal-card{width:100%;max-width:820px;max-height:92vh;overflow:auto;padding:20px;border:1px solid #333;border-radius:14px;background:#111}
+.modal-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:18px}.modal-head h2{margin:0;font-size:18px}
+.field{margin-bottom:14px}.field label{display:block;margin-bottom:7px;color:#ddd;font-size:11px;font-weight:800}
+.field input,.field textarea{width:100%;padding:11px 12px;border:1px solid #3a3a3a;border-radius:8px;background:#191919;color:#fff;outline:none}.field textarea{min-height:85px;resize:vertical}
+.permission-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.permission-item{display:flex;align-items:flex-start;gap:8px;padding:10px;border:1px solid #2f2f2f;border-radius:8px;background:#171717}
+.permission-item input{width:16px;height:16px;margin-top:2px}
+.permission-title{font-size:11px;font-weight:900}.permission-code{margin-top:2px;color:#777;font-size:9px}.permission-desc{margin-top:4px;color:#888;font-size:9px;line-height:1.35}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+@media(max-width:800px){.role-grid,.permission-grid{grid-template-columns:1fr}}
+@media(max-width:560px){body{padding:10px}.header{flex-direction:column}}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="header">
+    <div>
+      <h1>Role & Permission</h1>
+      <p>
+        Atur hak akses berdasarkan role. Role sistem dapat diedit permission-nya,
+        tetapi tidak dapat dihapus.
+      </p>
+    </div>
+
+    <button
+      id="addRoleButton"
+      class="btn btn-primary"
+      type="button"
+    >
+      TAMBAH ROLE
+    </button>
+  </div>
+
+  <div
+    id="message"
+    class="message"
+  ></div>
+
+  <div
+    id="roleList"
+    class="role-grid"
+  >
+    Memuat role...
+  </div>
+
+</div>
+
+
+<div
+  id="roleModal"
+  class="modal hidden"
+>
+  <div class="modal-card">
+
+    <div class="modal-head">
+      <h2 id="modalTitle">
+        Tambah Role
+      </h2>
+
+      <button
+        id="closeModalButton"
+        class="btn"
+        type="button"
+      >
+        TUTUP
+      </button>
+    </div>
+
+    <form id="roleForm">
+
+      <input
+        id="editRoleId"
+        type="hidden"
+      >
+
+      <div
+        id="codeField"
+        class="field"
+      >
+        <label for="roleCode">
+          CODE ROLE
+        </label>
+
+        <input
+          id="roleCode"
+          type="text"
+          placeholder="CONTOH_ROLE"
+        >
+      </div>
+
+      <div class="field">
+        <label for="roleName">
+          NAMA ROLE
+        </label>
+
+        <input
+          id="roleName"
+          type="text"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="roleDescription">
+          DESKRIPSI
+        </label>
+
+        <textarea
+          id="roleDescription"
+        ></textarea>
+      </div>
+
+      <div class="field">
+        <label>
+          PERMISSION
+        </label>
+
+        <div
+          id="permissionGrid"
+          class="permission-grid"
+        ></div>
+      </div>
+
+      <div class="modal-actions">
+        <button
+          id="saveRoleButton"
+          class="btn btn-primary"
+          type="submit"
+        >
+          SIMPAN
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+
+<script>
+"use strict";
+
+const SUPABASE_URL =
+  "https://yrvnmmascklkuzpjkwxn.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
+
+const SERVICE_URL =
+  SUPABASE_URL +
+  "/functions/v1/admin-role-service";
+
+const client =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
+  );
+
+const roleList =
+  document.getElementById(
+    "roleList"
+  );
+
+const message =
+  document.getElementById(
+    "message"
+  );
+
+const addRoleButton =
+  document.getElementById(
+    "addRoleButton"
+  );
+
+const roleModal =
+  document.getElementById(
+    "roleModal"
+  );
+
+const closeModalButton =
+  document.getElementById(
+    "closeModalButton"
+  );
+
+const roleForm =
+  document.getElementById(
+    "roleForm"
+  );
+
+const modalTitle =
+  document.getElementById(
+    "modalTitle"
+  );
+
+const editRoleId =
+  document.getElementById(
+    "editRoleId"
+  );
+
+const codeField =
+  document.getElementById(
+    "codeField"
+  );
+
+const roleCode =
+  document.getElementById(
+    "roleCode"
+  );
+
+const roleName =
+  document.getElementById(
+    "roleName"
+  );
+
+const roleDescription =
+  document.getElementById(
+    "roleDescription"
+  );
+
+const permissionGrid =
+  document.getElementById(
+    "permissionGrid"
+  );
+
+const saveRoleButton =
+  document.getElementById(
+    "saveRoleButton"
+  );
+
+let roles = [];
+let permissions = [];
+
+function showMessage(
+  type,
+  text
+) {
+  message.textContent =
+    text;
+
+  message.className =
+    "message show " +
+    type;
+}
+
+function clearMessage() {
+  message.textContent =
+    "";
+
+  message.className =
+    "message";
+}
+
+function escapeHtml(value) {
+  return String(
+    value == null
+      ? ""
+      : value
+  )
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+async function callService(
+  action,
+  method = "GET",
+  body
+) {
+  const sessionResult =
+    await client.auth.getSession();
+
+  const session =
+    sessionResult.data &&
+    sessionResult.data.session;
+
+  if (!session) {
+    throw new Error(
+      "Sesi admin tidak tersedia. Login ulang."
+    );
+  }
+
+  const options = {
+    method,
+    headers: {
+      "Accept":
+        "application/json",
+      "Content-Type":
+        "application/json",
+      "apikey":
+        SUPABASE_KEY,
+      "Authorization":
+        "Bearer " +
+        session.access_token
+    }
+  };
+
+  if (
+    body !== undefined
+  ) {
+    options.body =
+      JSON.stringify(
+        body
+      );
+  }
+
+  const response =
+    await fetch(
+      SERVICE_URL +
+      "?action=" +
+      encodeURIComponent(action),
+      options
+    );
+
+  const raw =
+    await response.text();
+
+  let data;
+
+  try {
+    data =
+      raw
+        ? JSON.parse(raw)
+        : null;
+  } catch {
+    throw new Error(
+      "Response server tidak valid."
+    );
+  }
+
+  if (
+    !response.ok ||
+    !data ||
+    data.success !== true
+  ) {
+    throw new Error(
+      data &&
+      data.message
+        ? data.message
+        : "Request gagal."
+    );
+  }
+
+  return data;
+}
+
+function renderRoleList() {
+
+  if (!roles.length) {
+    roleList.innerHTML =
+      "Belum ada role.";
+
+    return;
+  }
+
+  roleList.innerHTML =
+    roles.map(
+      function(role) {
+
+        const selectedIds =
+          new Set(
+            role.permission_ids ||
+            []
+          );
+
+        const permissionBadges =
+          permissions
+            .filter(
+              function(permission) {
+                return selectedIds.has(
+                  permission.id
+                );
+              }
+            )
+            .map(
+              function(permission) {
+                return (
+                  '<span class="badge">' +
+                  escapeHtml(
+                    permission.code
+                  ) +
+                  '</span>'
+                );
+              }
+            )
+            .join("");
+
+        const systemBadge =
+          role.is_system
+            ? '<span class="badge system-badge">SYSTEM</span>'
+            : "";
+
+        const deleteButton =
+          role.is_system
+            ? ""
+            : (
+                '<button class="btn btn-danger delete-role-btn" ' +
+                'data-id="' +
+                escapeHtml(role.id) +
+                '" type="button">HAPUS</button>'
+              );
+
+        return (
+          '<div class="role-card">' +
+            '<div class="role-head">' +
+              '<div>' +
+                '<div class="role-name">' +
+                  escapeHtml(role.name) +
+                '</div>' +
+                '<div class="role-code">' +
+                  escapeHtml(role.code) +
+                '</div>' +
+              '</div>' +
+              systemBadge +
+            '</div>' +
+
+            '<div class="role-desc">' +
+              escapeHtml(
+                role.description ||
+                "Tidak ada deskripsi."
+              ) +
+            '</div>' +
+
+            '<div>' +
+              (
+                permissionBadges ||
+                '<span class="badge">Tanpa permission</span>'
+              ) +
+            '</div>' +
+
+            '<div class="role-actions">' +
+              '<button class="btn edit-role-btn" ' +
+              'data-id="' +
+              escapeHtml(role.id) +
+              '" type="button">EDIT</button>' +
+              deleteButton +
+            '</div>' +
+          '</div>'
+        );
+
+      }
+    ).join("");
+
+  document
+    .querySelectorAll(
+      ".edit-role-btn"
+    )
+    .forEach(
+      function(button) {
+
+        button.addEventListener(
+          "click",
+          function() {
+            openEditRole(
+              button.dataset.id
+            );
+          }
+        );
+
+      }
+    );
+
+  document
+    .querySelectorAll(
+      ".delete-role-btn"
+    )
+    .forEach(
+      function(button) {
+
+        button.addEventListener(
+          "click",
+          function() {
+            deleteRole(
+              button.dataset.id
+            );
+          }
+        );
+
+      }
+    );
+}
+
+function renderPermissions(
+  selectedIds = []
+) {
+
+  const selected =
+    new Set(
+      selectedIds
+    );
+
+  permissionGrid.innerHTML =
+    permissions.map(
+      function(permission) {
+
+        const checked =
+          selected.has(
+            permission.id
+          )
+            ? "checked"
+            : "";
+
+        return (
+          '<label class="permission-item">' +
+
+            '<input ' +
+              'type="checkbox" ' +
+              'class="permission-check" ' +
+              'value="' +
+              escapeHtml(
+                permission.id
+              ) +
+              '" ' +
+              checked +
+            '>' +
+
+            '<span>' +
+              '<div class="permission-title">' +
+                escapeHtml(
+                  permission.name
+                ) +
+              '</div>' +
+
+              '<div class="permission-code">' +
+                escapeHtml(
+                  permission.code
+                ) +
+              '</div>' +
+
+              '<div class="permission-desc">' +
+                escapeHtml(
+                  permission.description ||
+                  ""
+                ) +
+              '</div>' +
+            '</span>' +
+
+          '</label>'
+        );
+
+      }
+    ).join("");
+}
+
+function getSelectedPermissionIds() {
+  return Array.from(
+    document.querySelectorAll(
+      ".permission-check:checked"
+    )
+  ).map(
+    function(element) {
+      return element.value;
+    }
+  );
+}
+
+async function loadData() {
+
+  clearMessage();
+
+  roleList.innerHTML =
+    "Memuat role...";
+
+  try {
+
+    const data =
+      await callService(
+        "list"
+      );
+
+    roles =
+      data.roles || [];
+
+    permissions =
+      data.permissions || [];
+
+    renderRoleList();
+
+  } catch (error) {
+
+    roleList.innerHTML =
+      "Gagal memuat role.";
+
+    showMessage(
+      "error",
+      error &&
+      error.message
+        ? error.message
+        : "Gagal memuat role."
+    );
+
+  }
+}
+
+function openCreateRole() {
+
+  roleForm.reset();
+
+  editRoleId.value =
+    "";
+
+  modalTitle.textContent =
+    "Tambah Role";
+
+  codeField.classList.remove(
+    "hidden"
+  );
+
+  roleCode.required =
+    true;
+
+  renderPermissions(
+    []
+  );
+
+  roleModal.classList.remove(
+    "hidden"
+  );
+}
+
+function openEditRole(
+  roleId
+) {
+
+  const role =
+    roles.find(
+      function(item) {
+        return item.id === roleId;
+      }
+    );
+
+  if (!role) {
+    return;
+  }
+
+  roleForm.reset();
+
+  editRoleId.value =
+    role.id;
+
+  roleName.value =
+    role.name || "";
+
+  roleDescription.value =
+    role.description || "";
+
+  modalTitle.textContent =
+    "Edit Role";
+
+  codeField.classList.add(
+    "hidden"
+  );
+
+  roleCode.required =
+    false;
+
+  renderPermissions(
+    role.permission_ids ||
+    []
+  );
+
+  roleModal.classList.remove(
+    "hidden"
+  );
+}
+
+addRoleButton.addEventListener(
+  "click",
+  openCreateRole
+);
+
+closeModalButton.addEventListener(
+  "click",
+  function() {
+    roleModal.classList.add(
+      "hidden"
+    );
+  }
+);
+
+roleForm.addEventListener(
+  "submit",
+  async function(event) {
+
+    event.preventDefault();
+
+    clearMessage();
+
+    const roleId =
+      editRoleId.value.trim();
+
+    const permissionIds =
+      getSelectedPermissionIds();
+
+    saveRoleButton.disabled =
+      true;
+
+    saveRoleButton.textContent =
+      "MENYIMPAN...";
+
+    try {
+
+      if (roleId) {
+
+        await callService(
+          "update",
+          "POST",
+          {
+            role_id:
+              roleId,
+            name:
+              roleName.value.trim(),
+            description:
+              roleDescription.value.trim(),
+            permission_ids:
+              permissionIds
+          }
+        );
+
+        showMessage(
+          "success",
+          "Role berhasil diperbarui."
+        );
+
+      } else {
+
+        await callService(
+          "create",
+          "POST",
+          {
+            code:
+              roleCode.value.trim(),
+            name:
+              roleName.value.trim(),
+            description:
+              roleDescription.value.trim(),
+            permission_ids:
+              permissionIds
+          }
+        );
+
+        showMessage(
+          "success",
+          "Role baru berhasil dibuat."
+        );
+
+      }
+
+      roleModal.classList.add(
+        "hidden"
+      );
+
+      await loadData();
+
+    } catch (error) {
+
+      showMessage(
+        "error",
+        error &&
+        error.message
+          ? error.message
+          : "Gagal menyimpan role."
+      );
+
+    } finally {
+
+      saveRoleButton.disabled =
+        false;
+
+      saveRoleButton.textContent =
+        "SIMPAN";
+
+    }
+
+  }
+);
+
+async function deleteRole(
+  roleId
+) {
+
+  const role =
+    roles.find(
+      function(item) {
+        return item.id === roleId;
+      }
+    );
+
+  if (!role) {
+    return;
+  }
+
+  const confirmed =
+    window.confirm(
+      "Hapus role '" +
+      role.name +
+      "'?\n\nRole hanya dapat dihapus jika tidak digunakan oleh admin."
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  clearMessage();
+
+  try {
+
+    await callService(
+      "delete",
+      "POST",
+      {
+        role_id:
+          roleId
+      }
+    );
+
+    showMessage(
+      "success",
+      "Role berhasil dihapus."
+    );
+
+    await loadData();
+
+  } catch (error) {
+
+    showMessage(
+      "error",
+      error &&
+      error.message
+        ? error.message
+        : "Gagal menghapus role."
+    );
+
+  }
+}
+
+loadData();
+</script>
+
+</body>
+</html>

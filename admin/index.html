@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BMTC — Central Admin Dashboard</title>
+<title>BMTC — Central Admin Dashboard V5</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
@@ -146,7 +146,7 @@ const contentFrame=document.getElementById("contentFrame");
 const dashboardHome=document.getElementById("dashboardHome");
 const loading=document.getElementById("loading");
 const openFullPageLink=document.getElementById("openFullPageLink");
-let currentProfile=null,currentRoles=[],currentPermissions=new Set();
+let currentSession=null,currentProfile=null,currentRoles=[],currentPermissions=new Set();
 
 function showLoginError(m){loginMessage.textContent=m;loginMessage.className="login-message error"}
 function clearLoginError(){loginMessage.textContent="";loginMessage.className="login-message"}
@@ -194,10 +194,128 @@ function showApp(){
 
 async function establishSession(session){
   if(!session||!session.user) return false;
+
   const ur=await client.auth.getUser();
-  if(ur.error||!ur.data||!ur.data.user) return false;
-  await loadAdminAccess(ur.data.user.id);showApp();return true;
+
+  if(
+    ur.error||
+    !ur.data||
+    !ur.data.user
+  ){
+    return false;
+  }
+
+  currentSession=session;
+
+  await loadAdminAccess(
+    ur.data.user.id
+  );
+
+  showApp();
+
+  return true;
 }
+
+
+/*
+ * Same-origin bridge untuk modul yang dibuka di iframe.
+ *
+ * Modul seperti draw-admin.html tidak perlu membuat ulang
+ * pemeriksaan Auth + RBAC melalui client Supabase kedua.
+ * Dashboard menyerahkan session dan permission yang sudah
+ * tervalidasi kepada iframe. Edge Function tetap melakukan
+ * validasi JWT + permission server-side.
+ */
+window.BMTC_ADMIN_BRIDGE=
+  Object.freeze({
+
+    getContext:
+      function(permission){
+
+        if(
+          !currentSession||
+          !currentSession.user||
+          !currentProfile
+        ){
+          throw new Error(
+            "AUTH_REQUIRED"
+          );
+        }
+
+        if(
+          permission&&
+          !currentPermissions.has(
+            permission
+          )
+        ){
+          throw new Error(
+            "FORBIDDEN"
+          );
+        }
+
+        return {
+          session:
+            currentSession,
+
+          user:
+            currentSession.user,
+
+          profile:
+            currentProfile,
+
+          roles:
+            currentRoles.slice(),
+
+          permissions:
+            new Set(
+              currentPermissions
+            )
+        };
+      },
+
+
+    getSession:
+      function(){
+
+        return {
+          data:{
+            session:
+              currentSession
+          },
+          error:null
+        };
+      },
+
+
+    getUser:
+      function(){
+
+        return {
+          data:{
+            user:
+              currentSession
+                ? currentSession.user
+                : null
+          },
+          error:
+            currentSession
+              ? null
+              : new Error(
+                  "AUTH_REQUIRED"
+                )
+        };
+      },
+
+
+    signOut:
+      async function(){
+
+        await client.auth.signOut();
+
+      }
+
+  });
+
 
 loginForm.addEventListener("submit",async e=>{
   e.preventDefault();clearLoginError();loginButton.disabled=true;loginButton.textContent="LOGIN...";
@@ -210,17 +328,83 @@ loginForm.addEventListener("submit",async e=>{
 });
 
 logoutButton.addEventListener("click",async()=>{
-  await client.auth.signOut();currentProfile=null;currentRoles=[];currentPermissions=new Set();
+  await client.auth.signOut();currentSession=null;currentProfile=null;currentRoles=[];currentPermissions=new Set();
   contentFrame.src="about:blank";contentFrame.classList.add("hidden");dashboardHome.classList.remove("hidden");
   appScreen.classList.add("hidden");loginScreen.classList.remove("hidden");loginEmail.focus();
 });
 
 function activateButton(selected){menuButtons.forEach(b=>b.classList.remove("active"));selected.classList.add("active")}
 function showHome(button){activateButton(button);pageTitle.textContent=button.dataset.title||"Dashboard";pageDescription.textContent=button.dataset.description||"";contentFrame.classList.add("hidden");dashboardHome.classList.remove("hidden");loading.classList.add("hidden");openFullPageLink.style.display="none";contentFrame.src="about:blank"}
-function openModule(button){const p=button.dataset.permission;if(p&&!currentPermissions.has(p))return;const url=button.dataset.url;if(!url)return;activateButton(button);pageTitle.textContent=button.dataset.title||"Admin";pageDescription.textContent=button.dataset.description||"";dashboardHome.classList.add("hidden");contentFrame.classList.remove("hidden");loading.classList.remove("hidden");openFullPageLink.href=url;openFullPageLink.style.display="inline-flex";contentFrame.src=url}
+function openModule(button){
+  const p=button.dataset.permission;
+
+  if(
+    p&&
+    !currentPermissions.has(p)
+  ){
+    return;
+  }
+
+  const url=button.dataset.url;
+
+  if(!url){
+    return;
+  }
+
+  activateButton(button);
+
+  pageTitle.textContent=
+    button.dataset.title||
+    "Admin";
+
+  pageDescription.textContent=
+    button.dataset.description||
+    "";
+
+  dashboardHome.classList.add(
+    "hidden"
+  );
+
+  contentFrame.classList.remove(
+    "hidden"
+  );
+
+  loading.classList.remove(
+    "hidden"
+  );
+
+  openFullPageLink.href=url;
+  openFullPageLink.style.display=
+    "inline-flex";
+
+  const moduleUrl=
+    new URL(
+      url,
+      window.location.origin
+    );
+
+  moduleUrl.searchParams.set(
+    "_adminv",
+    "5"
+  );
+
+  contentFrame.src=
+    moduleUrl.pathname+
+    moduleUrl.search;
+}
 menuButtons.forEach(button=>button.addEventListener("click",()=>{if(button.dataset.mode==="home")showHome(button);else openModule(button)}));
 contentFrame.addEventListener("load",()=>loading.classList.add("hidden"));
-client.auth.onAuthStateChange((event)=>{if(event==="SIGNED_OUT"){appScreen.classList.add("hidden");loginScreen.classList.remove("hidden")}});
+client.auth.onAuthStateChange((event)=>{
+  if(event==="SIGNED_OUT"){
+    currentSession=null;
+    currentProfile=null;
+    currentRoles=[];
+    currentPermissions=new Set();
+
+    appScreen.classList.add("hidden");
+    loginScreen.classList.remove("hidden");
+  }
+});
 
 function getSafeReturnTo(){
   const params=new URLSearchParams(window.location.search);

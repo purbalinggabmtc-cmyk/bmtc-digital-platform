@@ -995,24 +995,6 @@
             </div>
           </div>
 
-          <div class="field">
-            <label for="lookupWhatsapp">
-              WhatsApp Saat Registrasi <span class="required">*</span>
-            </label>
-
-            <input
-              id="lookupWhatsapp"
-              type="tel"
-              inputmode="tel"
-              autocomplete="tel"
-              placeholder="Contoh: 081234567890"
-            >
-
-            <div class="field-help">
-              Digunakan untuk memverifikasi bahwa ID pembelian milik Anda.
-            </div>
-          </div>
-
           <button
             id="lookupPurchaseButton"
             class="btn-primary"
@@ -1506,9 +1488,6 @@
 
     const lookupPurchaseIdInput =
       document.getElementById("lookupPurchaseId");
-
-    const lookupWhatsappInput =
-      document.getElementById("lookupWhatsapp");
 
     const lookupPurchaseButton =
       document.getElementById("lookupPurchaseButton");
@@ -2159,22 +2138,6 @@ const submitButton =
         "BAD26-" +
         purchaseCode;
 
-      const lookupWhatsapp =
-        String(
-          lookupWhatsappInput.value || ""
-        ).trim();
-
-      if (!lookupWhatsapp) {
-        showMessage(
-          "error",
-          "Masukkan WhatsApp yang digunakan saat registrasi."
-        );
-
-        lookupWhatsappInput.focus();
-
-        return;
-      }
-
       paymentStatusBox.classList.add(
         "hidden"
       );
@@ -2190,11 +2153,7 @@ const submitButton =
           await fetch(
             PURCHASE_SERVICE_URL +
             "?action=getPurchase&purchaseId=" +
-            encodeURIComponent(purchaseId) +
-            "&whatsapp=" +
-            encodeURIComponent(
-              lookupWhatsapp
-            ),
+            encodeURIComponent(purchaseId),
             {
               method: "GET",
               headers: {
@@ -2478,20 +2437,14 @@ const submitButton =
       const purchaseId =
         lookupResultPurchaseId.textContent.trim();
 
-      const lookupWhatsapp =
-        String(
-          lookupWhatsappInput.value || ""
-        ).trim();
-
       if (
         !purchaseId ||
-        purchaseId === "-" ||
-        !lookupWhatsapp
+        purchaseId === "-"
       ) {
         if (!silent) {
           showMessage(
             "error",
-            "Silakan cek ID pembelian dan WhatsApp terlebih dahulu."
+            "Silakan cek ID pembelian terlebih dahulu."
           );
         }
 
@@ -2513,10 +2466,6 @@ const submitButton =
             "?action=getPurchase&purchaseId=" +
             encodeURIComponent(
               purchaseId
-            ) +
-            "&whatsapp=" +
-            encodeURIComponent(
-              lookupWhatsapp
             ),
             {
               method: "GET",
@@ -2744,11 +2693,6 @@ const submitButton =
       const purchaseId =
         lookupResultPurchaseId.textContent.trim();
 
-      const lookupWhatsapp =
-        String(
-          lookupWhatsappInput.value || ""
-        ).trim();
-
       const file =
         lookupPaymentProofInput.files &&
         lookupPaymentProofInput.files.length
@@ -2763,17 +2707,6 @@ const submitButton =
           "error",
           "Silakan cek ID pembelian terlebih dahulu."
         );
-        return;
-      }
-
-      if (!lookupWhatsapp) {
-        showMessage(
-          "error",
-          "Masukkan WhatsApp yang digunakan saat registrasi."
-        );
-
-        lookupWhatsappInput.focus();
-
         return;
       }
 
@@ -2829,11 +2762,6 @@ const submitButton =
         formData.append(
           "purchaseId",
           purchaseId
-        );
-
-        formData.append(
-          "whatsapp",
-          lookupWhatsapp
         );
 
         formData.append(
@@ -2946,9 +2874,6 @@ const submitButton =
 
       paymentLookupBox.style.display =
         "none";
-
-      lookupWhatsappInput.value =
-        "";
 
       lookupPurchaseDetails.classList.add(
         "hidden"

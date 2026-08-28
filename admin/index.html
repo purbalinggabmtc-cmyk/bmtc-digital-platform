@@ -3,12 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BMTC — Central Admin Dashboard V6</title>
+<title>BMTC — Central Admin Dashboard V7 Push</title>
 <script>
 if (window.self !== window.top) {
   window.top.location.replace("/admin/");
 }
 </script>
+<link rel="manifest" href="/admin/manifest.webmanifest">
+<meta name="theme-color" content="#e00000">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
@@ -105,6 +107,7 @@ iframe{width:100%;height:100%;border:0;background:#fff}.hidden{display:none!impo
 <div><div id="pageTitle" class="page-title">Dashboard</div><div id="pageDescription" class="page-description">Pusat administrasi BMTC dan BOLD AFTER DARK.</div></div>
 <div class="topbar-actions">
 <a id="openFullPageLink" class="topbar-link" href="/" target="_blank" rel="noopener noreferrer" style="display:none;">BUKA HALAMAN PENUH ↗</a>
+<button id="notificationButton" class="topbar-link" type="button">🔔 AKTIFKAN NOTIFIKASI</button>
 <button id="logoutButton" class="topbar-link" type="button">LOGOUT</button>
 </div>
 </header>
@@ -127,6 +130,9 @@ iframe{width:100%;height:100%;border:0;background:#fff}.hidden{display:none!impo
 </main>
 </div>
 
+<script src="/admin/js/admin-auth.js"></script>
+<script src="/admin/js/push-notification.js"></script>
+
 <script>
 "use strict";
 const SUPABASE_URL="https://yrvnmmascklkuzpjkwxn.supabase.co";
@@ -140,6 +146,7 @@ const loginEmail=document.getElementById("loginEmail");
 const loginPassword=document.getElementById("loginPassword");
 const loginButton=document.getElementById("loginButton");
 const loginMessage=document.getElementById("loginMessage");
+const notificationButton=document.getElementById("notificationButton");
 const logoutButton=document.getElementById("logoutButton");
 const accountName=document.getElementById("accountName");
 const accountRole=document.getElementById("accountRole");
@@ -195,6 +202,7 @@ function showApp(){
   accountPermissionCount.textContent=currentPermissions.size+" permission aktif";
   applyPermissions();
   loginScreen.classList.add("hidden");appScreen.classList.remove("hidden");
+  setTimeout(refreshNotificationButton,0);
 }
 
 async function establishSession(session){
@@ -331,6 +339,122 @@ loginForm.addEventListener("submit",async e=>{
   }catch(err){await client.auth.signOut();showLoginError(err&&err.message?err.message:"Login gagal.")}
   finally{loginButton.disabled=false;loginButton.textContent="LOGIN"}
 });
+
+
+async function refreshNotificationButton(){
+  if(
+    !window.BMTC_PUSH
+  ){
+    notificationButton.textContent=
+      "🔕 NOTIFIKASI TIDAK TERSEDIA";
+
+    notificationButton.disabled=
+      true;
+
+    return;
+  }
+
+  try{
+    const status=
+      await window
+        .BMTC_PUSH
+        .getStatus();
+
+    if(!status.supported){
+      notificationButton.textContent=
+        "🔕 TIDAK DIDUKUNG";
+
+      notificationButton.disabled=
+        true;
+
+      return;
+    }
+
+    if(status.subscribed){
+      notificationButton.textContent=
+        "🔔 NOTIFIKASI AKTIF";
+
+      notificationButton.dataset.active=
+        "true";
+
+      return;
+    }
+
+    notificationButton.textContent=
+      "🔔 AKTIFKAN NOTIFIKASI";
+
+    notificationButton.dataset.active=
+      "false";
+
+  }catch(error){
+    console.error(
+      "PUSH STATUS ERROR:",
+      error
+    );
+
+    notificationButton.textContent=
+      "🔔 AKTIFKAN NOTIFIKASI";
+  }
+}
+
+
+notificationButton.addEventListener(
+  "click",
+  async function(){
+
+    notificationButton.disabled=
+      true;
+
+    try{
+      const status=
+        await window
+          .BMTC_PUSH
+          .getStatus();
+
+      if(status.subscribed){
+        const confirmed=
+          window.confirm(
+            "Nonaktifkan notifikasi BMTC pada perangkat ini?"
+          );
+
+        if(!confirmed){
+          return;
+        }
+
+        await window
+          .BMTC_PUSH
+          .unsubscribe();
+
+        alert(
+          "Notifikasi BMTC dinonaktifkan pada perangkat ini."
+        );
+
+      }else{
+        await window
+          .BMTC_PUSH
+          .subscribe();
+
+        alert(
+          "Notifikasi BMTC berhasil diaktifkan pada perangkat ini."
+        );
+      }
+
+      await refreshNotificationButton();
+
+    }catch(error){
+      alert(
+        error&&error.message
+          ? error.message
+          : "Gagal mengatur notifikasi."
+      );
+
+    }finally{
+      notificationButton.disabled=
+        false;
+    }
+  }
+);
+
 
 logoutButton.addEventListener("click",async()=>{
   await client.auth.signOut();currentSession=null;currentProfile=null;currentRoles=[];currentPermissions=new Set();

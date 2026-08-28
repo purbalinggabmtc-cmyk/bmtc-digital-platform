@@ -725,25 +725,41 @@
     }
 
 
-    function getAccessToken() {
-      return (
-        currentAdminAccess &&
-        currentAdminAccess.session &&
-        currentAdminAccess.session.access_token
-      ) || "";
-    }
+    async function getFreshAdminHeaders(
+      includeJson = false
+    ) {
+      const sessionResult =
+        await window.BMTC_ADMIN_AUTH
+          .client
+          .auth
+          .getSession();
 
+      const session =
+        sessionResult.data &&
+        sessionResult.data.session;
 
-    function getAdminHeaders() {
-      return {
+      if (!session) {
+        throw new Error(
+          "AUTH_REQUIRED"
+        );
+      }
+
+      const headers = {
         "Accept":
           "application/json",
         "apikey":
           SUPABASE_PUBLISHABLE_KEY,
         "Authorization":
           "Bearer " +
-          getAccessToken()
+          session.access_token
       };
+
+      if (includeJson) {
+        headers["Content-Type"] =
+          "application/json";
+      }
+
+      return headers;
     }
 
 
@@ -1051,132 +1067,10 @@
               "GET",
             cache:
               "no-store",
-            headers: {
-              "Accept":
-                "application/json",
-              "apikey":
-                SUPABASE_PUBLISHABLE_KEY,
-              "Authorization":
-                "Bearer " +
-                SUPABASE_PUBLISHABLE_KEY
-            }
-          }
-        );
-
-      const raw =
-        await response.text();
-
-      let data;
-
-      try {
-        data =
-          JSON.parse(
-            raw
-          );
-      } catch {
-        throw new Error(
-          "Server mengembalikan response yang tidak valid."
-        );
-      }
-
-      if (
-        !response.ok ||
-        !data ||
-        data.success !== true
-      ) {
-        throw new Error(
-          data &&
-          (
-            data.message ||
-            data.detail
-          )
-            ? (
-                data.message ||
-                data.detail
-              )
-            : "Gagal membaca status raffle."
-        );
-      }
-
-      return data;
-    }
-
-
-    async function loadState() {
-      hideMessage(
-        dashboardMessage
-      );
-
-      refreshButton.disabled =
-        true;
-
-      try {
-        const data =
-          await requestState();
-
-        renderState(
-          data
-        );
-
-      } catch (error) {
-        console.error(
-          "LOAD RAFFLE STATE ERROR:",
-          error
-        );
-
-        showMessage(
-          dashboardMessage,
-          "error",
-          error &&
-          error.message
-            ? error.message
-            : "Tidak dapat membaca status raffle."
-        );
-
-      } finally {
-        refreshButton.disabled =
-          false;
-      }
-    }
-
-
-    async function runAdminAction(
-      action
-    ) {
-      const permission =
-        action === "stop"
-          ? "raffle.stop"
-          : "raffle.start";
-
-      if (!hasPermission(permission)) {
-        denyPermission(
-          permission,
-          dashboardMessage
-        );
-        return;
-      }
-
-      drawButton.disabled =
-        true;
-
-      hideMessage(
-        dashboardMessage
-      );
-
-      try {
-        const response =
-          await fetch(
-            RAFFLE_SERVICE_URL +
-            "?action=" +
-            encodeURIComponent(
-              action
-            ),
-            {
-              method:
-                "POST",
-              headers: {
-                ...getAdminHeaders()
-              }
+            headers:
+                await getFreshAdminHeaders(
+                  false
+                )
             }
           );
 
@@ -1303,11 +1197,10 @@
             {
               method:
                 "POST",
-              headers: {
-                "Content-Type":
-                  "application/json",
-                ...getAdminHeaders()
-              },
+              headers:
+                await getFreshAdminHeaders(
+                  true
+                ),
               body:
                 JSON.stringify({
                   isVisible
@@ -1448,9 +1341,10 @@
             {
               method:
                 "POST",
-              headers: {
-                ...getAdminHeaders()
-              }
+              headers:
+                await getFreshAdminHeaders(
+                  false
+                )
             }
           );
 

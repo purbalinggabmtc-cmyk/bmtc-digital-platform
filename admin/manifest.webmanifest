@@ -1,0 +1,10 @@
+{
+  "name": "BMTC Admin",
+  "short_name": "BMTC Admin",
+  "start_url": "/admin/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#070707",
+  "theme_color": "#e00000",
+  "description": "BMTC Central Admin Dashboard"
+}

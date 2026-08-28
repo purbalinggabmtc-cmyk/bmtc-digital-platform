@@ -989,6 +989,9 @@
 
   </style>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/admin/js/admin-auth.js"></script>
+
 </head>
 
 <body>
@@ -1594,6 +1597,9 @@
 
     let filteredRows = [];
 
+    let currentAdminAccess =
+      null;
+
 
     /* =========================================================
        ELEMENTS
@@ -1663,6 +1669,169 @@
       document.getElementById(
         "tableBody"
       );
+
+
+    /* =========================================================
+       CENTRAL ADMIN AUTH / RBAC
+       ========================================================= */
+
+    function hasPermission(
+      permission
+    ) {
+
+      return Boolean(
+        currentAdminAccess &&
+        currentAdminAccess.permissions &&
+        currentAdminAccess.permissions.has(
+          permission
+        )
+      );
+
+    }
+
+
+    async function getFreshAdminHeaders() {
+
+      const sessionResult =
+        await window.BMTC_ADMIN_AUTH
+          .client
+          .auth
+          .getSession();
+
+
+      const session =
+        sessionResult.data &&
+        sessionResult.data.session;
+
+
+      if (!session) {
+
+        throw new Error(
+          "AUTH_REQUIRED"
+        );
+
+      }
+
+
+      return {
+
+        "Accept":
+          "application/json",
+
+        "apikey":
+          SUPABASE_PUBLISHABLE_KEY,
+
+        "Authorization":
+          "Bearer " +
+          session.access_token
+
+      };
+
+    }
+
+
+    function configureExportAccess() {
+
+      const allowed =
+        hasPermission(
+          "report.export"
+        );
+
+
+      printButton.disabled =
+        !allowed;
+
+
+      csvButton.disabled =
+        !allowed;
+
+
+      if (!allowed) {
+
+        printButton.title =
+          "Memerlukan permission report.export";
+
+
+        csvButton.title =
+          "Memerlukan permission report.export";
+
+      }
+
+    }
+
+
+    function denyExport() {
+
+      showError(
+        "Anda tidak memiliki hak akses report.export."
+      );
+
+    }
+
+
+    async function startCentralReportAdmin() {
+
+      hideError();
+
+
+      try {
+
+        currentAdminAccess =
+          await window.BMTC_ADMIN_AUTH
+            .requirePermission(
+              "report.view"
+            );
+
+
+        configureExportAccess();
+
+
+        await loadReport();
+
+      } catch (error) {
+
+        const message =
+          error &&
+          error.message
+            ? error.message
+            : "Akses report gagal.";
+
+
+        if (
+          message === "AUTH_REQUIRED"
+        ) {
+
+          window.BMTC_ADMIN_AUTH
+            .redirectToAdmin();
+
+          return;
+
+        }
+
+
+        if (
+          message === "FORBIDDEN"
+        ) {
+
+          document.body.innerHTML =
+            '<div style="padding:30px;color:#fff;font-family:Arial;background:#050505;min-height:100vh">' +
+            '<h2>Akses Ditolak</h2>' +
+            '<p>Akun Anda tidak memiliki permission <strong>report.view</strong>.</p>' +
+            '<p><a href="/admin/" style="color:#ff6b6b">Kembali ke Admin Dashboard</a></p>' +
+            '</div>';
+
+          return;
+
+        }
+
+
+        showError(
+          message
+        );
+
+      }
+
+    }
 
 
     /* =========================================================
@@ -1893,17 +2062,8 @@
 
               cache: "no-store",
 
-              headers: {
-                "Accept":
-                  "application/json",
-
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-
-                "Authorization":
-                  "Bearer " +
-                  SUPABASE_PUBLISHABLE_KEY
-              }
+              headers:
+                await getFreshAdminHeaders()
             }
           );
 
@@ -2529,6 +2689,19 @@
     function downloadCsv() {
 
       if (
+        !hasPermission(
+          "report.export"
+        )
+      ) {
+
+        denyExport();
+
+        return;
+
+      }
+
+
+      if (
         !filteredRows ||
         filteredRows.length === 0
       ) {
@@ -2657,6 +2830,19 @@
 
     function printReport() {
 
+      if (
+        !hasPermission(
+          "report.export"
+        )
+      ) {
+
+        denyExport();
+
+        return;
+
+      }
+
+
       document.getElementById(
         "printDate"
       ).textContent =
@@ -2710,7 +2896,7 @@
       "click",
       function() {
 
-        loadReport();
+        startCentralReportAdmin();
 
       }
     );

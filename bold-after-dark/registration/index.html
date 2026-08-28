@@ -450,25 +450,6 @@
     }
 
 
-    .whatsapp-link-button {
-      display: block;
-      width: 100%;
-      min-height: 48px;
-      padding: 13px 18px;
-      margin-top: 10px;
-      border-radius: 9px;
-      background: #128c4a;
-      color: #ffffff;
-      text-decoration: none;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 900;
-      line-height: 22px;
-    }
-
-    .whatsapp-link-button:hover {
-      background: #16a557;
-    }
 
     .footer {
       text-align: center;
@@ -1014,6 +995,24 @@
             </div>
           </div>
 
+          <div class="field">
+            <label for="lookupWhatsapp">
+              WhatsApp Saat Registrasi <span class="required">*</span>
+            </label>
+
+            <input
+              id="lookupWhatsapp"
+              type="tel"
+              inputmode="tel"
+              autocomplete="tel"
+              placeholder="Contoh: 081234567890"
+            >
+
+            <div class="field-help">
+              Digunakan untuk memverifikasi bahwa ID pembelian milik Anda.
+            </div>
+          </div>
+
           <button
             id="lookupPurchaseButton"
             class="btn-primary"
@@ -1111,26 +1110,39 @@
             </button>
 
             <div
-              id="whatsappConfirmationBox"
-              class="hidden"
-              style="margin-top:10px;"
+              id="paymentStatusBox"
+              class="purchase-result hidden"
+              style="margin-top:14px;"
             >
-              <a
-                id="confirmViaWhatsappLink"
-                class="whatsapp-link-button"
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                KONFIRMASI VIA WHATSAPP
-              </a>
+              <div class="purchase-result-label">
+                STATUS PEMBAYARAN
+              </div>
 
               <div
-                class="field-help"
-                style="margin-top:8px;"
+                id="paymentStatusText"
+                class="purchase-result-value"
+                style="font-size:15px;line-height:1.5;"
               >
-                Link WhatsApp ini baru dibuat setelah bukti pembayaran berhasil diunggah.
+                MENUNGGU VERIFIKASI ADMIN
               </div>
+
+              <div
+                id="paymentStatusHelp"
+                class="field-help"
+                style="margin-top:8px;color:#d8c76a;"
+              >
+                Anda tidak perlu melakukan konfirmasi melalui WhatsApp.
+                Status akan diperiksa otomatis selama halaman ini tetap terbuka.
+              </div>
+
+              <button
+                id="checkPaymentStatusButton"
+                class="btn-primary"
+                type="button"
+                style="width:100%;margin-top:12px;"
+              >
+                CEK STATUS SEKARANG
+              </button>
             </div>
           </div>
         </div>
@@ -1373,13 +1385,6 @@
     const WHATSAPP_NUMBER =
       "6282324854187";
 
-    /*
-     * Admin penerima konfirmasi pembayaran.
-     * Format internasional Indonesia: 62 + nomor tanpa angka 0 di depan.
-     */
-    const PAYMENT_ADMIN_WHATSAPP =
-      "6282324854187";
-
     let ACTIVE_PRODUCT_NAME =
       "Produk";
 
@@ -1391,6 +1396,18 @@
 
     const MAX_PAYMENT_PROOF_SIZE =
       5 * 1024 * 1024;
+
+    const PAYMENT_STATUS_POLL_INTERVAL =
+      10000;
+
+    const PAYMENT_STATUS_POLL_MAX_MS =
+      10 * 60 * 1000;
+
+    let paymentStatusPollTimer =
+      null;
+
+    let paymentStatusPollStartedAt =
+      0;
 
     const registrationForm =
       document.getElementById("registrationForm");
@@ -1482,6 +1499,9 @@
     const lookupPurchaseIdInput =
       document.getElementById("lookupPurchaseId");
 
+    const lookupWhatsappInput =
+      document.getElementById("lookupWhatsapp");
+
     const lookupPurchaseButton =
       document.getElementById("lookupPurchaseButton");
 
@@ -1521,11 +1541,17 @@
     const submitLookupPaymentProofButton =
       document.getElementById("submitLookupPaymentProof");
 
-    const whatsappConfirmationBox =
-      document.getElementById("whatsappConfirmationBox");
+    const paymentStatusBox =
+      document.getElementById("paymentStatusBox");
 
-    const confirmViaWhatsappLink =
-      document.getElementById("confirmViaWhatsappLink");
+    const paymentStatusText =
+      document.getElementById("paymentStatusText");
+
+    const paymentStatusHelp =
+      document.getElementById("paymentStatusHelp");
+
+    const checkPaymentStatusButton =
+      document.getElementById("checkPaymentStatusButton");
 
     const accessTypeInput =
       document.getElementById("accessType");
@@ -2125,7 +2151,23 @@ const submitButton =
         "BAD26-" +
         purchaseCode;
 
-      whatsappConfirmationBox.classList.add(
+      const lookupWhatsapp =
+        String(
+          lookupWhatsappInput.value || ""
+        ).trim();
+
+      if (!lookupWhatsapp) {
+        showMessage(
+          "error",
+          "Masukkan WhatsApp yang digunakan saat registrasi."
+        );
+
+        lookupWhatsappInput.focus();
+
+        return;
+      }
+
+      paymentStatusBox.classList.add(
         "hidden"
       );
 
@@ -2140,7 +2182,11 @@ const submitButton =
           await fetch(
             PURCHASE_SERVICE_URL +
             "?action=getPurchase&purchaseId=" +
-            encodeURIComponent(purchaseId),
+            encodeURIComponent(purchaseId) +
+            "&whatsapp=" +
+            encodeURIComponent(
+              lookupWhatsapp
+            ),
             {
               method: "GET",
               headers: {
@@ -2189,6 +2235,29 @@ const submitButton =
 
         const purchase =
           data.purchase || {};
+
+        setPaymentStatusDisplay(
+          purchase.paymentStatus ||
+          "PENDING",
+          String(
+            purchase.paymentStatus || ""
+          ).toUpperCase() === "REJECTED" &&
+          purchase.rejectionReason
+            ? "Alasan: " +
+              purchase.rejectionReason +
+              ". Silakan upload ulang bukti pembayaran."
+            : null
+        );
+
+        if (
+          String(
+            purchase.paymentStatus || ""
+          ).toUpperCase() === "PENDING"
+        ) {
+          schedulePaymentStatusPolling();
+        } else {
+          stopPaymentStatusPolling();
+        }
 
         lookupResultPurchaseId.textContent =
           purchase.purchaseId || "-";
@@ -2333,58 +2402,331 @@ const submitButton =
     }
 
 
-    function buildPaymentConfirmationMessage() {
+    function stopPaymentStatusPolling() {
+      if (paymentStatusPollTimer) {
+        clearTimeout(
+          paymentStatusPollTimer
+        );
+
+        paymentStatusPollTimer =
+          null;
+      }
+
+      paymentStatusPollStartedAt =
+        0;
+    }
+
+
+    function setPaymentStatusDisplay(
+      status,
+      message
+    ) {
+      const normalized =
+        String(status || "")
+          .toUpperCase();
+
+      paymentStatusBox.classList.remove(
+        "hidden"
+      );
+
+      if (normalized === "APPROVED") {
+        paymentStatusText.textContent =
+          "PEMBAYARAN DISETUJUI";
+
+        paymentStatusHelp.textContent =
+          message ||
+          "Pembayaran sudah disetujui. Nomor undian Anda tersedia.";
+
+        stopPaymentStatusPolling();
+
+        return;
+      }
+
+      if (normalized === "REJECTED") {
+        paymentStatusText.textContent =
+          "PEMBAYARAN DITOLAK";
+
+        paymentStatusHelp.textContent =
+          message ||
+          "Pembayaran ditolak. Periksa alasan penolakan dan upload ulang bukti yang benar.";
+
+        stopPaymentStatusPolling();
+
+        return;
+      }
+
+      paymentStatusText.textContent =
+        "MENUNGGU VERIFIKASI ADMIN";
+
+      paymentStatusHelp.textContent =
+        message ||
+        "Anda tidak perlu melakukan konfirmasi melalui WhatsApp. Status akan diperiksa otomatis selama halaman ini tetap terbuka.";
+    }
+
+
+    async function refreshPaymentStatus(
+      silent = false
+    ) {
       const purchaseId =
         lookupResultPurchaseId.textContent.trim();
 
-      const buyerName =
-        lookupResultName.textContent.trim();
+      const lookupWhatsapp =
+        String(
+          lookupWhatsappInput.value || ""
+        ).trim();
 
-      const quantity =
-        lookupResultQuantity.textContent.trim();
+      if (
+        !purchaseId ||
+        purchaseId === "-" ||
+        !lookupWhatsapp
+      ) {
+        if (!silent) {
+          showMessage(
+            "error",
+            "Silakan cek ID pembelian dan WhatsApp terlebih dahulu."
+          );
+        }
 
-      const total =
-        lookupResultTotal.textContent.trim();
+        return null;
+      }
 
-      const paymentMethod =
-        lookupResultPaymentMethod.textContent.trim();
+      if (!silent) {
+        checkPaymentStatusButton.disabled =
+          true;
 
-      return [
-        "Halo Admin BOLD AFTER DARK,",
-        "",
-        "Saya sudah mengirim bukti pembayaran.",
-        "",
-        "ID Pembelian / Ticket ID: " + purchaseId,
-        "Nama: " + buyerName,
-        "Jumlah: " + quantity,
-        "Total: " + total,
-        "Metode: " + paymentMethod,
-        "",
-        "Mohon dilakukan verifikasi."
-      ].join("\n");
+        checkPaymentStatusButton.textContent =
+          "MEMERIKSA...";
+      }
+
+      try {
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=getPurchase&purchaseId=" +
+            encodeURIComponent(
+              purchaseId
+            ) +
+            "&whatsapp=" +
+            encodeURIComponent(
+              lookupWhatsapp
+            ),
+            {
+              method: "GET",
+              cache: "no-store",
+              headers: {
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY
+              }
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Server mengembalikan response yang tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "Gagal memeriksa status pembayaran."
+          );
+        }
+
+        const purchase =
+          data.purchase || {};
+
+        const status =
+          String(
+            purchase.paymentStatus || ""
+          ).toUpperCase();
+
+        const raffleNumbers =
+          Array.isArray(data.coupons)
+            ? data.coupons
+                .map(function(coupon) {
+                  return String(
+                    coupon.coupon_code || ""
+                  ).trim();
+                })
+                .filter(Boolean)
+            : [];
+
+        if (
+          status === "APPROVED"
+        ) {
+          if (
+            raffleNumbers.length > 0
+          ) {
+            approvedRaffleNumbers.textContent =
+              raffleNumbers.join("\n");
+
+            approvedRaffleBox.classList.remove(
+              "hidden"
+            );
+          }
+
+          lookupPaymentProofInput
+            .closest(".field")
+            .classList.add(
+              "hidden"
+            );
+
+          submitLookupPaymentProofButton.classList.add(
+            "hidden"
+          );
+
+          setPaymentStatusDisplay(
+            "APPROVED",
+            "Pembayaran sudah disetujui. Nomor undian Anda tersedia di atas."
+          );
+
+          showMessage(
+            "success",
+            "Pembayaran sudah disetujui."
+          );
+
+        } else if (
+          status === "REJECTED"
+        ) {
+          approvedRaffleBox.classList.add(
+            "hidden"
+          );
+
+          lookupPaymentProofInput
+            .closest(".field")
+            .classList.remove(
+              "hidden"
+            );
+
+          submitLookupPaymentProofButton.classList.remove(
+            "hidden"
+          );
+
+          setPaymentStatusDisplay(
+            "REJECTED",
+            purchase.rejectionReason
+              ? "Alasan: " +
+                purchase.rejectionReason +
+                ". Silakan upload ulang bukti pembayaran."
+              : "Pembayaran ditolak. Silakan upload ulang bukti pembayaran."
+          );
+
+          showMessage(
+            "error",
+            purchase.rejectionReason
+              ? "Pembayaran ditolak: " +
+                purchase.rejectionReason
+              : "Pembayaran ditolak."
+          );
+
+        } else {
+          setPaymentStatusDisplay(
+            "PENDING"
+          );
+        }
+
+        return status;
+
+      } catch (error) {
+        console.error(
+          "PAYMENT STATUS ERROR:",
+          error
+        );
+
+        if (!silent) {
+          showMessage(
+            "error",
+            error &&
+            error.message
+              ? error.message
+              : "Gagal memeriksa status pembayaran."
+          );
+        }
+
+        return null;
+
+      } finally {
+        if (!silent) {
+          checkPaymentStatusButton.disabled =
+            false;
+
+          checkPaymentStatusButton.textContent =
+            "CEK STATUS SEKARANG";
+        }
+      }
     }
 
 
-    function buildWhatsAppConfirmationUrl() {
-      const message =
-        buildPaymentConfirmationMessage();
+    function schedulePaymentStatusPolling() {
+      stopPaymentStatusPolling();
 
-      return (
-        "https://wa.me/" +
-        PAYMENT_ADMIN_WHATSAPP +
-        "?text=" +
-        encodeURIComponent(message)
-      );
-    }
+      paymentStatusPollStartedAt =
+        Date.now();
 
+      async function poll() {
+        if (
+          Date.now() -
+            paymentStatusPollStartedAt >
+          PAYMENT_STATUS_POLL_MAX_MS
+        ) {
+          stopPaymentStatusPolling();
 
-    function preparePaymentConfirmationWhatsAppLink() {
-      confirmViaWhatsappLink.href =
-        buildWhatsAppConfirmationUrl();
+          paymentStatusHelp.textContent =
+            "Pemeriksaan otomatis dihentikan setelah 10 menit. Gunakan tombol CEK STATUS SEKARANG untuk memeriksa kembali.";
 
-      whatsappConfirmationBox.classList.remove(
-        "hidden"
-      );
+          return;
+        }
+
+        const status =
+          await refreshPaymentStatus(
+            true
+          );
+
+        if (
+          status === "APPROVED" ||
+          status === "REJECTED"
+        ) {
+          return;
+        }
+
+        paymentStatusPollTimer =
+          setTimeout(
+            poll,
+            PAYMENT_STATUS_POLL_INTERVAL
+          );
+      }
+
+      paymentStatusPollTimer =
+        setTimeout(
+          poll,
+          PAYMENT_STATUS_POLL_INTERVAL
+        );
     }
 
 
@@ -2393,6 +2735,11 @@ const submitButton =
 
       const purchaseId =
         lookupResultPurchaseId.textContent.trim();
+
+      const lookupWhatsapp =
+        String(
+          lookupWhatsappInput.value || ""
+        ).trim();
 
       const file =
         lookupPaymentProofInput.files &&
@@ -2408,6 +2755,17 @@ const submitButton =
           "error",
           "Silakan cek ID pembelian terlebih dahulu."
         );
+        return;
+      }
+
+      if (!lookupWhatsapp) {
+        showMessage(
+          "error",
+          "Masukkan WhatsApp yang digunakan saat registrasi."
+        );
+
+        lookupWhatsappInput.focus();
+
         return;
       }
 
@@ -2463,6 +2821,11 @@ const submitButton =
         formData.append(
           "purchaseId",
           purchaseId
+        );
+
+        formData.append(
+          "whatsapp",
+          lookupWhatsapp
         );
 
         formData.append(
@@ -2525,13 +2888,18 @@ const submitButton =
 
         showMessage(
           "success",
-          "Bukti pembayaran berhasil dikirim. Silakan konfirmasi ke admin melalui WhatsApp."
+          "Bukti pembayaran berhasil dikirim. Anda tidak perlu melakukan konfirmasi melalui WhatsApp."
         );
 
         lookupPaymentProofInput.value =
           "";
 
-        preparePaymentConfirmationWhatsAppLink();
+        setPaymentStatusDisplay(
+          "PENDING",
+          "Bukti pembayaran sudah diterima dan sedang menunggu verifikasi admin. Status akan diperiksa otomatis."
+        );
+
+        schedulePaymentStatusPolling();
 
       } catch (error) {
         console.error(
@@ -2571,13 +2939,24 @@ const submitButton =
       paymentLookupBox.style.display =
         "none";
 
+      lookupWhatsappInput.value =
+        "";
+
       lookupPurchaseDetails.classList.add(
         "hidden"
       );
 
-      whatsappConfirmationBox.classList.add(
+      stopPaymentStatusPolling();
+
+      paymentStatusBox.classList.add(
         "hidden"
       );
+
+      paymentStatusText.textContent =
+        "MENUNGGU VERIFIKASI ADMIN";
+
+      paymentStatusHelp.textContent =
+        "Anda tidak perlu melakukan konfirmasi melalui WhatsApp. Status akan diperiksa otomatis selama halaman ini tetap terbuka.";
 
       purchaseDetailResultBox.classList.add(
         "hidden"
@@ -4184,9 +4563,25 @@ boldRidersId:
     );
 
 
+    checkPaymentStatusButton.addEventListener(
+      "click",
+      function() {
+        refreshPaymentStatus(
+          false
+        );
+      }
+    );
+
+
     saveRaffleNumbersButton.addEventListener(
       "click",
       saveRaffleNumbersAsJpg
+    );
+
+
+    window.addEventListener(
+      "beforeunload",
+      stopPaymentStatusPolling
     );
 
 

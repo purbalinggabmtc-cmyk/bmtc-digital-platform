@@ -1353,7 +1353,7 @@
     "use strict";
 
     window.BOLD_AFTER_DARK_REGISTRATION_VERSION =
-      "V7-STATUS-BUTTON-FIX";
+      "V8-PAYMENT-RECOVERY";
 
     console.info(
       "BOLD AFTER DARK REGISTRATION:",
@@ -2719,6 +2719,183 @@ const submitButton =
     }
 
 
+    function getPaymentProofRecoveryStorageKey(
+      purchaseId
+    ) {
+      return (
+        "bmtc:payment-proof-recovery:" +
+        String(purchaseId || "")
+          .trim()
+          .toUpperCase()
+      );
+    }
+
+
+    function getPaymentProofFileSignature(
+      file
+    ) {
+      return [
+        file ? file.name : "",
+        file ? file.size : 0,
+        file ? file.type : "",
+        file ? file.lastModified : 0
+      ].join("|");
+    }
+
+
+    function getOrCreatePaymentProofRequestId(
+      purchaseId,
+      file
+    ) {
+      const key =
+        getPaymentProofRecoveryStorageKey(
+          purchaseId
+        );
+
+      const signature =
+        getPaymentProofFileSignature(
+          file
+        );
+
+      try {
+        const storedRaw =
+          sessionStorage.getItem(
+            key
+          );
+
+        if (storedRaw) {
+          const stored =
+            JSON.parse(storedRaw);
+
+          if (
+            stored &&
+            stored.requestId &&
+            stored.fileSignature ===
+              signature
+          ) {
+            return stored.requestId;
+          }
+        }
+      } catch (error) {
+        console.warn(
+          "PAYMENT RECOVERY STORAGE READ ERROR:",
+          error
+        );
+      }
+
+      const requestId =
+        crypto.randomUUID();
+
+      try {
+        sessionStorage.setItem(
+          key,
+          JSON.stringify({
+            requestId:
+              requestId,
+            fileSignature:
+              signature,
+            createdAt:
+              new Date()
+                .toISOString()
+          })
+        );
+      } catch (error) {
+        console.warn(
+          "PAYMENT RECOVERY STORAGE WRITE ERROR:",
+          error
+        );
+      }
+
+      return requestId;
+    }
+
+
+    async function recoverPaymentProofSubmission(
+      purchaseId,
+      requestId
+    ) {
+      try {
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=getPurchase&purchaseId=" +
+            encodeURIComponent(
+              purchaseId
+            ),
+            {
+              method: "GET",
+              cache: "no-store",
+              headers: {
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY
+              }
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data = null;
+
+        try {
+          data = raw
+            ? JSON.parse(raw)
+            : null;
+        } catch {
+          return {
+            recovered: false,
+            data: null
+          };
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          return {
+            recovered: false,
+            data: data
+          };
+        }
+
+        const purchase =
+          data.purchase || {};
+
+        const recovered =
+          Boolean(
+            purchase.hasPaymentProof &&
+            purchase.paymentProofRequestId &&
+            purchase.paymentProofRequestId ===
+              requestId
+          );
+
+        return {
+          recovered:
+            recovered,
+          data:
+            data
+        };
+
+      } catch (error) {
+        console.warn(
+          "PAYMENT RECOVERY LOOKUP ERROR:",
+          error
+        );
+
+        return {
+          recovered: false,
+          data: null
+        };
+      }
+    }
+
+
     async function submitLookupPaymentProof() {
       hideMessage();
 
@@ -2781,6 +2958,12 @@ const submitButton =
         return;
       }
 
+      const paymentProofRequestId =
+        getOrCreatePaymentProofRequestId(
+          purchaseId,
+          file
+        );
+
       submitLookupPaymentProofButton.disabled =
         true;
 
@@ -2794,6 +2977,11 @@ const submitButton =
         formData.append(
           "purchaseId",
           purchaseId
+        );
+
+        formData.append(
+          "requestId",
+          paymentProofRequestId
         );
 
         formData.append(
@@ -2856,7 +3044,9 @@ const submitButton =
 
         showMessage(
           "success",
-          "Bukti pembayaran berhasil dikirim. Anda tidak perlu melakukan konfirmasi melalui WhatsApp."
+          data && data.recovered === true
+            ? "Bukti pembayaran sebelumnya sudah tersimpan. Sistem berhasil memulihkan status tanpa membuat upload duplikat."
+            : "Bukti pembayaran berhasil dikirim."
         );
 
         lookupPaymentProofInput.value =
@@ -2901,13 +3091,56 @@ const submitButton =
           error
         );
 
-        showMessage(
-          "error",
-          error &&
-          error.message
-            ? error.message
-            : "Upload bukti pembayaran gagal."
+        // UNKNOWN STATE RECOVERY:
+        // sebelum meminta user upload ulang, cek apakah request tadi sebenarnya
+        // sudah committed di server tetapi response hilang/timeout.
+        setPaymentStatusDisplay(
+          "PENDING",
+          "Koneksi terputus saat menerima hasil upload. Sistem sedang memastikan apakah bukti pembayaran sudah tersimpan."
         );
+
+        const recovery =
+          await recoverPaymentProofSubmission(
+            purchaseId,
+            paymentProofRequestId
+          );
+
+        if (recovery.recovered) {
+          lookupPaymentProofInput.value =
+            "";
+
+          showMessage(
+            "success",
+            "Koneksi sempat terputus, tetapi bukti pembayaran sudah tersimpan. Tidak perlu upload ulang."
+          );
+
+          const recoveredStatus =
+            await refreshPaymentStatus(
+              true
+            );
+
+          if (
+            recoveredStatus !== "APPROVED" &&
+            recoveredStatus !== "REJECTED"
+          ) {
+            schedulePaymentStatusPolling();
+          }
+
+        } else {
+          showMessage(
+            "error",
+            "Hasil upload belum dapat dipastikan. Tekan SUBMIT BUKTI PEMBAYARAN lagi dengan file yang sama. Request ID yang sama akan dipakai sehingga retry tidak membuat duplikat."
+          );
+
+          paymentStatusBox.classList.remove(
+            "hidden"
+          );
+          checkPaymentStatusButton.classList.remove(
+            "hidden"
+          );
+          checkPaymentStatusButton.style.display =
+            "block";
+        }
 
       } finally {
         submitLookupPaymentProofButton.disabled =

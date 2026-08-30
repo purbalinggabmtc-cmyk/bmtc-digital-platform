@@ -1290,6 +1290,17 @@
                 >
                   REVIEW
                 </button>
+
+                <button
+                  type="button"
+                  class="btn btn-dark delete-button"
+                  data-purchase-id="${escapeHtml(
+                    row.purchaseId
+                  )}"
+                  title="Hapus data pembelian secara permanen"
+                >
+                  HAPUS
+                </button>
               </div>
             </td>
           `;
@@ -1315,6 +1326,28 @@
                   );
 
                 openReviewModal(
+                  purchaseId
+                );
+              }
+            );
+          }
+        );
+
+      document
+        .querySelectorAll(
+          ".delete-button"
+        )
+        .forEach(
+          function(button) {
+            button.addEventListener(
+              "click",
+              function() {
+                const purchaseId =
+                  button.getAttribute(
+                    "data-purchase-id"
+                  );
+
+                deletePurchase(
                   purchaseId
                 );
               }
@@ -2256,6 +2289,144 @@
       }
     }
 
+
+
+    async function deletePurchase(
+      purchaseId
+    ) {
+      if (
+        !requireLocalPermission(
+          "payment.delete",
+          dashboardMessage
+        )
+      ) {
+        return;
+      }
+
+      const purchase =
+        purchases.find(
+          function(row) {
+            return (
+              row.purchaseId ===
+              purchaseId
+            );
+          }
+        ) || null;
+
+      const buyerName =
+        purchase &&
+        purchase.buyerName
+          ? purchase.buyerName
+          : "-";
+
+      const confirmed =
+        window.confirm(
+          "PERINGATAN!\n\n" +
+          "Data pembelian akan dihapus PERMANEN.\n\n" +
+          "ID: " +
+          purchaseId +
+          "\n" +
+          "Nama: " +
+          buyerName +
+          "\n\n" +
+          "Data purchase, kupon terkait, dan file bukti pembayaran akan dihapus.\n\n" +
+          "Tindakan ini tidak dapat dibatalkan.\n\n" +
+          "Lanjutkan?"
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      const secondConfirmed =
+        window.confirm(
+          "KONFIRMASI TERAKHIR\n\n" +
+          "Ketik persetujuan Anda dengan klik OK untuk menghapus " +
+          purchaseId +
+          " secara permanen."
+        );
+
+      if (!secondConfirmed) {
+        return;
+      }
+
+      try {
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=adminDeletePurchase",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type":
+                  "application/json",
+                ...getAdminHeaders()
+              },
+              body:
+                JSON.stringify({
+                  purchaseId
+                })
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Server mengembalikan response JSON yang tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "Gagal menghapus data pembelian."
+          );
+        }
+
+        showMessage(
+          dashboardMessage,
+          "success",
+          data.message ||
+          "Data pembelian berhasil dihapus."
+        );
+
+        await loadPurchases();
+
+      } catch (error) {
+        console.error(
+          "PAYMENT DELETE ERROR:",
+          error
+        );
+
+        showMessage(
+          dashboardMessage,
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Gagal menghapus data pembelian."
+        );
+      }
+    }
 
     async function startCentralPaymentAdmin() {
 

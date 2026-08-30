@@ -181,6 +181,16 @@
       border: 1px solid #444;
     }
 
+    .delete-all-button {
+      background: #4a0b0b;
+      color: #ffffff;
+      border: 1px solid #a40000;
+    }
+
+    .delete-all-button:hover {
+      background: #7a0000;
+    }
+
     .btn-green {
       background: #15934a;
       color: #fff;
@@ -568,6 +578,14 @@
         </button>
 
         <button
+          id="deleteAllButton"
+          class="btn btn-dark delete-all-button"
+          type="button"
+        >
+          HAPUS SEMUA DATA
+        </button>
+
+        <button
           id="logoutButton"
           class="btn btn-dark"
           type="button"
@@ -858,6 +876,9 @@
 
     const refreshButton =
       document.getElementById("refreshButton");
+
+    const deleteAllButton =
+      document.getElementById("deleteAllButton");
 
     const logoutButton =
       document.getElementById("logoutButton");
@@ -2428,6 +2449,144 @@
       }
     }
 
+    async function deleteAllPurchases() {
+      if (
+        !requireLocalPermission(
+          "payment.delete_all",
+          dashboardMessage
+        )
+      ) {
+        return;
+      }
+
+      const total =
+        Array.isArray(purchases)
+          ? purchases.length
+          : 0;
+
+      if (total === 0) {
+        showMessage(
+          dashboardMessage,
+          "error",
+          "Tidak ada data pembelian yang dapat dihapus."
+        );
+        return;
+      }
+
+      const confirmed =
+        window.confirm(
+          "PERINGATAN KERAS!\n\n" +
+          "Anda akan menghapus SEMUA data pembelian yang sedang tersedia pada sistem.\n\n" +
+          "Jumlah data saat ini: " +
+          total +
+          "\n\n" +
+          "Data purchase, coupon terkait, dan bukti pembayaran akan dihapus.\n\n" +
+          "Data registrasi, akun admin, role/permission, dan konfigurasi produk tidak ikut dihapus.\n\n" +
+          "Tindakan ini TIDAK DAPAT dibatalkan.\n\n" +
+          "Lanjutkan?"
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      const secondConfirmed =
+        window.confirm(
+          "KONFIRMASI TERAKHIR\n\n" +
+          "Anda benar-benar ingin menghapus SELURUH data pembelian?\n\n" +
+          "Tekan OK untuk melanjutkan penghapusan permanen."
+        );
+
+      if (!secondConfirmed) {
+        return;
+      }
+
+      deleteAllButton.disabled = true;
+      deleteAllButton.textContent = "MENGHAPUS...";
+
+      try {
+        const response =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=adminDeleteAllPurchases",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type":
+                  "application/json",
+                ...getAdminHeaders()
+              },
+              body:
+                JSON.stringify({
+                  confirm: true
+                })
+            }
+          );
+
+        const raw =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(raw);
+        } catch {
+          throw new Error(
+            "Server mengembalikan response JSON yang tidak valid."
+          );
+        }
+
+        if (
+          !response.ok ||
+          !data ||
+          data.success !== true
+        ) {
+          throw new Error(
+            data &&
+            (
+              data.message ||
+              data.detail
+            )
+              ? (
+                  data.message ||
+                  data.detail
+                )
+              : "Gagal menghapus seluruh data pembelian."
+          );
+        }
+
+        showMessage(
+          dashboardMessage,
+          "success",
+          data.message ||
+          "Seluruh data pembelian berhasil dihapus."
+        );
+
+        await loadPurchases();
+
+      } catch (error) {
+        console.error(
+          "DELETE ALL PURCHASES ERROR:",
+          error
+        );
+
+        showMessage(
+          dashboardMessage,
+          "error",
+          error &&
+          error.message
+            ? error.message
+            : "Gagal menghapus seluruh data pembelian."
+        );
+
+      } finally {
+        deleteAllButton.disabled = false;
+        deleteAllButton.textContent =
+          "HAPUS SEMUA DATA";
+      }
+    }
+
     async function startCentralPaymentAdmin() {
 
       hideMessage(
@@ -2536,6 +2695,11 @@
     refreshButton.addEventListener(
       "click",
       loadPurchases
+    );
+
+    deleteAllButton.addEventListener(
+      "click",
+      deleteAllPurchases
     );
 
 

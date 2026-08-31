@@ -6,35 +6,35 @@
 <title>BOLD AFTER DARK — PEMBELIAN & PRE ORDER</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#260000 0%,#0b0b0b 38%,#050505 72%,#000 100%);color:#fff;font-family:Arial,Helvetica,sans-serif;padding:12px}
-.container{max-width:760px;margin:0 auto}
+:root{--red:#e00000;--bg:#050505;--card:#111;--border:#303030;--text:#fff;--muted:#999}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#260000 0%,#0b0b0b 38%,#050505 72%,#000 100%);color:var(--text);font-family:Arial,Helvetica,sans-serif;padding:12px}
+.container{width:100%;max-width:760px;margin:0 auto}
 .header{text-align:center;margin-bottom:18px}
-.brand{font-size:25px;font-weight:900;letter-spacing:3px}
-.red{color:#e00000}
+.brand{font-size:25px;font-weight:900;letter-spacing:3px}.red{color:var(--red)}
 .subtitle{margin-top:6px;color:#aaa;font-size:11px;font-weight:700;letter-spacing:2px}
-.card{background:#111;border:1px solid #303030;border-radius:14px;padding:15px;margin-bottom:14px}
+.card{background:rgba(17,17,17,.97);border:1px solid var(--border);border-radius:14px;padding:15px;margin-bottom:14px}
 .title{font-size:15px;font-weight:900;margin-bottom:7px}
-.help{color:#999;font-size:11px;line-height:1.55}
+.help{color:var(--muted);font-size:11px;line-height:1.55}
 .product{margin-top:12px;padding:14px;border:1px solid #383838;border-radius:12px;background:#0d0d0d}
 .product-head{display:flex;gap:10px;align-items:flex-start}
-.product-head input[type=checkbox]{width:20px;height:20px;margin-top:1px;accent-color:#e00000}
+.product-head input[type=checkbox]{width:20px;height:20px;margin-top:1px;accent-color:var(--red);flex:0 0 20px}
 .product-name{font-size:14px;font-weight:900}
 .product-body{display:none;margin-top:13px}
 .product.selected .product-body{display:block}
 input[type=number]{width:100%;min-height:40px;margin-top:6px;padding:8px 10px;border:1px solid #444;border-radius:8px;background:#171717;color:#fff}
-.shirt-group{margin-top:12px;border:1px solid #2c2c2c;border-radius:10px;padding:11px;background:#111}
+.shirt-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.shirt-group{border:1px solid #2c2c2c;border-radius:10px;padding:11px;background:#111}
 .shirt-group-title{font-size:12px;font-weight:900;margin-bottom:7px}
-.shirt-row{display:grid;grid-template-columns:55px 1fr;gap:10px;align-items:center;margin-top:6px}
+.shirt-row{display:grid;grid-template-columns:48px minmax(0,1fr);gap:9px;align-items:center;margin-top:6px}
 .size-label{font-size:11px;font-weight:800}
 .summary{margin-top:13px;background:#0d0d0d;border:1px solid #333;border-radius:10px;padding:12px}
 .summary-row{display:flex;justify-content:space-between;gap:10px;padding:4px 0;font-size:12px}
 .summary-total{border-top:1px solid #333;margin-top:7px;padding-top:9px;font-weight:900;font-size:14px}
 .message{display:none;padding:11px 12px;border-radius:9px;margin-bottom:12px;font-size:12px;line-height:1.5}
-.message.show{display:block}
-.message.error{background:#300000;border:1px solid #8c0000;color:#ff9a9a}
+.message.show{display:block}.message.error{background:#300000;border:1px solid #8c0000;color:#ff9a9a}
 .btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;border:0;border-radius:8px;font-weight:900;text-decoration:none;cursor:pointer;padding:10px 14px}
-.btn-red{background:#e00000;color:#fff}.btn-dark{background:#242424;color:#fff;border:1px solid #444;margin-top:9px}
-@media(max-width:600px){body{padding:9px}.brand{font-size:21px}.card{padding:13px}}
+.btn-red{background:var(--red);color:#fff}.btn-dark{background:#242424;color:#fff;border:1px solid #444;margin-top:9px}
+@media(max-width:600px){body{padding:9px}.brand{font-size:21px}.card{padding:13px}.shirt-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -48,13 +48,14 @@ input[type=number]{width:100%;min-height:40px;margin-top:6px;padding:8px 10px;bo
 
   <div class="card">
     <div class="title">PEMBELIAN LA BOLD 12</div>
+    <div class="help">
+      Beli 1 BUNGKUS LA BOLD 12 mendapatkan 1 kupon undian setelah pembayaran dinyatakan lunas/APPROVED.
+    </div>
+
     <div class="product" id="laProduct">
       <div class="product-head">
         <input id="laCheck" type="checkbox">
-        <div>
-          <div class="product-name">PEMBELIAN LA BOLD 12</div>
-          <div class="help">Beli 1 BUNGKUS LA BOLD 12 mendapatkan 1 kupon undian setelah pembayaran lunas/APPROVED.</div>
-        </div>
+        <div class="product-name">PEMBELIAN LA BOLD 12</div>
       </div>
       <div class="product-body">
         <label for="laQuantity">Jumlah BUNGKUS</label>
@@ -67,50 +68,50 @@ input[type=number]{width:100%;min-height:40px;margin-top:6px;padding:8px 10px;bo
   <div class="card">
     <div class="title">PRE ORDER KAOS BOLD AFTER DARK</div>
     <div class="help">
-      Pre Order dibuka sampai 18 September 2026. Beli 1 PCS kaos mendapatkan 2 kupon undian setelah pembayaran lunas/APPROVED.
+      Pre Order dibuka sampai 18 September 2026.
+      Beli 1 PCS kaos mendapatkan 2 kupon undian setelah pembayaran dinyatakan lunas/APPROVED.
     </div>
 
     <div class="product" id="shirtProduct">
       <div class="product-head">
         <input id="shirtCheck" type="checkbox">
-        <div>
-          <div class="product-name">PRE ORDER KAOS BOLD AFTER DARK</div>
-          <div class="help">Lengan pendek dan lengan panjang dapat dipesan bersamaan.</div>
-        </div>
+        <div class="product-name">PRE ORDER KAOS BOLD AFTER DARK</div>
       </div>
 
       <div class="product-body">
-        <div class="shirt-group">
-          <div class="shirt-group-title">LENGAN PENDEK</div>
-          S <input class="shirtQty" data-sleeve="SHORT" data-size="S" type="number" min="0" max="100" value="0">
-          M <input class="shirtQty" data-sleeve="SHORT" data-size="M" type="number" min="0" max="100" value="0">
-          L <input class="shirtQty" data-sleeve="SHORT" data-size="L" type="number" min="0" max="100" value="0">
-          XL <input class="shirtQty" data-sleeve="SHORT" data-size="XL" type="number" min="0" max="100" value="0">
-          2XL <input class="shirtQty" data-sleeve="SHORT" data-size="2XL" type="number" min="0" max="100" value="0">
-          3XL <input class="shirtQty" data-sleeve="SHORT" data-size="3XL" type="number" min="0" max="100" value="0">
-          4XL <input class="shirtQty" data-sleeve="SHORT" data-size="4XL" type="number" min="0" max="100" value="0">
-        </div>
+        <div class="shirt-grid">
+          <div class="shirt-group">
+            <div class="shirt-group-title">LENGAN PENDEK</div>
+            <div class="shirt-row" data-sleeve="SHORT" data-size="S"><span class="size-label">S</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+            <div class="shirt-row" data-sleeve="SHORT" data-size="M"><span class="size-label">M</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+            <div class="shirt-row" data-sleeve="SHORT" data-size="L"><span class="size-label">L</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+            <div class="shirt-row" data-sleeve="SHORT" data-size="XL"><span class="size-label">XL</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+            <div class="shirt-row" data-sleeve="SHORT" data-size="2XL"><span class="size-label">2XL</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+            <div class="shirt-row" data-sleeve="SHORT" data-size="3XL"><span class="size-label">3XL</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+            <div class="shirt-row" data-sleeve="SHORT" data-size="4XL"><span class="size-label">4XL</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+          </div>
 
-        <div class="shirt-group">
-          <div class="shirt-group-title">LENGAN PANJANG</div>
-          S <input class="shirtQty" data-sleeve="LONG" data-size="S" type="number" min="0" max="100" value="0">
-          M <input class="shirtQty" data-sleeve="LONG" data-size="M" type="number" min="0" max="100" value="0">
-          L <input class="shirtQty" data-sleeve="LONG" data-size="L" type="number" min="0" max="100" value="0">
-          XL <input class="shirtQty" data-sleeve="LONG" data-size="XL" type="number" min="0" max="100" value="0">
-          2XL <input class="shirtQty" data-sleeve="LONG" data-size="2XL" type="number" min="0" max="100" value="0">
-          3XL <input class="shirtQty" data-sleeve="LONG" data-size="3XL" type="number" min="0" max="100" value="0">
-          4XL <input class="shirtQty" data-sleeve="LONG" data-size="4XL" type="number" min="0" max="100" value="0">
+          <div class="shirt-group">
+            <div class="shirt-group-title">LENGAN PANJANG</div>
+            <div class="shirt-row" data-sleeve="LONG" data-size="S"><span class="size-label">S</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+            <div class="shirt-row" data-sleeve="LONG" data-size="M"><span class="size-label">M</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+            <div class="shirt-row" data-sleeve="LONG" data-size="L"><span class="size-label">L</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+            <div class="shirt-row" data-sleeve="LONG" data-size="XL"><span class="size-label">XL</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+            <div class="shirt-row" data-sleeve="LONG" data-size="2XL"><span class="size-label">2XL</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+            <div class="shirt-row" data-sleeve="LONG" data-size="3XL"><span class="size-label">3XL</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+            <div class="shirt-row" data-sleeve="LONG" data-size="4XL"><span class="size-label">4XL</span><input class="shirtQty" type="number" min="0" max="100" value="0"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <div class="title">RINGKASAN</div>
+    <div class="title">RINGKASAN PESANAN</div>
     <div class="summary">
       <div class="summary-row"><span>Total Pembelian</span><strong id="totalText">Rp 0</strong></div>
       <div class="summary-row"><span>Total Kupon</span><strong id="couponText">0</strong></div>
-      <div class="summary-row summary-total"><span>Item</span><span id="itemText">Belum memilih produk.</span></div>
+      <div class="summary-total" id="itemText">Belum memilih produk.</div>
     </div>
   </div>
 
@@ -124,205 +125,418 @@ input[type=number]{width:100%;min-height:40px;margin-top:6px;padding:8px 10px;bo
 <script>
 "use strict";
 
-const SUPABASE_URL="https://yrvnmmascklkuzpjkwxn.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY="sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
-const SERVICE=SUPABASE_URL+"/functions/v1/purchase-service";
-const KEY="boldAfterDarkPurchaseSummary";
-const CUTOFF=new Date("2026-09-19T00:00:00+07:00");
+const SUPABASE_URL =
+  "https://yrvnmmascklkuzpjkwxn.supabase.co";
 
-const laProduct=document.getElementById("laProduct");
-const shirtProduct=document.getElementById("shirtProduct");
-const laCheck=document.getElementById("laCheck");
-const shirtCheck=document.getElementById("shirtCheck");
-const laQuantity=document.getElementById("laQuantity");
-const totalText=document.getElementById("totalText");
-const couponText=document.getElementById("couponText");
-const itemText=document.getElementById("itemText");
-const message=document.getElementById("message");
-const saveButton=document.getElementById("saveButton");
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
 
-let laPrice=0;
+const SERVICE =
+  SUPABASE_URL +
+  "/functions/v1/purchase-service";
 
-function money(v){
-  return "Rp "+Number(v||0).toLocaleString("id-ID");
+const KEY =
+  "boldAfterDarkPurchaseSummary";
+
+const CUTOFF =
+  new Date(
+    "2026-09-19T00:00:00+07:00"
+  );
+
+const laProduct =
+  document.getElementById("laProduct");
+const shirtProduct =
+  document.getElementById("shirtProduct");
+const laCheck =
+  document.getElementById("laCheck");
+const shirtCheck =
+  document.getElementById("shirtCheck");
+const laQuantity =
+  document.getElementById("laQuantity");
+const totalText =
+  document.getElementById("totalText");
+const couponText =
+  document.getElementById("couponText");
+const itemText =
+  document.getElementById("itemText");
+const message =
+  document.getElementById("message");
+const saveButton =
+  document.getElementById("saveButton");
+
+let laPrice = 0;
+
+function money(value) {
+  return "Rp " +
+    Number(value || 0)
+      .toLocaleString("id-ID");
 }
 
-function error(text){
-  message.textContent=text;
-  message.className="message show error";
+function showError(text) {
+  message.textContent = text;
+  message.className =
+    "message show error";
 }
 
-function shirtQty(){
+function getShirtRows() {
   return Array.from(
-    document.querySelectorAll(".shirtQty")
-  ).reduce(
-    (sum,input)=>sum+Math.max(0,Number(input.value||0)),
-    0
+    document.querySelectorAll(
+      ".shirt-row"
+    )
   );
 }
 
-function selectedItems(){
-  const items=[];
-  if(laCheck.checked){
-    const q=Math.max(1,Math.floor(Number(laQuantity.value||1)));
-    items.push({
-      itemType:"LA_BOLD_12",
-      variant:"STANDARD",
-      size:null,
-      sleeveType:null,
-      quantity:q,
-      label:"LA BOLD 12",
-      subtotal:q*laPrice
-    });
-  }
+function getShirtQuantity() {
+  return getShirtRows().reduce(
+    function(sum, row) {
+      const input =
+        row.querySelector(
+          ".shirtQty"
+        );
 
-  if(shirtCheck.checked){
-    Array.from(
-      document.querySelectorAll(".shirtQty")
-    ).forEach(input=>{
-      const q=Math.floor(Number(input.value||0));
-      if(q>0){
-        items.push({
-          itemType:"BOLD_AFTER_DARK_SHIRT",
-          variant:"SHIRT",
-          size:input.dataset.size||null,
-          sleeveType:input.dataset.sleeve||null,
-          quantity:q,
-          label:
-            "Kaos "+
-            (
-              input.dataset.sleeve==="LONG"
-              ? "Lengan Panjang "
-              : "Lengan Pendek "
-            )+
-            input.dataset.size,
-          subtotal:0
-        });
-      }
-    });
-  }
-  return items;
-}
-
-function calculate(){
-  const items=selectedItems();
-  const total=items.reduce(
-    (sum,item)=>sum+Number(item.subtotal||0),
-    0
-  );
-  const coupons=items.reduce(
-    (sum,item)=>{
-      return sum+
-        (
-          item.itemType==="LA_BOLD_12"
-          ? item.quantity
-          : item.quantity*2
+      return sum +
+        Math.max(
+          0,
+          Math.floor(
+            Number(
+              input.value || 0
+            )
+          )
         );
     },
     0
   );
+}
 
-  totalText.textContent=money(total);
-  couponText.textContent=String(coupons);
+function collectItems() {
+  const items = [];
 
-  itemText.textContent=
+  if (laCheck.checked) {
+    const qty =
+      Math.max(
+        1,
+        Math.floor(
+          Number(
+            laQuantity.value || 1
+          )
+        )
+      );
+
+    items.push({
+      itemType:
+        "LA_BOLD_12",
+      variant:
+        "STANDARD",
+      size: null,
+      sleeveType: null,
+      quantity: qty,
+      label:
+        "LA BOLD 12",
+      subtotal:
+        qty * laPrice
+    });
+  }
+
+  if (shirtCheck.checked) {
+    getShirtRows().forEach(
+      function(row) {
+        const qty =
+          Math.floor(
+            Number(
+              row.querySelector(
+                ".shirtQty"
+              ).value || 0
+            )
+          );
+
+        if (qty <= 0) return;
+
+        items.push({
+          itemType:
+            "BOLD_AFTER_DARK_SHIRT",
+          variant:
+            "SHIRT",
+          size:
+            row.dataset.size,
+          sleeveType:
+            row.dataset.sleeve,
+          quantity:
+            qty,
+          label:
+            "Kaos " +
+            (
+              row.dataset.sleeve ===
+              "LONG"
+                ? "Lengan Panjang "
+                : "Lengan Pendek "
+            ) +
+            row.dataset.size,
+          subtotal: 0
+        });
+      }
+    );
+  }
+
+  return items;
+}
+
+function calculate() {
+  const items =
+    collectItems();
+
+  const total =
+    items.reduce(
+      function(sum, item) {
+        return sum +
+          Number(
+            item.subtotal || 0
+          );
+      },
+      0
+    );
+
+  const coupons =
+    items.reduce(
+      function(sum, item) {
+        return sum +
+          (
+            item.itemType ===
+            "LA_BOLD_12"
+              ? item.quantity
+              : item.quantity * 2
+          );
+      },
+      0
+    );
+
+  totalText.textContent =
+    money(total);
+
+  couponText.textContent =
+    String(coupons);
+
+  itemText.textContent =
     items.length
-      ? items.map(i=>i.label+" × "+i.quantity).join(" • ")
+      ? items.map(
+          function(item) {
+            return (
+              item.label +
+              " × " +
+              item.quantity
+            );
+          }
+        ).join(" • ")
       : "Belum memilih produk.";
 }
 
-function sync(){
-  laProduct.classList.toggle("selected",laCheck.checked);
-  shirtProduct.classList.toggle("selected",shirtCheck.checked);
+function sync() {
+  laProduct.classList.toggle(
+    "selected",
+    laCheck.checked
+  );
 
-  laQuantity.disabled=!laCheck.checked;
+  shirtProduct.classList.toggle(
+    "selected",
+    shirtCheck.checked
+  );
 
-  document.querySelectorAll(".shirtQty").forEach(input=>{
-    input.disabled=!shirtCheck.checked;
-    if(!shirtCheck.checked) input.value="0";
-  });
+  laQuantity.disabled =
+    !laCheck.checked;
+
+  getShirtRows().forEach(
+    function(row) {
+      const input =
+        row.querySelector(
+          ".shirtQty"
+        );
+
+      input.disabled =
+        !shirtCheck.checked;
+
+      if (!shirtCheck.checked) {
+        input.value = "0";
+      }
+    }
+  );
 
   calculate();
 }
 
-async function loadPrice(){
-  try{
-    const r=await fetch(
-      SERVICE+"?action=getProductSettings",
-      {
-        headers:{
-          Accept:"application/json",
-          apikey:SUPABASE_PUBLISHABLE_KEY
+async function loadPrice() {
+  try {
+    const response =
+      await fetch(
+        SERVICE +
+        "?action=getProductSettings",
+        {
+          method: "GET",
+          headers: {
+            Accept:
+              "application/json",
+            apikey:
+              SUPABASE_PUBLISHABLE_KEY
+          }
         }
-      }
-    );
-    const d=await r.json();
-    if(r.ok&&d&&d.success){
-      laPrice=Number(
-        d.product?.unitPrice||
-        d.unitPrice||
-        0
       );
-      document.getElementById("laPriceText").textContent=
-        "Harga per BUNGKUS: "+money(laPrice);
+
+    const data =
+      await response.json();
+
+    if (
+      response.ok &&
+      data &&
+      data.success
+    ) {
+      laPrice =
+        Number(
+          data.product?.unitPrice ||
+          data.unitPrice ||
+          0
+        );
+
+      document.getElementById(
+        "laPriceText"
+      ).textContent =
+        "Harga per BUNGKUS: " +
+        money(laPrice);
+
       calculate();
     }
-  }catch(e){
-    console.warn(e);
+  } catch (error) {
+    console.warn(
+      "Gagal mengambil harga LA BOLD.",
+      error
+    );
   }
 }
 
-function save(){
-  if(
+function saveAndReturn() {
+  if (
     shirtCheck.checked &&
-    Date.now()>=CUTOFF.getTime()
-  ){
-    error(
+    Date.now() >=
+      CUTOFF.getTime()
+  ) {
+    showError(
       "Pre Order Kaos Bold After Dark sudah ditutup."
     );
     return;
   }
 
-  const items=selectedItems();
+  const items =
+    collectItems();
 
-  try{
+  if (items.length === 0) {
+    sessionStorage.removeItem(
+      KEY
+    );
+    window.location.href =
+      "index.html";
+    return;
+  }
+
+  const shirtQuantity =
+    items
+      .filter(function(item) {
+        return (
+          item.itemType ===
+          "BOLD_AFTER_DARK_SHIRT"
+        );
+      })
+      .reduce(
+        function(sum, item) {
+          return sum +
+            item.quantity;
+        },
+        0
+      );
+
+  const laQuantitySaved =
+    items
+      .filter(function(item) {
+        return (
+          item.itemType ===
+          "LA_BOLD_12"
+        );
+      })
+      .reduce(
+        function(sum, item) {
+          return sum +
+            item.quantity;
+        },
+        0
+      );
+
+  const totalAmount =
+    items.reduce(
+      function(sum, item) {
+        return sum +
+          Number(
+            item.subtotal || 0
+          );
+      },
+      0
+    );
+
+  const couponCount =
+    laQuantitySaved +
+    shirtQuantity * 2;
+
+  try {
     sessionStorage.setItem(
       KEY,
       JSON.stringify({
-        wantsRaffleCoupon:true,
+        wantsRaffleCoupon:
+          true,
         items,
-        totalAmount:items.reduce((s,i)=>s+Number(i.subtotal||0),0),
-        couponCount:items.reduce(
-          (s,i)=>
-            s+
-            (
-              i.itemType==="LA_BOLD_12"
-              ? i.quantity
-              : i.quantity*2
-            ),
-          0
-        ),
-        savedAt:new Date().toISOString()
+        totalAmount,
+        couponCount,
+        savedAt:
+          new Date().toISOString()
       })
     );
-  }catch(e){
-    error(
-      "Pilihan belum dapat disimpan di browser ini."
+  } catch (error) {
+    showError(
+      "Pilihan pembelian tidak dapat disimpan pada browser ini."
     );
     return;
   }
 
-  window.location.href="index.html";
+  window.location.href =
+    "index.html";
 }
 
-laCheck.addEventListener("change",sync);
-shirtCheck.addEventListener("change",sync);
-laQuantity.addEventListener("input",calculate);
-document.querySelectorAll(".shirtQty").forEach(input=>{
-  input.addEventListener("input",calculate);
-});
+laCheck.addEventListener(
+  "change",
+  sync
+);
 
-saveButton.addEventListener("click",save);
+shirtCheck.addEventListener(
+  "change",
+  sync
+);
+
+laQuantity.addEventListener(
+  "input",
+  calculate
+);
+
+getShirtRows().forEach(
+  function(row) {
+    row
+      .querySelector(
+        ".shirtQty"
+      )
+      .addEventListener(
+        "input",
+        calculate
+      );
+  }
+);
+
+saveButton.addEventListener(
+  "click",
+  saveAndReturn
+);
 
 sync();
 loadPrice();

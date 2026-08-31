@@ -5417,5 +5417,241 @@ paymentMethodInput.addEventListener(
 })();
 </script>
 
+
+<script id="registration-draft-persistence">
+(function () {
+  "use strict";
+
+  const DRAFT_KEY =
+    "boldAfterDarkRegistrationDraft";
+
+  const form =
+    document.getElementById(
+      "registrationForm"
+    );
+
+  const openPurchaseButton =
+    document.getElementById(
+      "openPurchasePageButton"
+    );
+
+  const accessType =
+    document.getElementById(
+      "accessType"
+    );
+
+  const boldRidersId =
+    document.getElementById(
+      "boldRidersId"
+    );
+
+  const name =
+    document.getElementById(
+      "name"
+    );
+
+  const whatsapp =
+    document.getElementById(
+      "whatsapp"
+    );
+
+  const submitButton =
+    document.getElementById(
+      "submitButton"
+    );
+
+  function saveDraft() {
+    if (!form) {
+      return;
+    }
+
+    const draft = {
+      accessType:
+        accessType
+          ? accessType.value
+          : "",
+      boldRidersId:
+        boldRidersId
+          ? boldRidersId.value
+          : "",
+      name:
+        name
+          ? name.value
+          : "",
+      whatsapp:
+        whatsapp
+          ? whatsapp.value
+          : "",
+      savedAt:
+        new Date().toISOString()
+    };
+
+    try {
+      sessionStorage.setItem(
+        DRAFT_KEY,
+        JSON.stringify(draft)
+      );
+    } catch (error) {
+      console.warn(
+        "REGISTRATION DRAFT SAVE ERROR:",
+        error
+      );
+    }
+  }
+
+  function restoreDraft() {
+    let draft = null;
+
+    try {
+      const raw =
+        sessionStorage.getItem(
+          DRAFT_KEY
+        );
+
+      if (!raw) {
+        return;
+      }
+
+      draft =
+        JSON.parse(raw);
+    } catch (error) {
+      console.warn(
+        "REGISTRATION DRAFT READ ERROR:",
+        error
+      );
+      return;
+    }
+
+    if (!draft) {
+      return;
+    }
+
+    if (accessType && draft.accessType) {
+      accessType.value =
+        draft.accessType;
+    }
+
+    if (
+      boldRidersId &&
+      draft.boldRidersId
+    ) {
+      boldRidersId.value =
+        draft.boldRidersId;
+    }
+
+    if (name && draft.name) {
+      name.value =
+        draft.name;
+    }
+
+    if (
+      whatsapp &&
+      draft.whatsapp
+    ) {
+      whatsapp.value =
+        draft.whatsapp;
+    }
+
+    /*
+     * Re-run the page's normal field logic.
+     * This does not submit anything.
+     */
+    try {
+      if (
+        typeof updateAccessFields ===
+        "function"
+      ) {
+        updateAccessFields();
+      }
+    } catch (error) {
+      console.warn(
+        "REGISTRATION DRAFT ACCESS RESTORE ERROR:",
+        error
+      );
+    }
+
+    /*
+     * Re-validate Bold Riders ID after restoring.
+     * The server remains authoritative at final registration.
+     */
+    if (
+      accessType &&
+      accessType.value === "BOLD RIDERS" &&
+      boldRidersId &&
+      boldRidersId.value
+    ) {
+      try {
+        if (
+          typeof validateBoldRider ===
+          "function"
+        ) {
+          validateBoldRider();
+        }
+      } catch (error) {
+        console.warn(
+          "REGISTRATION DRAFT RIDER VALIDATION ERROR:",
+          error
+        );
+      }
+    }
+
+    /*
+     * Restore the current purchase summary as well.
+     */
+    try {
+      window.dispatchEvent(
+        new Event("boldafterdark:purchasesummary")
+      );
+    } catch (_) {}
+  }
+
+  if (openPurchaseButton) {
+    openPurchaseButton.addEventListener(
+      "click",
+      function () {
+        saveDraft();
+      }
+    );
+  }
+
+  /*
+   * Also save the current form state while typing.
+   * This prevents loss if Android restores/reloads the page unexpectedly.
+   */
+  if (form) {
+    form.addEventListener(
+      "input",
+      saveDraft
+    );
+
+    form.addEventListener(
+      "change",
+      saveDraft
+    );
+  }
+
+  /*
+   * Do not clear the draft on the ordinary registration submit;
+   * it is cleared only after a successful final registration.
+   * This keeps the data available when returning from purchase.html.
+   */
+  restoreDraft();
+
+  window.addEventListener(
+    "pageshow",
+    restoreDraft
+  );
+
+  window.clearBoldAfterDarkRegistrationDraft =
+    function () {
+      try {
+        sessionStorage.removeItem(
+          DRAFT_KEY
+        );
+      } catch (_) {}
+    };
+})();
+</script>
+
 </body>
 </html>

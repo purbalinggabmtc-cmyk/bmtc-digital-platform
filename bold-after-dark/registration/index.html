@@ -836,10 +836,79 @@
     }
 </style>
 <style>
+/* FINAL MOBILE/NO-JS FALLBACK FOR PRODUCT TOGGLES */
+#raffleCouponMasterInput:checked ~ #laBoldToggle,
+#raffleCouponMasterInput:checked ~ #boldShirtToggle {
+  display: block !important;
+}
+
+#raffleCouponMasterInput:not(:checked) ~ #laBoldToggle,
+#raffleCouponMasterInput:not(:checked) ~ #boldShirtToggle {
+  display: none !important;
+}
+
+#raffleCouponMasterInput:checked ~ #laBoldToggle .product-toggle-label,
+#raffleCouponMasterInput:checked ~ #boldShirtToggle .product-toggle-label {
+  display: flex !important;
+}
+
+@media (max-width: 600px) {
+  #raffleCouponMasterInput:checked ~ #laBoldToggle,
+  #raffleCouponMasterInput:checked ~ #boldShirtToggle {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  #raffleCouponMasterInput:checked ~ #boldShirtToggle {
+    margin-top: 12px !important;
+  }
+
+  #raffleCouponMasterInput:checked ~ #boldShirtToggle .product-toggle-help {
+    display: block !important;
+    visibility: visible !important;
+  }
+}
 </style>
+
+<style>
+/* PRODUCT SELECTION FINAL FIX */
+#laBoldToggle[hidden],
+#boldShirtToggle[hidden],
+#rafflePurchaseBox[hidden],
+#shirtPurchaseBox[hidden] {
+  display: none !important;
+}
+
+#laBoldToggle:not([hidden]),
+#boldShirtToggle:not([hidden]) {
+  display: block !important;
+}
+
+#rafflePurchaseBox:not([hidden]),
+#shirtPurchaseBox:not([hidden]) {
+  display: block !important;
+}
+
+@media (max-width: 600px) {
+  #laBoldToggle:not([hidden]),
+  #boldShirtToggle:not([hidden]),
+  #rafflePurchaseBox:not([hidden]),
+  #shirtPurchaseBox:not([hidden]) {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+</style>
+
 </head>
 
-<!-- REGISTRATION UI FINAL FIX -->
+<!-- MOBILE PREORDER FINAL -->
 <body>
 
   <div class="container">
@@ -2213,91 +2282,142 @@ const submitButton =
       }
     }
 
-    function updateCouponMasterState() {
-      const enabled = Boolean(raffleCouponMasterInput && raffleCouponMasterInput.checked);
+    function setElementVisible(element, visible, displayValue) {
+      if (!element) {
+        return;
+      }
 
-      if (enabled) {
-        laBoldToggle.classList.remove("hidden");
-        boldShirtToggle.classList.remove("hidden");
-        laBoldToggle.style.setProperty("display", "block", "important");
-        boldShirtToggle.style.setProperty("display", "block", "important");
-        laBoldToggle.style.setProperty("visibility", "visible", "important");
-        boldShirtToggle.style.setProperty("visibility", "visible", "important");
-        laBoldToggle.style.setProperty("opacity", "1", "important");
-        boldShirtToggle.style.setProperty("opacity", "1", "important");
+      element.classList.toggle("hidden", !visible);
+      element.hidden = !visible;
+      element.style.display = visible
+        ? (displayValue || "block")
+        : "none";
 
-        wantRaffleTicketInput.disabled = false;
-        wantBoldShirtInput.disabled = false;
+      if (visible) {
+        element.removeAttribute("aria-hidden");
       } else {
-        laBoldToggle.classList.add("hidden");
-        boldShirtToggle.classList.add("hidden");
-        laBoldToggle.style.setProperty("display", "none", "important");
-        boldShirtToggle.style.setProperty("display", "none", "important");
-        laBoldToggle.style.removeProperty("visibility");
-        boldShirtToggle.style.removeProperty("visibility");
-        laBoldToggle.style.removeProperty("opacity");
-        boldShirtToggle.style.removeProperty("opacity");
+        element.setAttribute("aria-hidden", "true");
+      }
+    }
 
+    function updateCouponMasterState() {
+      const enabled =
+        Boolean(
+          raffleCouponMasterInput &&
+          raffleCouponMasterInput.checked
+        );
+
+      // Master switch controls the two product checkboxes.
+      setElementVisible(
+        laBoldToggle,
+        enabled,
+        "block"
+      );
+
+      setElementVisible(
+        boldShirtToggle,
+        enabled,
+        "block"
+      );
+
+      wantRaffleTicketInput.disabled =
+        !enabled;
+
+      wantBoldShirtInput.disabled =
+        !enabled;
+
+      if (!enabled) {
         wantRaffleTicketInput.checked = false;
         wantBoldShirtInput.checked = false;
-        wantRaffleTicketInput.disabled = true;
-        wantBoldShirtInput.disabled = true;
-        rafflePurchaseBox.classList.add("hidden");
-        rafflePurchaseBox.style.setProperty("display", "none", "important");
-        shirtPurchaseBox.classList.add("hidden");
-        shirtPurchaseBox.style.setProperty("display", "none", "important");
-        paymentGatewayBox.classList.add("hidden");
+
         raffleQuantityInput.required = false;
+        raffleQuantityInput.value = "1";
+
+        setElementVisible(
+          rafflePurchaseBox,
+          false
+        );
+
+        setElementVisible(
+          shirtPurchaseBox,
+          false
+        );
+
+        paymentGatewayBox.classList.add("hidden");
+        paymentGatewayBox.hidden = true;
+        paymentGatewayBox.style.display = "none";
+
         paymentMethodInput.required = false;
         paymentMethodInput.value = "";
-        raffleQuantityInput.value = "1";
-        document.querySelectorAll(".shirt-qty").forEach(function(input) {
-          input.value = "0";
-          input.disabled = true;
-        });
+
+        document
+          .querySelectorAll(".shirt-qty")
+          .forEach(function(input) {
+            input.value = "0";
+            input.disabled = true;
+          });
+
         updatePaymentAccount();
       }
 
       updateRafflePurchaseFields();
       updateShirtPurchaseFields();
-      updatePaymentVisibility();
       updateOrderSummary();
     }
 
     function updateRafflePurchaseFields() {
       const enabled =
-        raffleCouponMasterInput.checked &&
-        wantRaffleTicketInput.checked;
+        Boolean(
+          raffleCouponMasterInput &&
+          raffleCouponMasterInput.checked &&
+          wantRaffleTicketInput &&
+          wantRaffleTicketInput.checked
+        );
+
+      setElementVisible(
+        rafflePurchaseBox,
+        enabled
+      );
+
+      raffleQuantityInput.required =
+        enabled;
 
       if (enabled) {
-        rafflePurchaseBox.classList.remove("hidden");
-        raffleQuantityInput.required = true;
         updateRaffleTotal();
       } else {
-        rafflePurchaseBox.classList.add("hidden");
-        raffleQuantityInput.required = false;
         raffleQuantityInput.value = "1";
       }
+
+      updatePaymentVisibility();
       updateOrderSummary();
     }
 
     function updateShirtPurchaseFields() {
       const enabled =
-        raffleCouponMasterInput.checked &&
-        wantBoldShirtInput.checked;
+        Boolean(
+          raffleCouponMasterInput &&
+          raffleCouponMasterInput.checked &&
+          wantBoldShirtInput &&
+          wantBoldShirtInput.checked
+        );
 
-      if (enabled) {
-        shirtPurchaseBox.classList.remove("hidden");
-        document.querySelectorAll(".shirt-qty").forEach(function(input) {
-          input.disabled = false;
+      setElementVisible(
+        shirtPurchaseBox,
+        enabled
+      );
+
+      document
+        .querySelectorAll(".shirt-qty")
+        .forEach(function(input) {
+          input.disabled = !enabled;
+
+          if (!enabled) {
+            input.value = "0";
+          }
         });
-      } else {
-        shirtPurchaseBox.classList.add("hidden");
-        document.querySelectorAll(".shirt-qty").forEach(function(input) {
-          input.value = "0";
-          input.disabled = true;
-        });
-      }
+
+      updateShirtSummary();
+      updatePaymentVisibility();
       updateOrderSummary();
     }
 
@@ -5312,6 +5432,7 @@ boldRidersId:
     updateShirtPurchaseFields();
     updatePaymentVisibility();
     updateCouponMasterState();
+    updateCouponMasterState();
     loadProductSettings();
 
     /*
@@ -5364,8 +5485,7 @@ boldRidersId:
           "is-selected"
         );
         preorderCard.classList.add(
-          "is-disabled",
-          "hidden"
+          "is-disabled"
         );
 
         preorderCard.setAttribute(

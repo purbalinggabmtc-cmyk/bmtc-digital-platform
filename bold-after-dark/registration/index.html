@@ -835,45 +835,9 @@
       color: #666;
     }
 </style>
-<style>
-/* FINAL MOBILE/NO-JS FALLBACK FOR PRODUCT TOGGLES */
-#raffleCouponMasterInput:checked ~ #laBoldToggle,
-#raffleCouponMasterInput:checked ~ #boldShirtToggle {
-  display: block !important;
-}
 
-#raffleCouponMasterInput:not(:checked) ~ #laBoldToggle,
-#raffleCouponMasterInput:not(:checked) ~ #boldShirtToggle {
-  display: none !important;
-}
 
-#raffleCouponMasterInput:checked ~ #laBoldToggle .product-toggle-label,
-#raffleCouponMasterInput:checked ~ #boldShirtToggle .product-toggle-label {
-  display: flex !important;
-}
-
-@media (max-width: 600px) {
-  #raffleCouponMasterInput:checked ~ #laBoldToggle,
-  #raffleCouponMasterInput:checked ~ #boldShirtToggle {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  #raffleCouponMasterInput:checked ~ #boldShirtToggle {
-    margin-top: 12px !important;
-  }
-
-  #raffleCouponMasterInput:checked ~ #boldShirtToggle .product-toggle-help {
-    display: block !important;
-    visibility: visible !important;
-  }
-}
-</style>
-
-<style id="purchase-summary-css">
+<style id="purchase-summary-css-final">
 .purchase-summary-card {
   margin-top: 16px;
   padding: 16px;
@@ -881,25 +845,7 @@
   border-radius: 12px;
   background: #111;
 }
-.purchase-summary-empty,
-.purchase-summary-content {
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 10px;
-  background: #0d0d0d;
-  color: #999;
-  font-size: 12px;
-  line-height: 1.6;
-}
-.purchase-summary-content strong { color: #fff; }
-.purchase-summary-line { margin-top: 4px; }
-@media (max-width: 600px) {
-  .purchase-summary-card { width: 100%; }
-}
-</style>
 
-
-<style id="purchase-coupon-info-css">
 .purchase-coupon-info {
   margin-top: 10px;
   padding: 10px 12px;
@@ -915,10 +861,32 @@
   color: #fff;
 }
 
+.purchase-summary-empty,
+.purchase-summary-content {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #0d0d0d;
+  color: #999;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.purchase-summary-content strong {
+  color: #fff;
+}
+
+.purchase-summary-line {
+  margin-top: 4px;
+}
+
 @media (max-width: 600px) {
+  .purchase-summary-card {
+    width: 100%;
+  }
+
   .purchase-coupon-info {
     font-size: 10.5px;
-    padding: 9px 10px;
   }
 }
 </style>
@@ -1059,14 +1027,16 @@
             <div class="optional-product-title">
               PEMBELIAN &amp; PRE ORDER
             </div>
+
             <div class="optional-product-subtitle">
               Atur Pembelian LA BOLD 12 dan Pre Order Kaos Bold After Dark pada halaman khusus.
             </div>
+
             <div class="purchase-coupon-info">
-              Setiap pembelian <strong>1 BUNGKUS LA BOLD 12</strong> mendapatkan
-              <strong>1 kupon undian</strong>, sedangkan setiap pembelian
-              <strong>1 PCS kaos Bold After Dark</strong> mendapatkan
-              <strong>2 kupon undian</strong>.
+              Setiap pembelian <strong>1 BUNGKUS LA BOLD 12</strong>
+              mendapatkan <strong>1 kupon undian</strong>, sedangkan
+              setiap pembelian <strong>1 PCS kaos Bold After Dark</strong>
+              mendapatkan <strong>2 kupon undian</strong>.
               Kupon undian diterbitkan setelah pembayaran dinyatakan
               <strong>lunas/APPROVED</strong>.
             </div>
@@ -2162,6 +2132,12 @@ const paymentGatewayBox =
       }
     }
 
+    
+
+    
+
+    
+
     function updateRaffleTotal() {
       let quantity = Number(raffleQuantityInput.value);
 
@@ -2177,6 +2153,8 @@ const paymentGatewayBox =
 
       updateOrderSummary();
     }
+
+    
 
     function updateOrderSummary() {
       const raffleTotal = wantRaffleTicketInput.checked
@@ -5209,7 +5187,7 @@ paymentMethodInput.addEventListener(
 (function () {
   function refreshCouponEstimate() {
     if (typeof updateCouponEstimate === "function") {
-      updateCouponEstimate();
+      
     }
   }
 
@@ -5252,11 +5230,13 @@ paymentMethodInput.addEventListener(
 </script>
 
 
-<script id="purchase-summary-reader">
+<script id="purchase-summary-reader-final">
 (function () {
   "use strict";
 
-  const KEY = "boldAfterDarkPurchaseSummary";
+  const KEY =
+    "boldAfterDarkPurchaseSummary";
+
   const box =
     document.getElementById(
       "purchaseSummary"
@@ -5264,19 +5244,31 @@ paymentMethodInput.addEventListener(
 
   function money(value) {
     return "Rp " +
-      Number(value || 0).toLocaleString("id-ID");
+      Number(value || 0).toLocaleString(
+        "id-ID"
+      );
   }
 
-  function render() {
-    if (!box) return;
+  function renderPurchaseSummary() {
+    if (!box) {
+      return;
+    }
 
     let data = null;
+
     try {
       const raw =
         sessionStorage.getItem(KEY);
-      data = raw ? JSON.parse(raw) : null;
-    } catch (_) {
-      data = null;
+
+      data =
+        raw
+          ? JSON.parse(raw)
+          : null;
+    } catch (error) {
+      console.warn(
+        "Gagal membaca ringkasan pembelian.",
+        error
+      );
     }
 
     if (
@@ -5286,8 +5278,10 @@ paymentMethodInput.addEventListener(
     ) {
       box.className =
         "purchase-summary-empty";
+
       box.textContent =
         "Belum ada pembelian atau pre order.";
+
       return;
     }
 
@@ -5295,33 +5289,50 @@ paymentMethodInput.addEventListener(
       "purchase-summary-content";
 
     const lines =
-      data.items.map(function(item) {
-        return (
-          '<div class="purchase-summary-line">' +
-          '<strong>' +
-          String(item.label || item.itemType || "Item") +
-          "</strong> × " +
-          Number(item.quantity || 0).toLocaleString("id-ID") +
-          (
-            Number(item.subtotal || 0) > 0
-              ? " — " + money(item.subtotal)
-              : ""
-          ) +
-          "</div>"
-        );
-      });
+      data.items.map(
+        function (item) {
+          return (
+            '<div class="purchase-summary-line">' +
+              "<strong>" +
+                String(
+                  item.label ||
+                  item.itemType ||
+                  "Item"
+                ) +
+              "</strong> × " +
+              Number(
+                item.quantity || 0
+              ).toLocaleString("id-ID") +
+            (
+              Number(
+                item.subtotal || 0
+              ) > 0
+                ? " — " +
+                  money(
+                    item.subtotal
+                  )
+                : ""
+            ) +
+            "</div>"
+          );
+        }
+      );
 
     lines.push(
       '<div class="purchase-summary-line">' +
-      "<strong>Total Pembelian:</strong> " +
-      money(data.totalAmount) +
+        "<strong>Total Pembelian:</strong> " +
+        money(
+          data.totalAmount
+        ) +
       "</div>"
     );
 
     lines.push(
       '<div class="purchase-summary-line">' +
-      "<strong>Total Kupon:</strong> " +
-      Number(data.couponCount || 0).toLocaleString("id-ID") +
+        "<strong>Total Kupon:</strong> " +
+        Number(
+          data.couponCount || 0
+        ).toLocaleString("id-ID") +
       "</div>"
     );
 
@@ -5331,10 +5342,10 @@ paymentMethodInput.addEventListener(
 
   window.addEventListener(
     "pageshow",
-    render
+    renderPurchaseSummary
   );
 
-  render();
+  renderPurchaseSummary();
 })();
 </script>
 

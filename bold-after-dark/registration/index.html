@@ -5353,11 +5353,14 @@ paymentMethodInput.addEventListener(
 
 
 
-<script id="registration-persistent-controller">
+
+
+
+<script id="registration-purchase-integration">
 (function () {
   "use strict";
 
-  const DRAFT_KEY =
+  const REG_DRAFT_KEY =
     "boldAfterDarkRegistrationDraft";
 
   const PURCHASE_KEY =
@@ -5382,90 +5385,96 @@ paymentMethodInput.addEventListener(
     return;
   }
 
+  function readJson(key) {
+    try {
+      const raw =
+        sessionStorage.getItem(key);
+
+      return raw
+        ? JSON.parse(raw)
+        : null;
+    } catch (error) {
+      console.warn(
+        "SESSION READ ERROR:",
+        key,
+        error
+      );
+
+      return null;
+    }
+  }
+
+  function writeJson(key, value) {
+    try {
+      sessionStorage.setItem(
+        key,
+        JSON.stringify(value)
+      );
+
+      return true;
+    } catch (error) {
+      console.warn(
+        "SESSION WRITE ERROR:",
+        key,
+        error
+      );
+
+      return false;
+    }
+  }
+
   function saveRegistrationDraft() {
-    const draft = {};
+    const fields = {};
 
     form
       .querySelectorAll(
         "input[name], select[name], textarea[name]"
       )
-      .forEach(function (field) {
-        if (
-          field.type === "file" ||
-          field.type === "submit" ||
-          field.type === "button"
-        ) {
-          return;
+      .forEach(
+        function (field) {
+          if (
+            field.type === "file" ||
+            field.type === "submit" ||
+            field.type === "button"
+          ) {
+            return;
+          }
+
+          fields[field.name] =
+            field.type === "checkbox" ||
+            field.type === "radio"
+              ? field.checked
+              : field.value;
         }
-
-        draft[field.name] =
-          field.type === "checkbox" ||
-          field.type === "radio"
-            ? field.checked
-            : field.value;
-      });
-
-    try {
-      sessionStorage.setItem(
-        DRAFT_KEY,
-        JSON.stringify({
-          version: 1,
-          savedAt:
-            new Date().toISOString(),
-          fields: draft
-        })
       );
-    } catch (error) {
-      console.warn(
-        "REGISTRATION DRAFT SAVE ERROR:",
-        error
-      );
-    }
+
+    writeJson(
+      REG_DRAFT_KEY,
+      {
+        version: 2,
+        fields,
+        savedAt:
+          new Date().toISOString()
+      }
+    );
   }
 
   function restoreRegistrationDraft() {
-    let raw = null;
-
-    try {
-      raw =
-        sessionStorage.getItem(
-          DRAFT_KEY
-        );
-    } catch (error) {
-      console.warn(
-        "REGISTRATION DRAFT READ ERROR:",
-        error
+    const data =
+      readJson(
+        REG_DRAFT_KEY
       );
+
+    if (
+      !data ||
+      !data.fields
+    ) {
       return;
     }
 
-    if (!raw) {
-      updateRegisterButton();
-      return;
-    }
-
-    let draft = null;
-
-    try {
-      draft = JSON.parse(raw);
-    } catch (error) {
-      console.warn(
-        "REGISTRATION DRAFT JSON ERROR:",
-        error
-      );
-      updateRegisterButton();
-      return;
-    }
-
-    const fields =
-      draft &&
-      draft.fields &&
-      typeof draft.fields ===
-        "object"
-        ? draft.fields
-        : {};
-
-    Object.keys(fields).forEach(
+    Object.keys(
+      data.fields
+    ).forEach(
       function (name) {
         const field =
           form.querySelector(
@@ -5483,20 +5492,18 @@ paymentMethodInput.addEventListener(
           field.type === "radio"
         ) {
           field.checked =
-            fields[name] === true;
+            data.fields[name] === true;
         } else {
           field.value =
-            fields[name] == null
+            data.fields[name] == null
               ? ""
-              : String(fields[name]);
+              : String(
+                  data.fields[name]
+                );
         }
       }
     );
 
-    /*
-     * Restore the normal page state (e.g. BOLD RIDERS ID field)
-     * without submitting the registration.
-     */
     try {
       if (
         typeof updateAccessFields ===
@@ -5506,80 +5513,74 @@ paymentMethodInput.addEventListener(
       }
     } catch (error) {
       console.warn(
-        "REGISTRATION ACCESS RESTORE ERROR:",
+        "ACCESS RESTORE ERROR:",
         error
       );
-    }
-
-    try {
-      if (
-        accessTypeInput &&
-        accessTypeInput.value ===
-          "BOLD RIDERS" &&
-        boldRidersIdInput &&
-        boldRidersIdInput.value &&
-        typeof validateBoldRider ===
-          "function"
-      ) {
-        validateBoldRider();
-      }
-    } catch (error) {
-      console.warn(
-        "BOLD RIDERS RESTORE ERROR:",
-        error
-      );
-    }
-
-    updateRegisterButton();
-  }
-
-  function hasSavedPurchase() {
-    try {
-      const raw =
-        sessionStorage.getItem(
-          PURCHASE_KEY
-        );
-
-      if (!raw) {
-        return false;
-      }
-
-      const data =
-        JSON.parse(raw);
-
-      return Boolean(
-        data &&
-        Array.isArray(data.items) &&
-        data.items.some(
-          function (item) {
-            return (
-              Number(
-                item.quantity || 0
-              ) > 0
-            );
-          }
-        )
-      );
-    } catch (error) {
-      console.warn(
-        "PURCHASE SUMMARY READ ERROR:",
-        error
-      );
-      return false;
     }
   }
 
-  function updateRegisterButton() {
+  function hasPurchase() {
+    const data =
+      readJson(
+        PURCHASE_KEY
+      );
+
+    return Boolean(
+      data &&
+      Array.isArray(data.items) &&
+      data.items.some(
+        function (item) {
+          return (
+            Number(
+              item.quantity || 0
+            ) > 0
+          );
+        }
+      )
+    );
+  }
+
+  function updateSubmitButton() {
     if (!submitButton) {
       return;
     }
 
     submitButton.textContent =
-      hasSavedPurchase()
+      hasPurchase()
         ? "DAFTAR DAN PESAN"
         : "FREE AKSES SAJA";
   }
 
+  function getPurchaseData() {
+    const data =
+      readJson(
+        PURCHASE_KEY
+      );
+
+    if (
+      !data ||
+      !Array.isArray(data.items)
+    ) {
+      return null;
+    }
+
+    return data;
+  }
+
+  /*
+   * Intercept the existing registration flow's product payload.
+   * The legacy validator may still exist in the page source, so we
+   * provide a single normalized reader for the new purchase page.
+   */
+  window.getSavedBoldAfterDarkPurchase =
+    function () {
+      return getPurchaseData();
+    };
+
+  /*
+   * Save the registration draft BEFORE navigating to purchase.html.
+   * This is the critical Android-safe persistence layer.
+   */
   if (purchaseButton) {
     purchaseButton.addEventListener(
       "click",
@@ -5603,43 +5604,141 @@ paymentMethodInput.addEventListener(
     "pageshow",
     function () {
       restoreRegistrationDraft();
+      updateSubmitButton();
     }
   );
 
   window.addEventListener(
-    "storage",
-    updateRegisterButton
-  );
-
-  /*
-   * Custom event allows purchase page / back navigation
-   * to trigger a summary refresh.
-   */
-  window.addEventListener(
     "boldafterdark:purchasesummary",
-    updateRegisterButton
+    updateSubmitButton
   );
 
-  /*
-   * Do not erase the draft when leaving for purchase.html.
-   * It is intentionally removed only after a successful final registration.
-   */
-  window.saveBoldAfterDarkRegistrationDraft =
-    saveRegistrationDraft;
+  restoreRegistrationDraft();
+  updateSubmitButton();
 
-  window.clearBoldAfterDarkRegistrationDraft =
+  /*
+   * Replace the legacy validateRafflePurchase() result with the
+   * current purchase.html/sessionStorage order.
+   *
+   * This keeps the existing submitRegistration() code path intact
+   * while making its purchase payload come from the new page.
+   */
+  if (
+    typeof window.validateRafflePurchase ===
+    "function"
+  ) {
+    const originalValidate =
+      window.validateRafflePurchase;
+
+    window.validateRafflePurchase =
+      function () {
+        const saved =
+          getPurchaseData();
+
+        if (
+          saved &&
+          Array.isArray(saved.items) &&
+          saved.items.length > 0
+        ) {
+          return {
+            ok: true,
+            items:
+              saved.items,
+            totalAmount:
+              Number(
+                saved.totalAmount || 0
+              ),
+            couponCount:
+              Number(
+                saved.couponCount || 0
+              )
+          };
+        }
+
+        /*
+         * No purchase: allow the normal no-order path.
+         * Do not invoke the old purchase UI validator.
+         */
+        return {
+          ok: true,
+          items: [],
+          totalAmount: 0,
+          couponCount: 0
+        };
+      };
+  }
+
+  /*
+   * Before final submit, the saved purchase must be turned into
+   * the payload expected by createMesranPurchase(). If that function
+   * exists, expose normalized data so the rest of the existing flow
+   * can consume it.
+   */
+  if (
+    typeof window.createMesranPurchase ===
+    "function"
+  ) {
+    const originalCreate =
+      window.createMesranPurchase;
+
+    window.createMesranPurchase =
+      async function (
+        registrationData,
+        raffleData
+      ) {
+        const saved =
+          getPurchaseData();
+
+        if (
+          saved &&
+          Array.isArray(saved.items) &&
+          saved.items.length > 0
+        ) {
+          return originalCreate(
+            registrationData,
+            {
+              ...raffleData,
+              items:
+                saved.items,
+              totalAmount:
+                Number(
+                  saved.totalAmount || 0
+                ),
+              couponCount:
+                Number(
+                  saved.couponCount || 0
+                )
+            }
+          );
+        }
+
+        return originalCreate(
+          registrationData,
+          raffleData
+        );
+      };
+  }
+
+  /*
+   * Clear both draft stores ONLY when the final registration
+   * actually succeeds. This avoids losing the form if the network
+   * or purchase call fails.
+   */
+  window.clearRegistrationPurchaseState =
     function () {
       try {
         sessionStorage.removeItem(
-          DRAFT_KEY
+          REG_DRAFT_KEY
+        );
+
+        sessionStorage.removeItem(
+          PURCHASE_KEY
         );
       } catch (_) {}
     };
 
-  window.updateBoldAfterDarkRegisterButton =
-    updateRegisterButton;
-
-  restoreRegistrationDraft();
+  window.updateBoldAfterDarkPurchaseButton =
+    updateSubmitButton;
 })();
 </script>
 

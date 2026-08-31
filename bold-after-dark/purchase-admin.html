@@ -358,6 +358,31 @@
       flex-wrap: wrap;
     }
 
+    .item-summary {
+      min-width: 145px;
+      line-height: 1.5;
+    }
+
+    .item-line {
+      margin-bottom: 3px;
+    }
+
+    .item-line:last-child {
+      margin-bottom: 0;
+    }
+
+    .modal-items-card {
+      margin-bottom: 15px;
+    }
+
+    .modal-items {
+      display: grid;
+      gap: 5px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+
     .actions .btn {
       min-height: 34px;
       padding: 8px 10px;
@@ -706,6 +731,7 @@
                 <th>NAMA</th>
                 <th>WHATSAPP</th>
                 <th>JUMLAH</th>
+                <th>ITEM</th>
                 <th>TOTAL</th>
                 <th>METODE</th>
                 <th>STATUS</th>
@@ -774,6 +800,13 @@
           <div id="modalPaymentMethod" class="detail-value">-</div>
         </div>
 
+      </div>
+
+      <div class="detail-item modal-items-card">
+        <div class="detail-label">DETAIL ITEM PESANAN</div>
+        <div id="modalItems" class="modal-items">
+          <span class="muted">-</span>
+        </div>
       </div>
 
       <iframe
@@ -942,6 +975,9 @@
 
     const modalPaymentMethod =
       document.getElementById("modalPaymentMethod");
+
+    const modalItems =
+      document.getElementById("modalItems");
 
     const proofFrame =
       document.getElementById("proofFrame");
@@ -1203,6 +1239,91 @@
     }
 
 
+    function purchaseItemsSummary(
+      row
+    ) {
+      const items =
+        Array.isArray(
+          row.items
+        )
+          ? row.items
+          : [];
+
+      if (
+        items.length === 0
+      ) {
+        return '<span class="muted">Detail belum tersedia</span>';
+      }
+
+      return items
+        .map(
+          function(item) {
+            const type =
+              String(
+                item.item_type || ""
+              ).toUpperCase();
+
+            const qty =
+              Number(
+                item.quantity || 0
+              );
+
+            if (
+              type ===
+              "LA_BOLD_12"
+            ) {
+              return (
+                '<div class="item-line">' +
+                '<strong>LA BOLD 12</strong> × ' +
+                qty +
+                " " +
+                escapeHtml(
+                  item.variant === "STANDARD"
+                    ? "BUNGKUS"
+                    : (
+                        item.variant ||
+                        ""
+                      )
+                ) +
+                "</div>"
+              );
+            }
+
+            const sleeve =
+              item.sleeve_type ===
+              "LONG"
+                ? "Panjang"
+                : item.sleeve_type ===
+                    "SHORT"
+                  ? "Pendek"
+                  : (
+                      item.variant ||
+                      ""
+                    );
+
+            const size =
+              item.size
+                ? " " +
+                  escapeHtml(
+                    item.size
+                  )
+                : "";
+
+            return (
+              '<div class="item-line">' +
+              '<strong>Kaos ' +
+              escapeHtml(sleeve) +
+              "</strong>" +
+              size +
+              " × " +
+              qty +
+              "</div>"
+            );
+          }
+        )
+        .join("");
+    }
+
     function renderTable() {
       purchaseTableBody.innerHTML =
         "";
@@ -1270,6 +1391,12 @@
             <td>
               ${escapeHtml(row.quantity)}
               ${escapeHtml(row.unitName || "unit")}
+            </td>
+
+            <td>
+              <div class="item-summary">
+                ${purchaseItemsSummary(row)}
+              </div>
             </td>
 
             <td>
@@ -2002,6 +2129,11 @@
 
       modalPaymentMethod.textContent =
         paymentLabel(
+          currentPurchase
+        );
+
+      modalItems.innerHTML =
+        purchaseItemsSummary(
           currentPurchase
         );
 

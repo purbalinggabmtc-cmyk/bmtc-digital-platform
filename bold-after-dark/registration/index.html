@@ -819,6 +819,158 @@
       }
     }
   </style>
+<style>
+    /* Coupon -> product selection */
+    .coupon-choice-wrap {
+      margin-top: 18px;
+    }
+
+    .coupon-choice {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 15px 16px;
+      border: 1px solid #d7d7d7;
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .coupon-choice input {
+      margin-top: 3px;
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    .coupon-choice-content {
+      flex: 1;
+    }
+
+    .coupon-choice-title {
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 3px;
+    }
+
+    .coupon-choice-note {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .optional-products {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .product-option-card {
+      border: 1px solid #dedede;
+      border-radius: 12px;
+      padding: 15px;
+      background: #fff;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .product-option-card.is-disabled {
+      opacity: .45;
+      pointer-events: none;
+      filter: grayscale(.15);
+    }
+
+    .product-option-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .product-option-head input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      flex: 0 0 auto;
+    }
+
+    .product-option-title {
+      font-weight: 800;
+      color: #111;
+    }
+
+    .product-option-subtitle {
+      font-size: 12px;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    .product-option-body {
+      display: none;
+      margin-top: 8px;
+    }
+
+    .product-option-card.is-selected .product-option-body {
+      display: block;
+    }
+
+    .shirt-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .shirt-group {
+      border: 1px solid #ececec;
+      border-radius: 10px;
+      padding: 11px;
+      background: #fafafa;
+    }
+
+    .shirt-group-title {
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .shirt-size-row {
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
+      margin-top: 7px;
+    }
+
+    .shirt-size-label {
+      font-weight: 600;
+    }
+
+    .shirt-size-row input[type="number"] {
+      width: 100%;
+      min-height: 38px;
+      box-sizing: border-box;
+    }
+
+    .la-quantity-row {
+      display: grid;
+      grid-template-columns: 1fr 110px;
+      gap: 10px;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .selection-total-note {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #f6f6f6;
+      font-size: 13px;
+    }
+
+    @media (max-width: 720px) {
+      .optional-products {
+        grid-template-columns: 1fr;
+      }
+    }
+</style>
 </head>
 
 <body>
@@ -845,7 +997,203 @@
         REGISTRATION FORM
       </div>
 
-      <form id="registrationForm" novalidate>
+      
+<section id="purchaseOptionsSection" class="coupon-choice-wrap">
+  <label class="coupon-choice" for="wantRaffleCoupon">
+    <input
+      id="wantRaffleCoupon"
+      name="wantRaffleCoupon"
+      type="checkbox"
+      value="yes"
+    >
+    <span class="coupon-choice-content">
+      <span class="coupon-choice-title">
+        Saya ingin kupon undian
+      </span>
+      <span class="coupon-choice-note">
+        Centang untuk mengaktifkan pilihan pembelian LA BOLD 12 dan Pre Order Kaos Bold After Dark.
+      </span>
+    </span>
+  </label>
+
+  <div
+    id="optionalProductOptions"
+    class="optional-products"
+    aria-disabled="true"
+  >
+    <!-- LA BOLD 12 -->
+    <div
+      id="laBoldOptionCard"
+      class="product-option-card is-disabled"
+    >
+      <div class="product-option-head">
+        <input
+          id="wantLaBold"
+          name="wantLaBold"
+          type="checkbox"
+          value="yes"
+          disabled
+        >
+        <div>
+          <div class="product-option-title">
+            Pembelian LA BOLD 12
+          </div>
+          <div class="product-option-subtitle">
+            Pilih jumlah bungkus yang ingin dibeli.
+          </div>
+        </div>
+      </div>
+
+      <div id="laBoldBody" class="product-option-body">
+        <div class="la-quantity-row">
+          <label for="laBoldQuantity">
+            Jumlah bungkus
+          </label>
+          <input
+            id="laBoldQuantity"
+            name="laBoldQuantity"
+            type="number"
+            min="1"
+            max="100"
+            step="1"
+            value="1"
+            disabled
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- SHIRT -->
+    <div
+      id="shirtOptionCard"
+      class="product-option-card is-disabled"
+    >
+      <div class="product-option-head">
+        <input
+          id="wantShirt"
+          name="wantShirt"
+          type="checkbox"
+          value="yes"
+          disabled
+        >
+        <div>
+          <div class="product-option-title">
+            Pre Order Kaos Bold After Dark
+          </div>
+          <div class="product-option-subtitle">
+            Bisa memilih lengan pendek dan lengan panjang sekaligus.
+          </div>
+        </div>
+      </div>
+
+      <div id="shirtBody" class="product-option-body">
+        <div class="shirt-grid">
+          <div class="shirt-group">
+            <div class="shirt-group-title">
+              Lengan Pendek
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">S</div>
+              <input class="shirt-qty" data-sleeve="SHORT" data-size="S"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">M</div>
+              <input class="shirt-qty" data-sleeve="SHORT" data-size="M"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">L</div>
+              <input class="shirt-qty" data-sleeve="SHORT" data-size="L"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">XL</div>
+              <input class="shirt-qty" data-sleeve="SHORT" data-size="XL"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">2XL</div>
+              <input class="shirt-qty" data-sleeve="SHORT" data-size="2XL"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">3XL</div>
+              <input class="shirt-qty" data-sleeve="SHORT" data-size="3XL"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">4XL</div>
+              <input class="shirt-qty" data-sleeve="SHORT" data-size="4XL"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+          </div>
+
+          <div class="shirt-group">
+            <div class="shirt-group-title">
+              Lengan Panjang
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">S</div>
+              <input class="shirt-qty" data-sleeve="LONG" data-size="S"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">M</div>
+              <input class="shirt-qty" data-sleeve="LONG" data-size="M"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">L</div>
+              <input class="shirt-qty" data-sleeve="LONG" data-size="L"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">XL</div>
+              <input class="shirt-qty" data-sleeve="LONG" data-size="XL"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">2XL</div>
+              <input class="shirt-qty" data-sleeve="LONG" data-size="2XL"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">3XL</div>
+              <input class="shirt-qty" data-sleeve="LONG" data-size="3XL"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+
+            <div class="shirt-size-row">
+              <div class="shirt-size-label">4XL</div>
+              <input class="shirt-qty" data-sleeve="LONG" data-size="4XL"
+                type="number" min="0" max="100" step="1" value="0" disabled>
+            </div>
+          </div>
+        </div>
+
+        <div id="shirtQuantitySummary" class="selection-total-note">
+          Total kaos: 0 pcs
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<form id="registrationForm" novalidate>
 
         <!-- ACCESS -->
         <div class="field">
@@ -5165,6 +5513,364 @@ boldRidersId:
     );
 
   </script>
+
+
+<script>
+(function () {
+  const couponCheckbox =
+    document.getElementById("wantRaffleCoupon");
+
+  const laCard =
+    document.getElementById("laBoldOptionCard");
+
+  const shirtCard =
+    document.getElementById("shirtOptionCard");
+
+  const laCheckbox =
+    document.getElementById("wantLaBold");
+
+  const shirtCheckbox =
+    document.getElementById("wantShirt");
+
+  const laQuantity =
+    document.getElementById("laBoldQuantity");
+
+  const shirtQtyInputs =
+    Array.from(
+      document.querySelectorAll(
+        ".shirt-qty"
+      )
+    );
+
+  const shirtQuantitySummary =
+    document.getElementById(
+      "shirtQuantitySummary"
+    );
+
+  function setDisabledState(
+    element,
+    disabled
+  ) {
+    if (element) {
+      element.disabled = disabled;
+    }
+  }
+
+  function updateCouponDependency() {
+    const enabled =
+      Boolean(
+        couponCheckbox &&
+        couponCheckbox.checked
+      );
+
+    if (!enabled) {
+      if (laCheckbox) {
+        laCheckbox.checked = false;
+      }
+
+      if (shirtCheckbox) {
+        shirtCheckbox.checked = false;
+      }
+
+      if (laCard) {
+        laCard.classList.remove(
+          "is-selected"
+        );
+        laCard.classList.add(
+          "is-disabled"
+        );
+      }
+
+      if (shirtCard) {
+        shirtCard.classList.remove(
+          "is-selected"
+        );
+        shirtCard.classList.add(
+          "is-disabled"
+        );
+      }
+
+      setDisabledState(
+        laCheckbox,
+        true
+      );
+
+      setDisabledState(
+        shirtCheckbox,
+        true
+      );
+
+      setDisabledState(
+        laQuantity,
+        true
+      );
+
+      shirtQtyInputs.forEach(
+        function (input) {
+          input.disabled = true;
+          input.value = "0";
+        }
+      );
+
+      if (laQuantity) {
+        laQuantity.value = "1";
+      }
+
+    } else {
+      setDisabledState(
+        laCheckbox,
+        false
+      );
+
+      setDisabledState(
+        shirtCheckbox,
+        false
+      );
+
+      laCard &&
+        laCard.classList.toggle(
+          "is-disabled",
+          !laCheckbox.checked
+        );
+
+      shirtCard &&
+        shirtCard.classList.toggle(
+          "is-disabled",
+          !shirtCheckbox.checked
+        );
+
+      updateLaState();
+      updateShirtState();
+    }
+  }
+
+  function updateLaState() {
+    const selected =
+      Boolean(
+        laCheckbox &&
+        laCheckbox.checked
+      );
+
+    if (laCard) {
+      laCard.classList.toggle(
+        "is-selected",
+        selected
+      );
+
+      if (
+        couponCheckbox &&
+        couponCheckbox.checked
+      ) {
+        laCard.classList.remove(
+          "is-disabled"
+        );
+      }
+    }
+
+    setDisabledState(
+      laQuantity,
+      !selected
+    );
+
+    if (!selected && laQuantity) {
+      laQuantity.value = "1";
+    }
+  }
+
+  function updateShirtState() {
+    const selected =
+      Boolean(
+        shirtCheckbox &&
+        shirtCheckbox.checked
+      );
+
+    if (shirtCard) {
+      shirtCard.classList.toggle(
+        "is-selected",
+        selected
+      );
+
+      if (
+        couponCheckbox &&
+        couponCheckbox.checked
+      ) {
+        shirtCard.classList.remove(
+          "is-disabled"
+        );
+      }
+    }
+
+    shirtQtyInputs.forEach(
+      function (input) {
+        input.disabled = !selected;
+
+        if (!selected) {
+          input.value = "0";
+        }
+      }
+    );
+
+    updateShirtSummary();
+  }
+
+  function updateShirtSummary() {
+    const total =
+      shirtQtyInputs.reduce(
+        function (sum, input) {
+          const value =
+            Number(
+              input.value
+            );
+
+          return (
+            sum +
+            (
+              Number.isFinite(value) &&
+              value > 0
+                ? Math.floor(value)
+                : 0
+            )
+          );
+        },
+        0
+      );
+
+    if (shirtQuantitySummary) {
+      shirtQuantitySummary.textContent =
+        "Total kaos: " +
+        total +
+        " pcs";
+    }
+  }
+
+  couponCheckbox &&
+    couponCheckbox.addEventListener(
+      "change",
+      updateCouponDependency
+    );
+
+  laCheckbox &&
+    laCheckbox.addEventListener(
+      "change",
+      updateLaState
+    );
+
+  shirtCheckbox &&
+    shirtCheckbox.addEventListener(
+      "change",
+      updateShirtState
+    );
+
+  shirtQtyInputs.forEach(
+    function (input) {
+      input.addEventListener(
+        "input",
+        updateShirtSummary
+      );
+
+      input.addEventListener(
+        "change",
+        updateShirtSummary
+      );
+    }
+  );
+
+  updateCouponDependency();
+
+  /*
+   * Expose a normalized order-reader so the existing registration
+   * submit flow can use one source of truth.
+   */
+  window.getBoldAfterDarkOrderOptions =
+    function () {
+      const couponSelected =
+        Boolean(
+          couponCheckbox &&
+          couponCheckbox.checked
+        );
+
+      const laSelected =
+        couponSelected &&
+        Boolean(
+          laCheckbox &&
+          laCheckbox.checked
+        );
+
+      const shirtSelected =
+        couponSelected &&
+        Boolean(
+          shirtCheckbox &&
+          shirtCheckbox.checked
+        );
+
+      const laQuantityValue =
+        Number(
+          laQuantity &&
+          laQuantity.value
+            ? laQuantity.value
+            : 0
+        );
+
+      const items = [];
+
+      if (
+        laSelected &&
+        Number.isInteger(
+          laQuantityValue
+        ) &&
+        laQuantityValue > 0
+      ) {
+        items.push({
+          itemType: "LA_BOLD_12",
+          variant: "STANDARD",
+          size: null,
+          sleeveType: null,
+          quantity: laQuantityValue
+        });
+      }
+
+      if (shirtSelected) {
+        shirtQtyInputs.forEach(
+          function (input) {
+            const quantity =
+              Number(
+                input.value
+              );
+
+            if (
+              !Number.isInteger(
+                quantity
+              ) ||
+              quantity <= 0
+            ) {
+              return;
+            }
+
+            items.push({
+              itemType:
+                "BOLD_AFTER_DARK_SHIRT",
+              variant:
+                "SHIRT",
+              size:
+                input.dataset.size ||
+                null,
+              sleeveType:
+                input.dataset.sleeve ||
+                null,
+              quantity
+            });
+          }
+        );
+      }
+
+      return {
+        wantsRaffleCoupon:
+          couponSelected,
+        items
+      };
+    };
+})();
+</script>
 
 </body>
 </html>

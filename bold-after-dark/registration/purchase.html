@@ -501,8 +501,24 @@ function saveAndReturn() {
     return;
   }
 
-  window.location.href =
-    "index.html";
+  /*
+   * Return to the actual registration page.
+   * history.back() preserves the live form state on Android/desktop
+   * when the browser keeps the previous document in its navigation cache.
+   * sessionStorage is the fallback for a full reload.
+   */
+  if (
+    document.referrer &&
+    document.referrer.indexOf(
+      "/registration/"
+    ) !== -1 &&
+    window.history.length > 1
+  ) {
+    window.history.back();
+  } else {
+    window.location.href =
+      "index.html";
+  }
 }
 
 laCheck.addEventListener(
@@ -541,5 +557,33 @@ saveButton.addEventListener(
 sync();
 loadPrice();
 </script>
+
+<script id="purchase-return-controller">
+(function () {
+  "use strict";
+
+  const KEY =
+    "boldAfterDarkPurchaseSummary";
+
+  window.addEventListener(
+    "pageshow",
+    function () {
+      try {
+        const raw =
+          sessionStorage.getItem(KEY);
+
+        if (raw) {
+          window.dispatchEvent(
+            new Event(
+              "boldafterdark:purchasesummary"
+            )
+          );
+        }
+      } catch (_) {}
+    }
+  );
+})();
+</script>
+
 </body>
 </html>

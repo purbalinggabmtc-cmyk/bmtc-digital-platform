@@ -591,6 +591,19 @@
       box-shadow: 0 0 14px rgba(224, 0, 0, 0.18);
     }
 
+
+    /* QR SAVE BUTTON VISIBILITY FIX */
+    #saveQrButton {
+      display: block !important;
+      width: 100% !important;
+      min-height: 48px !important;
+      margin-top: 14px !important;
+      position: relative !important;
+      z-index: 5 !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
     .btn-save-qr:hover {
       background: #ff0000;
       border-color: #ff0000;
@@ -1252,7 +1265,7 @@
             </div>
 
             <div class="field-help">
-              Masukkan hanya 6 digit kode setelah BAD26-.
+              Masukkan 6 digit kode BAD26-xxxxxx. ID ini dapat digunakan sebagai ID pembelian hanya jika transaksi pembelian sudah dibuat.
             </div>
           </div>
 
@@ -1593,7 +1606,7 @@
               class="btn-save-qr"
               type="button"
             >
-              SIMPAN TIKET MASUK (JPG)
+              SIMPAN QR & TIKET (JPG)
             </button>
           </div>
 
@@ -2658,7 +2671,7 @@ const submitButton =
           !data ||
           data.success !== true
         ) {
-          throw new Error(
+          const serverMessage =
             data &&
             (
               data.message ||
@@ -2668,7 +2681,11 @@ const submitButton =
                   data.message ||
                   data.detail
                 )
-              : "ID pembelian tidak ditemukan."
+              : "";
+
+          throw new Error(
+            serverMessage ||
+            "ID pembelian belum memiliki data transaksi. Pastikan Anda sudah memilih pembelian LA BOLD/Kaos saat registrasi."
           );
         }
 
@@ -4649,7 +4666,7 @@ boldRidersId:
         saveQrButton.textContent =
           currentHasMesranPurchase
             ? "SIMPAN TIKET + DETAIL PEMBELIAN (JPG)"
-            : "SIMPAN TIKET MASUK (JPG)";
+            : "SIMPAN QR & TIKET (JPG)";
       }
     }
 
@@ -5054,11 +5071,21 @@ boldRidersId:
         qrBox.classList.remove(
           "hidden"
         );
+        qrBox.style.display = "block";
+        saveQrButton.classList.remove(
+          "hidden"
+        );
+        saveQrButton.style.display =
+          "block";
+        saveQrButton.style.visibility =
+          "visible";
+        saveQrButton.style.opacity =
+          "1";
 
         saveQrButton.textContent =
           currentHasMesranPurchase
             ? "SIMPAN TIKET + DETAIL PEMBELIAN (JPG)"
-            : "SIMPAN TIKET MASUK (JPG)";
+            : "SIMPAN QR & TIKET (JPG)";
       } else {
         qrImage.removeAttribute(
           "src"
@@ -5067,6 +5094,9 @@ boldRidersId:
         qrBox.classList.add(
           "hidden"
         );
+        qrBox.style.display = "none";
+        saveQrButton.style.display =
+          "none";
       }
 
       resultBox.scrollIntoView({
@@ -5407,7 +5437,7 @@ boldRidersId:
 
     if (
       preorderCheckbox &&
-      document.getElementById("wantRaffleCoupon")?.checked
+      document.getElementById("raffleCouponMasterInput")?.checked
     ) {
       preorderCheckbox.disabled = false;
     }

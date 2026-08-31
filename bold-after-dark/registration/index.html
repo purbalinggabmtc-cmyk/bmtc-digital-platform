@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>BOLD AFTER DARK — REGISTRATION V6</title>
+  <title>V-FINAL - BOLD AFTER DARK — REGISTRATION V6</title>
 
   <style>
     * {
@@ -819,31 +819,40 @@
       }
     }
   </style>
+<style>
+    .preorder-deadline-note {
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: #fff3cd;
+      color: #7a5600;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .preorder-deadline-note.is-closed {
+      background: #f1f1f1;
+      color: #666;
+    }
+</style>
 
 
-<style id="bmtc-product-toggle-clean-css">
-.product-toggle,
-.optional-product-box {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.product-toggle[hidden],
-.optional-product-box[hidden] {
-  display: none !important;
-}
-
+<style id="bmtc-single-product-css">
 @media (max-width: 600px) {
-  .product-toggle,
-  .optional-product-box {
-    width: 100% !important;
-    max-width: 100% !important;
+  #laBoldToggle,
+  #boldShirtToggle,
+  #rafflePurchaseBox,
+  #shirtPurchaseBox {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 </style>
 
 </head>
 
+<!-- MOBILE PREORDER FINAL -->
 <body>
 
   <div class="container">
@@ -2217,8 +2226,13 @@ const submitButton =
       }
     }
 
-    function setProductVisibility(element, visible) {
-      if (!element) return;
+    function setOptionalSectionVisible(
+      element,
+      visible
+    ) {
+      if (!element) {
+        return;
+      }
 
       element.classList.toggle(
         "hidden",
@@ -2229,22 +2243,15 @@ const submitButton =
         !visible;
 
       if (visible) {
-        element.style.removeProperty(
-          "display"
-        );
-        element.removeAttribute(
-          "aria-hidden"
-        );
+        element.style.display =
+          "block";
+        element.style.visibility =
+          "visible";
       } else {
-        element.style.setProperty(
-          "display",
-          "none",
-          "important"
-        );
-        element.setAttribute(
-          "aria-hidden",
-          "true"
-        );
+        element.style.display =
+          "none";
+        element.style.visibility =
+          "hidden";
       }
     }
 
@@ -2252,21 +2259,23 @@ const submitButton =
       const masterOn =
         raffleCouponMasterInput.checked === true;
 
+      // The master checkbox only controls whether the
+      // two purchase choices are available.
+      setOptionalSectionVisible(
+        laBoldToggle,
+        masterOn
+      );
+
+      setOptionalSectionVisible(
+        boldShirtToggle,
+        masterOn
+      );
+
       wantRaffleTicketInput.disabled =
         !masterOn;
 
       wantBoldShirtInput.disabled =
         !masterOn;
-
-      setProductVisibility(
-        laBoldToggle,
-        masterOn
-      );
-
-      setProductVisibility(
-        boldShirtToggle,
-        masterOn
-      );
 
       if (!masterOn) {
         wantRaffleTicketInput.checked =
@@ -2274,45 +2283,6 @@ const submitButton =
 
         wantBoldShirtInput.checked =
           false;
-
-        raffleQuantityInput.value =
-          "1";
-
-        raffleQuantityInput.required =
-          false;
-
-        setProductVisibility(
-          rafflePurchaseBox,
-          false
-        );
-
-        setProductVisibility(
-          shirtPurchaseBox,
-          false
-        );
-
-        document
-          .querySelectorAll(
-            ".shirt-qty"
-          )
-          .forEach(function(input) {
-            input.value = "0";
-            input.disabled = true;
-          });
-
-        paymentMethodInput.value =
-          "";
-
-        paymentMethodInput.required =
-          false;
-
-        if (
-          paymentGatewayBox
-        ) {
-          paymentGatewayBox.classList.add(
-            "hidden"
-          );
-        }
       }
 
       updateRafflePurchaseFields();
@@ -2326,7 +2296,7 @@ const submitButton =
         raffleCouponMasterInput.checked === true &&
         wantRaffleTicketInput.checked === true;
 
-      setProductVisibility(
+      setOptionalSectionVisible(
         rafflePurchaseBox,
         active
       );
@@ -2337,9 +2307,7 @@ const submitButton =
       if (!active) {
         raffleQuantityInput.value =
           "1";
-      }
-
-      if (active) {
+      } else {
         updateRaffleTotal();
       }
 
@@ -2351,7 +2319,7 @@ const submitButton =
         raffleCouponMasterInput.checked === true &&
         wantBoldShirtInput.checked === true;
 
-      setProductVisibility(
+      setOptionalSectionVisible(
         shirtPurchaseBox,
         active
       );
@@ -2374,7 +2342,7 @@ const submitButton =
       updateOrderSummary();
     }
 
-    function updateRaffleTotal() {
+function updateRaffleTotal() {
       let quantity = Number(raffleQuantityInput.value);
 
       if (!Number.isInteger(quantity) || quantity < 1) quantity = 1;
@@ -5241,19 +5209,10 @@ boldRidersId:
     /*
      * TIKET UNDIAN
      */
-    raffleCouponMasterInput.addEventListener(
-      "change",
-      function() {
-        updateCouponMasterState();
-        hideMessage();
+hideMessage();
       }
     );
-
-    wantRaffleTicketInput.addEventListener(
-      "change",
-      function() {
-        updateRafflePurchaseFields();
-        hideMessage();
+hideMessage();
       }
     );
 
@@ -5262,13 +5221,7 @@ boldRidersId:
       "input",
       updateRaffleTotal
     );
-
-
-    wantBoldShirtInput.addEventListener(
-      "change",
-      function() {
-        updateShirtPurchaseFields();
-        hideMessage();
+hideMessage();
       }
     );
 
@@ -5384,6 +5337,28 @@ boldRidersId:
     updateRafflePurchaseFields();
     updateShirtPurchaseFields();
     updatePaymentVisibility();
+
+    raffleCouponMasterInput.addEventListener(
+      "change",
+      function() {
+        updateCouponMasterState();
+      }
+    );
+
+    wantRaffleTicketInput.addEventListener(
+      "change",
+      function() {
+        updateRafflePurchaseFields();
+      }
+    );
+
+    wantBoldShirtInput.addEventListener(
+      "change",
+      function() {
+        updateShirtPurchaseFields();
+      }
+    );
+
     updateCouponMasterState();
     loadProductSettings();
 
@@ -5491,84 +5466,98 @@ boldRidersId:
 </script>
 
 
-
-
-<script id="bmtc-clean-pageshow">
-window.addEventListener("pageshow", function () {
-  setTimeout(function () {
-    if (
-      typeof updateCouponMasterState ===
-      "function"
-    ) {
-      updateCouponMasterState();
+<script>
+(function () {
+  function refreshCouponEstimate() {
+    if (typeof updateCouponEstimate === "function") {
+      updateCouponEstimate();
     }
-  }, 0);
-});
+  }
+
+  [
+    "raffleCouponMasterInput",
+    "wantRaffleTicket",
+    "wantBoldShirt",
+    "raffleQuantity"
+  ].forEach(function (id) {
+    const element =
+      document.getElementById(id);
+
+    if (element) {
+      element.addEventListener(
+        "change",
+        refreshCouponEstimate
+      );
+      element.addEventListener(
+        "input",
+        refreshCouponEstimate
+      );
+    }
+  });
+
+  document
+    .querySelectorAll(".shirt-qty")
+    .forEach(function (element) {
+      element.addEventListener(
+        "change",
+        refreshCouponEstimate
+      );
+      element.addEventListener(
+        "input",
+        refreshCouponEstimate
+      );
+    });
+
+  refreshCouponEstimate();
+})();
 </script>
 
 
-<script id="bmtc-clean-preorder-deadline">
+<script id="bmtc-single-preorder-deadline">
 (function () {
-  const CUTOFF =
-    new Date("2026-09-19T00:00:00+07:00");
+  const cutoff =
+    new Date(
+      "2026-09-19T00:00:00+07:00"
+    ).getTime();
 
-  function syncDeadline() {
+  function syncPreorderDeadline() {
     const master =
       document.getElementById(
         "raffleCouponMasterInput"
       );
-    const checkbox =
+
+    const shirtCheckbox =
       document.getElementById(
         "wantBoldShirt"
       );
-    const toggle =
-      document.getElementById(
-        "boldShirtToggle"
-      );
-    const box =
-      document.getElementById(
-        "shirtPurchaseBox"
-      );
 
-    if (
-      !master ||
-      !checkbox ||
-      !toggle ||
-      !box
-    ) {
+    if (!master || !shirtCheckbox) {
       return;
     }
 
-    const open =
-      Date.now() < CUTOFF.getTime();
+    const isOpen =
+      Date.now() < cutoff;
 
-    if (!open) {
-      checkbox.checked = false;
-      checkbox.disabled = true;
+    shirtCheckbox.disabled =
+      !isOpen ||
+      !master.checked;
 
-      toggle.classList.add("hidden");
-      toggle.hidden = true;
-      toggle.style.display = "none";
+    if (!isOpen) {
+      shirtCheckbox.checked = false;
 
-      box.classList.add("hidden");
-      box.hidden = true;
-      box.style.display = "none";
-
-      document
-        .querySelectorAll(".shirt-qty")
-        .forEach(function(input) {
-          input.value = "0";
-          input.disabled = true;
-        });
-    } else {
-      checkbox.disabled =
-        !master.checked;
+      if (
+        typeof updateShirtPurchaseFields ===
+        "function"
+      ) {
+        updateShirtPurchaseFields();
+      }
     }
   }
 
-  syncDeadline();
+  syncPreorderDeadline();
+
   window.setInterval(
-    syncDeadline,
+    syncPreorderDeadline,
     60000
   );
 })();

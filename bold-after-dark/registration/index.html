@@ -373,6 +373,154 @@
       margin: 0 auto;
     }
 
+    .product-toggle {
+      display: block;
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid #333;
+      border-radius: 12px;
+      background: #111;
+    }
+
+    .product-toggle-label {
+      display: flex !important;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 0 !important;
+      cursor: pointer;
+      font-size: 14px !important;
+      font-weight: 900 !important;
+      color: #fff !important;
+    }
+
+    .product-toggle-label input[type=checkbox] {
+      width: 20px;
+      min-height: 20px;
+      margin: 0;
+      flex: 0 0 20px;
+      accent-color: #e00000;
+    }
+
+    .product-toggle-help {
+      margin: 8px 0 0 30px;
+      color: #888;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .optional-product-box {
+      margin-top: 12px;
+      padding: 18px;
+      border: 1px solid #383838;
+      border-radius: 12px;
+      background: #0d0d0d;
+    }
+
+    .optional-product-header {
+      margin-bottom: 16px;
+    }
+
+    .optional-product-title {
+      color: #fff;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+    }
+
+    .optional-product-subtitle {
+      margin-top: 6px;
+      color: #888;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .shirt-section {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid #2c2c2c;
+      border-radius: 10px;
+      background: #121212;
+    }
+
+    .shirt-section-title {
+      margin-bottom: 10px;
+      color: #e00000;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+
+    .shirt-size-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 130px 130px;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .shirt-size-row.header {
+      color: #777;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .shirt-size-label {
+      color: #ddd;
+      font-weight: 800;
+    }
+
+    .shirt-qty {
+      min-height: 42px;
+      padding: 10px 12px;
+    }
+
+    .shirt-subtotal {
+      text-align: right;
+      color: #aaa;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .shirt-summary {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #2c2c2c;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .order-total-card {
+      margin-top: 16px;
+      padding: 15px;
+      border: 1px solid #444;
+      border-radius: 10px;
+      background: #171717;
+    }
+
+    .order-total-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: #ccc;
+    }
+
+    .order-total-row.grand {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #333;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
     .combined-purchase-details {
       margin-top: 16px;
       padding-top: 16px;
@@ -796,45 +944,39 @@
           >
         </div>
 
-        <!-- TIKET UNDIAN -->
-        <div class="raffle-option">
+        <!-- PRODUK / PEMBELIAN -->
+        <div class="product-toggle">
           <label
             for="wantRaffleTicket"
-            class="raffle-checkbox-label"
+            class="product-toggle-label"
           >
             <input
               id="wantRaffleTicket"
               name="wantRaffleTicket"
               type="checkbox"
             >
-
-            <span class="raffle-checkbox-text">
-              Saya ingin mendapatkan tiket undian
-            </span>
+            <span>Saya ingin mendapatkan tiket undian</span>
           </label>
-
-          <div class="field-help">
-            <span id="raffleProductInfo">Memuat informasi produk...</span>
+          <div class="product-toggle-help">
+            Aktifkan untuk memesan LA BOLD 12. Jika tidak dicentang, bagian LA BOLD tidak ikut dihitung.
           </div>
         </div>
 
         <div
           id="rafflePurchaseBox"
-          class="raffle-box hidden"
+          class="optional-product-box hidden"
         >
-          <div class="raffle-title">
-            <span id="purchaseSectionTitle">PEMBELIAN PRODUK</span>
-          </div>
-
-          <div class="raffle-subtitle">
-            Tentukan jumlah pembelian dan metode pembayaran. Bukti pembayaran diunggah setelah registrasi.
+          <div class="optional-product-header">
+            <div class="optional-product-title" id="purchaseSectionTitle">PEMBELIAN LA BOLD 12</div>
+            <div class="optional-product-subtitle">
+              Tentukan jumlah BUNGKUS. Setelah pembayaran disetujui, setiap 1 BUNGKUS mendapatkan 1 tiket undian sekali pakai.
+            </div>
           </div>
 
           <div class="field">
             <label for="raffleQuantity">
-              <span id="raffleQuantityLabel">Jumlah</span> <span class="required">*</span>
+              Jumlah BUNGKUS <span class="required">*</span>
             </label>
-
             <input
               id="raffleQuantity"
               name="raffleQuantity"
@@ -848,38 +990,104 @@
 
           <div class="price-summary">
             <div class="price-row">
-              <span id="raffleUnitPriceLabel">Harga per unit</span>
+              <span>Harga per BUNGKUS</span>
               <strong id="raffleUnitPriceText">-</strong>
             </div>
-
             <div class="price-row">
               <span>Jumlah</span>
-              <strong id="raffleQuantityText">1 unit</strong>
+              <strong id="raffleQuantityText">1 BUNGKUS</strong>
             </div>
-
             <div class="price-row">
-              <span>Total Pembayaran</span>
-              <strong id="raffleTotalText">Rp20.000</strong>
+              <span>Total LA BOLD 12</span>
+              <strong id="raffleTotalText">Rp0</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-toggle">
+          <label
+            for="wantBoldShirt"
+            class="product-toggle-label"
+          >
+            <input
+              id="wantBoldShirt"
+              name="wantBoldShirt"
+              type="checkbox"
+            >
+            <span>Saya ingin PRE ORDER KAOS BOLD AFTER DARK</span>
+          </label>
+          <div class="product-toggle-help">
+            Pilih jumlah berdasarkan ukuran dan model lengan. Lengan pendek dan lengan panjang dapat dipesan bersamaan.
+          </div>
+        </div>
+
+        <div
+          id="shirtPurchaseBox"
+          class="optional-product-box hidden"
+        >
+          <div class="optional-product-header">
+            <div class="optional-product-title">PRE ORDER KAOS BOLD AFTER DARK</div>
+            <div class="optional-product-subtitle">
+              Isi jumlah untuk setiap ukuran. Biarkan 0 jika tidak memesan ukuran tersebut.
             </div>
           </div>
 
-          <div class="payment-title">
-            PAYMENT GATEWAY
+          <div class="shirt-section">
+            <div class="shirt-section-title">LENGAN PENDEK</div>
+            <div class="shirt-size-row header">
+              <div>Ukuran</div><div>Jumlah</div><div>Subtotal</div>
+            </div>
+            <div id="shortSleeveRows"></div>
+            <div class="shirt-summary">
+              <span>Total Lengan Pendek</span>
+              <strong id="shortSleeveTotal">Rp0</strong>
+            </div>
           </div>
 
+          <div class="shirt-section">
+            <div class="shirt-section-title">LENGAN PANJANG</div>
+            <div class="shirt-size-row header">
+              <div>Ukuran</div><div>Jumlah</div><div>Subtotal</div>
+            </div>
+            <div id="longSleeveRows"></div>
+            <div class="shirt-summary">
+              <span>Total Lengan Panjang</span>
+              <strong id="longSleeveTotal">Rp0</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-total-card">
+          <div style="font-weight:900; font-size:13px; letter-spacing:.6px;">RINGKASAN PESANAN</div>
+          <div class="order-total-row">
+            <span>LA BOLD 12</span>
+            <strong id="summaryRaffleTotal">Rp0</strong>
+          </div>
+          <div class="order-total-row">
+            <span>Kaos Lengan Pendek</span>
+            <strong id="summaryShortTotal">Rp0</strong>
+          </div>
+          <div class="order-total-row">
+            <span>Kaos Lengan Panjang</span>
+            <strong id="summaryLongTotal">Rp0</strong>
+          </div>
+          <div class="order-total-row grand">
+            <span>TOTAL PEMBAYARAN</span>
+            <strong id="grandOrderTotal">Rp0</strong>
+          </div>
+        </div>
+
+        <div
+          id="paymentGatewayBox"
+          class="optional-product-box hidden"
+        >
+          <div class="payment-title">PAYMENT GATEWAY</div>
           <div class="field">
             <label for="paymentMethod">
               Pilih Metode Pembayaran <span class="required">*</span>
             </label>
-
-            <select
-              id="paymentMethod"
-              name="paymentMethod"
-            >
-              <option value="">
-                Pilih bank / e-wallet
-              </option>
-
+            <select id="paymentMethod" name="paymentMethod">
+              <option value="">Pilih bank / e-wallet</option>
               <option value="EWALLET">DANA / GoPay / ShopeePay</option>
               <option value="BCA">BCA</option>
               <option value="BRI">BRI</option>
@@ -887,33 +1095,12 @@
             </select>
           </div>
 
-          <div
-            id="selectedPaymentAccount"
-            class="payment-item hidden"
-          >
-            <div
-              id="selectedPaymentLabel"
-              class="payment-label"
-            >
-              -
-            </div>
-
-            <div
-              id="selectedPaymentNumber"
-              class="payment-number"
-            >
-              -
-            </div>
-
-            <div
-              id="selectedPaymentOwner"
-              class="field-help hidden"
-            >
-              -
-            </div>
+          <div id="selectedPaymentAccount" class="payment-item hidden">
+            <div id="selectedPaymentLabel" class="payment-label">-</div>
+            <div id="selectedPaymentNumber" class="payment-number">-</div>
+            <div id="selectedPaymentOwner" class="field-help hidden">-</div>
           </div>
-</div>
-
+        </div>
 
         <div
           id="loadingBox"
@@ -1719,6 +1906,17 @@ const submitButton =
           );
         }
 
+        SHIRT_SHORT_UNIT_PRICE = Number(
+          data.merchandise && data.merchandise.shortPrice
+            ? data.merchandise.shortPrice
+            : 0
+        );
+        SHIRT_LONG_UNIT_PRICE = Number(
+          data.merchandise && data.merchandise.longPrice
+            ? data.merchandise.longPrice
+            : 0
+        );
+        createShirtRows();
         applyProductSettingsToUi();
 
       } catch (error) {
@@ -1784,8 +1982,7 @@ const submitButton =
 
       if (purchaseDetailTitle) {
         purchaseDetailTitle.textContent =
-          "DETAIL PEMBELIAN " +
-          ACTIVE_PRODUCT_NAME.toUpperCase();
+          "DETAIL PEMBELIAN BOLD AFTER DARK";
       }
 
       updateRaffleTotal();
@@ -1857,132 +2054,277 @@ const submitButton =
     }
 
 
+    const SHIRT_SIZES = ["S", "M", "L", "XL", "2XL", "3XL", "4XL"];
+
+    let SHIRT_SHORT_UNIT_PRICE = 0;
+    let SHIRT_LONG_UNIT_PRICE = 0;
+    let ACTIVE_ORDER_ITEMS = [];
+
+    const wantBoldShirtInput =
+      document.getElementById("wantBoldShirt");
+
+    const shirtPurchaseBox =
+      document.getElementById("shirtPurchaseBox");
+
+    const paymentGatewayBox =
+      document.getElementById("paymentGatewayBox");
+
+    const shortSleeveRows =
+      document.getElementById("shortSleeveRows");
+
+    const longSleeveRows =
+      document.getElementById("longSleeveRows");
+
+    const shortSleeveTotal =
+      document.getElementById("shortSleeveTotal");
+
+    const longSleeveTotal =
+      document.getElementById("longSleeveTotal");
+
+    const summaryRaffleTotal =
+      document.getElementById("summaryRaffleTotal");
+
+    const summaryShortTotal =
+      document.getElementById("summaryShortTotal");
+
+    const summaryLongTotal =
+      document.getElementById("summaryLongTotal");
+
+    const grandOrderTotal =
+      document.getElementById("grandOrderTotal");
+
+    function createShirtRows() {
+      function rowHtml(sleeve, size, price) {
+        const prefix = sleeve === "SHORT" ? "short" : "long";
+        return `
+          <div class="shirt-size-row">
+            <div class="shirt-size-label">${size}</div>
+            <input
+              id="shirt_${prefix}_${size.replace(/[^A-Z0-9]/g, "").toLowerCase()}"
+              class="shirt-qty"
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              value="0"
+              data-sleeve="${sleeve}"
+              data-size="${size}"
+              data-price="${price}"
+            >
+            <div
+              id="shirt_subtotal_${prefix}_${size.replace(/[^A-Z0-9]/g, "").toLowerCase()}"
+              class="shirt-subtotal"
+            >${formatRupiah(0)}</div>
+          </div>
+        `;
+      }
+
+      shortSleeveRows.innerHTML = SHIRT_SIZES
+        .map(size => rowHtml("SHORT", size, SHIRT_SHORT_UNIT_PRICE))
+        .join("");
+
+      longSleeveRows.innerHTML = SHIRT_SIZES
+        .map(size => rowHtml("LONG", size, SHIRT_LONG_UNIT_PRICE))
+        .join("");
+
+      document.querySelectorAll(".shirt-qty").forEach(input => {
+        input.addEventListener("input", updateOrderSummary);
+      });
+    }
+
+    function getShirtLines() {
+      return Array.from(document.querySelectorAll(".shirt-qty"))
+        .map(input => ({
+          sleeve: input.dataset.sleeve,
+          size: input.dataset.size,
+          quantity: Math.max(0, Math.min(100, Number(input.value) || 0)),
+          unitPrice: Number(input.dataset.price) || 0
+        }))
+        .filter(item => Number.isInteger(item.quantity) && item.quantity > 0);
+    }
+
+    function hasAnyOrderItem() {
+      const raffleSelected = wantRaffleTicketInput.checked;
+      const shirtSelected = wantBoldShirtInput.checked;
+      const shirtItems = shirtSelected ? getShirtLines() : [];
+      return raffleSelected || shirtItems.length > 0;
+    }
+
+    function updatePaymentVisibility() {
+      if (hasAnyOrderItem()) {
+        paymentGatewayBox.classList.remove("hidden");
+        paymentMethodInput.required = true;
+      } else {
+        paymentGatewayBox.classList.add("hidden");
+        paymentMethodInput.required = false;
+        paymentMethodInput.value = "";
+        updatePaymentAccount();
+      }
+    }
+
     function updateRafflePurchaseFields() {
-      const enabled =
-        wantRaffleTicketInput.checked;
+      const enabled = wantRaffleTicketInput.checked;
 
       if (enabled) {
-        rafflePurchaseBox.classList.remove(
-          "hidden"
-        );
-
-        raffleQuantityInput.required =
-          true;
-
-        paymentMethodInput.required =
-          true;
-
+        rafflePurchaseBox.classList.remove("hidden");
+        raffleQuantityInput.required = true;
         updateRaffleTotal();
       } else {
-        rafflePurchaseBox.classList.add(
-          "hidden"
-        );
-
-        raffleQuantityInput.required =
-          false;
-
-        paymentMethodInput.required =
-          false;
-
-        raffleQuantityInput.value =
-          "1";
-
-        paymentMethodInput.value =
-          "";
-
-        updatePaymentAccount();
-
-    paymentLookupBox.style.display =
-      "none";
-
-        updateRaffleTotal();
+        rafflePurchaseBox.classList.add("hidden");
+        raffleQuantityInput.required = false;
+        raffleQuantityInput.value = "1";
       }
+
+      updateOrderSummary();
     }
 
+    function updateShirtPurchaseFields() {
+      if (wantBoldShirtInput.checked) {
+        shirtPurchaseBox.classList.remove("hidden");
+      } else {
+        shirtPurchaseBox.classList.add("hidden");
+        document.querySelectorAll(".shirt-qty").forEach(input => {
+          input.value = "0";
+        });
+      }
+
+      updateOrderSummary();
+    }
 
     function updateRaffleTotal() {
-      let quantity =
-        Number(
-          raffleQuantityInput.value
-        );
+      let quantity = Number(raffleQuantityInput.value);
 
-      if (
-        !Number.isInteger(quantity) ||
-        quantity < 1
-      ) {
-        quantity = 1;
-      }
-
-      if (quantity > 100) {
-        quantity = 100;
-      }
+      if (!Number.isInteger(quantity) || quantity < 1) quantity = 1;
+      if (quantity > 100) quantity = 100;
+      raffleQuantityInput.value = String(quantity);
 
       raffleQuantityText.textContent =
-        quantity +
-        " " +
-        ACTIVE_PRODUCT_UNIT_NAME;
+        quantity + " BUNGKUS";
 
       raffleTotalText.textContent =
-        formatRupiah(
-          quantity *
-          ACTIVE_PRODUCT_UNIT_PRICE
-        );
+        formatRupiah(quantity * ACTIVE_PRODUCT_UNIT_PRICE);
+
+      updateOrderSummary();
     }
 
+    function updateOrderSummary() {
+      const raffleTotal = wantRaffleTicketInput.checked
+        ? Number(raffleQuantityInput.value || 0) * ACTIVE_PRODUCT_UNIT_PRICE
+        : 0;
+
+      let shortTotal = 0;
+      let longTotal = 0;
+
+      document.querySelectorAll(".shirt-qty").forEach(input => {
+        let quantity = Number(input.value) || 0;
+        quantity = Math.max(0, Math.min(100, Math.floor(quantity)));
+        input.value = String(quantity);
+
+        const price = Number(input.dataset.price) || 0;
+        const subtotal = quantity * price;
+
+        const prefix = input.dataset.sleeve === "SHORT" ? "short" : "long";
+        const size = input.dataset.size.replace(/[^A-Z0-9]/g, "").toLowerCase();
+        const subtotalNode = document.getElementById(
+          `shirt_subtotal_${prefix}_${size}`
+        );
+        if (subtotalNode) subtotalNode.textContent = formatRupiah(subtotal);
+
+        if (input.dataset.sleeve === "SHORT") {
+          shortTotal += subtotal;
+        } else {
+          longTotal += subtotal;
+        }
+      });
+
+      const grandTotal = raffleTotal + shortTotal + longTotal;
+
+      summaryRaffleTotal.textContent = formatRupiah(raffleTotal);
+      summaryShortTotal.textContent = formatRupiah(shortTotal);
+      summaryLongTotal.textContent = formatRupiah(longTotal);
+      shortSleeveTotal.textContent = formatRupiah(shortTotal);
+      longSleeveTotal.textContent = formatRupiah(longTotal);
+      grandOrderTotal.textContent = formatRupiah(grandTotal);
+
+      updatePaymentVisibility();
+    }
 
     function validateRafflePurchase() {
-      if (
-        !wantRaffleTicketInput.checked
-      ) {
+      const raffleSelected = wantRaffleTicketInput.checked;
+      const shirtSelected = wantBoldShirtInput.checked;
+      const shirtItems = shirtSelected ? getShirtLines() : [];
+
+      if (!raffleSelected && !shirtSelected) {
         return {
           ok: true,
           quantity: 0,
           paymentMethod: "",
-          file: null
+          items: []
         };
       }
 
-      const quantity =
-        Number(
-          raffleQuantityInput.value
-        );
+      const quantity = raffleSelected
+        ? Number(raffleQuantityInput.value)
+        : 0;
 
-      if (
-        !Number.isInteger(quantity) ||
-        quantity < 1 ||
-        quantity > 100
-      ) {
+      if (raffleSelected && (!Number.isInteger(quantity) || quantity < 1 || quantity > 100)) {
         return {
           ok: false,
-          message:
-            "Jumlah pembelian " + ACTIVE_PRODUCT_NAME + " harus 1 sampai 100 " + ACTIVE_PRODUCT_UNIT_NAME + ".",
-          element:
-            raffleQuantityInput
+          message: "Jumlah BUNGKUS LA BOLD 12 harus 1 sampai 100.",
+          element: raffleQuantityInput
         };
       }
 
-      const paymentMethod =
-        String(
-          paymentMethodInput.value || ""
-        ).trim();
+      if (shirtSelected && shirtItems.length === 0) {
+        return {
+          ok: false,
+          message: "Pilih minimal 1 kaos berdasarkan ukuran dan model lengan.",
+          element: wantBoldShirtInput
+        };
+      }
 
+      const paymentMethod = String(paymentMethodInput.value || "").trim();
       if (!paymentMethod) {
         return {
           ok: false,
-          message:
-            "Silakan pilih metode pembayaran " + ACTIVE_PRODUCT_NAME + ".",
-          element:
-            paymentMethodInput
+          message: "Silakan pilih metode pembayaran.",
+          element: paymentMethodInput
         };
       }
+
+      const items = [];
+
+      if (raffleSelected) {
+        items.push({
+          itemType: "LA_BOLD_12",
+          variant: "STANDARD",
+          size: null,
+          sleeveType: null,
+          quantity,
+          unitPrice: ACTIVE_PRODUCT_UNIT_PRICE
+        });
+      }
+
+      for (const shirt of shirtItems) {
+        items.push({
+          itemType: "BOLD_AFTER_DARK_SHIRT",
+          variant: shirt.sleeve === "SHORT" ? "LENGAN PENDEK" : "LENGAN PANJANG",
+          size: shirt.size,
+          sleeveType: shirt.sleeve,
+          quantity: shirt.quantity,
+          unitPrice: shirt.unitPrice
+        });
+      }
+
+      ACTIVE_ORDER_ITEMS = items;
 
       return {
         ok: true,
         quantity,
-        paymentMethod
+        paymentMethod,
+        items
       };
     }
-
 
     async function createMesranPurchase(
       registrationData,
@@ -1995,121 +2337,81 @@ const submitButton =
           {
             method: "POST",
             headers: {
-              "Content-Type":
-                "application/json",
-              "Accept":
-                "application/json",
-              "apikey":
-                SUPABASE_PUBLISHABLE_KEY,
-              "Authorization":
-                "Bearer " +
-                SUPABASE_PUBLISHABLE_KEY
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+              "apikey": SUPABASE_PUBLISHABLE_KEY,
+              "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
             },
-            body:
-              JSON.stringify({
-                buyerName:
-                  registrationData.name,
-                whatsapp:
-                  registrationData.whatsapp,
-                registrationPassId:
-                  registrationData.passId,
-                quantity:
-                  raffleData.quantity,
-                paymentMethod:
-                  raffleData.paymentMethod
-              })
+            body: JSON.stringify({
+              buyerName: registrationData.name,
+              whatsapp: registrationData.whatsapp,
+              registrationPassId: registrationData.passId,
+              quantity: raffleData.quantity || 0,
+              paymentMethod: raffleData.paymentMethod,
+              items: raffleData.items || []
+            })
           }
         );
 
-      const raw =
-        await createResponse.text();
-
+      const raw = await createResponse.text();
       let data;
 
       try {
-        data =
-          JSON.parse(raw);
+        data = JSON.parse(raw);
       } catch {
         throw new Error(
           "Registrasi berhasil, tetapi server pembelian mengembalikan response yang tidak valid."
         );
       }
 
-      if (
-        !createResponse.ok ||
-        !data ||
-        data.success !== true
-      ) {
+      if (!createResponse.ok || !data || data.success !== true) {
         throw new Error(
-          data &&
-          (
-            data.message ||
-            data.detail
-          )
-            ? (
-                data.message ||
-                data.detail
-              )
-            : "Registrasi berhasil, tetapi ID pembelian " + ACTIVE_PRODUCT_NAME + " gagal dibuat."
+          data && (data.message || data.detail)
+            ? (data.message || data.detail)
+            : "ID pembelian gagal dibuat."
         );
       }
 
       return {
-        purchaseId:
-          String(
-            data.purchase &&
-            data.purchase.purchaseId
-              ? data.purchase.purchaseId
-              : registrationData.passId
-          ).trim(),
-        quantity:
-          Number(
-            data.purchase &&
-            data.purchase.quantity
-              ? data.purchase.quantity
-              : raffleData.quantity
-          ),
-        totalAmount:
-          Number(
-            data.purchase &&
-            data.purchase.totalAmount
-              ? data.purchase.totalAmount
-              : raffleData.quantity *
-                ACTIVE_PRODUCT_UNIT_PRICE
-          ),
-        paymentMethod:
-          String(
-            data.purchase &&
-            data.purchase.paymentMethod
-              ? data.purchase.paymentMethod
-              : raffleData.paymentMethod
-          ),
-        productName:
-          String(
-            data.purchase &&
-            data.purchase.productName
-              ? data.purchase.productName
-              : ACTIVE_PRODUCT_NAME
-          ),
-        unitName:
-          String(
-            data.purchase &&
-            data.purchase.unitName
-              ? data.purchase.unitName
-              : ACTIVE_PRODUCT_UNIT_NAME
-          ),
-        unitPrice:
-          Number(
-            data.purchase &&
-            data.purchase.unitPrice
-              ? data.purchase.unitPrice
-              : ACTIVE_PRODUCT_UNIT_PRICE
-          ),
-        paymentAccount:
-          data.paymentAccount || null
+        purchaseId: String(
+          data.purchase && data.purchase.purchaseId
+            ? data.purchase.purchaseId
+            : registrationData.passId
+        ).trim(),
+        quantity: Number(
+          data.purchase && data.purchase.quantity
+            ? data.purchase.quantity
+            : raffleData.quantity || 0
+        ),
+        totalAmount: Number(
+          data.purchase && data.purchase.totalAmount
+            ? data.purchase.totalAmount
+            : 0
+        ),
+        paymentMethod: String(
+          data.purchase && data.purchase.paymentMethod
+            ? data.purchase.paymentMethod
+            : raffleData.paymentMethod
+        ),
+        productName: String(
+          data.purchase && data.purchase.productName
+            ? data.purchase.productName
+            : "BOLD AFTER DARK ORDER"
+        ),
+        unitName: String(
+          data.purchase && data.purchase.unitName
+            ? data.purchase.unitName
+            : "order"
+        ),
+        unitPrice: Number(
+          data.purchase && data.purchase.unitPrice
+            ? data.purchase.unitPrice
+            : 0
+        ),
+        paymentAccount: data.paymentAccount || null,
+        items: Array.isArray(data.items) ? data.items : raffleData.items || []
       };
     }
-
 
     async function lookupPurchase() {
       hideMessage();
@@ -3767,7 +4069,8 @@ boldRidersId:
         let mesranPurchase = null;
 
         if (
-          wantRaffleTicketInput.checked
+          raffleData.items &&
+          raffleData.items.length > 0
         ) {
           try {
             mesranPurchase =
@@ -4724,6 +5027,15 @@ boldRidersId:
     );
 
 
+    wantBoldShirtInput.addEventListener(
+      "change",
+      function() {
+        updateShirtPurchaseFields();
+        hideMessage();
+      }
+    );
+
+
     paymentMethodInput.addEventListener(
       "change",
       updatePaymentAccount
@@ -4832,6 +5144,9 @@ boldRidersId:
      * INITIAL STATE
      */
     syncAccessUi();
+    updateRafflePurchaseFields();
+    updateShirtPurchaseFields();
+    updatePaymentVisibility();
     loadProductSettings();
 
     /*

@@ -836,10 +836,10 @@
     }
 </style>
 <style>
-
+</style>
 </head>
 
-<!-- MOBILE PREORDER FINAL v10 -->
+<!-- REGISTRATION UI FINAL FIX -->
 <body>
 
   <div class="container">
@@ -2214,75 +2214,53 @@ const submitButton =
     }
 
     function updateCouponMasterState() {
-      const enabled =
-        Boolean(
-          raffleCouponMasterInput &&
-          raffleCouponMasterInput.checked
-        );
+      const enabled = Boolean(raffleCouponMasterInput && raffleCouponMasterInput.checked);
 
-      // The two product checkboxes are available only after
-      // the master "Saya ingin kupon undian" checkbox is checked.
-      laBoldToggle.classList.toggle(
-        "hidden",
-        !enabled
-      );
+      if (enabled) {
+        laBoldToggle.classList.remove("hidden");
+        boldShirtToggle.classList.remove("hidden");
+        laBoldToggle.style.setProperty("display", "block", "important");
+        boldShirtToggle.style.setProperty("display", "block", "important");
+        laBoldToggle.style.setProperty("visibility", "visible", "important");
+        boldShirtToggle.style.setProperty("visibility", "visible", "important");
+        laBoldToggle.style.setProperty("opacity", "1", "important");
+        boldShirtToggle.style.setProperty("opacity", "1", "important");
 
-      boldShirtToggle.classList.toggle(
-        "hidden",
-        !enabled
-      );
+        wantRaffleTicketInput.disabled = false;
+        wantBoldShirtInput.disabled = false;
+      } else {
+        laBoldToggle.classList.add("hidden");
+        boldShirtToggle.classList.add("hidden");
+        laBoldToggle.style.setProperty("display", "none", "important");
+        boldShirtToggle.style.setProperty("display", "none", "important");
+        laBoldToggle.style.removeProperty("visibility");
+        boldShirtToggle.style.removeProperty("visibility");
+        laBoldToggle.style.removeProperty("opacity");
+        boldShirtToggle.style.removeProperty("opacity");
 
-      // Explicit display values prevent mobile browsers/CSS
-      // from retaining a stale hidden state.
-      laBoldToggle.style.display =
-        enabled ? "block" : "none";
-
-      boldShirtToggle.style.display =
-        enabled ? "block" : "none";
-
-      wantRaffleTicketInput.disabled =
-        !enabled;
-
-      wantBoldShirtInput.disabled =
-        !enabled;
-
-      if (!enabled) {
         wantRaffleTicketInput.checked = false;
         wantBoldShirtInput.checked = false;
-
-        rafflePurchaseBox.classList.add(
-          "hidden"
-        );
-        rafflePurchaseBox.style.display =
-          "none";
-
-        shirtPurchaseBox.classList.add(
-          "hidden"
-        );
-        shirtPurchaseBox.style.display =
-          "none";
-
-        paymentGatewayBox.classList.add(
-          "hidden"
-        );
-
+        wantRaffleTicketInput.disabled = true;
+        wantBoldShirtInput.disabled = true;
+        rafflePurchaseBox.classList.add("hidden");
+        rafflePurchaseBox.style.setProperty("display", "none", "important");
+        shirtPurchaseBox.classList.add("hidden");
+        shirtPurchaseBox.style.setProperty("display", "none", "important");
+        paymentGatewayBox.classList.add("hidden");
         raffleQuantityInput.required = false;
         paymentMethodInput.required = false;
         paymentMethodInput.value = "";
         raffleQuantityInput.value = "1";
-
-        document
-          .querySelectorAll(".shirt-qty")
-          .forEach(function(input) {
-            input.value = "0";
-            input.disabled = true;
-          });
-
+        document.querySelectorAll(".shirt-qty").forEach(function(input) {
+          input.value = "0";
+          input.disabled = true;
+        });
         updatePaymentAccount();
       }
 
       updateRafflePurchaseFields();
       updateShirtPurchaseFields();
+      updatePaymentVisibility();
       updateOrderSummary();
     }
 
@@ -2292,23 +2270,14 @@ const submitButton =
         wantRaffleTicketInput.checked;
 
       if (enabled) {
-        rafflePurchaseBox.classList.remove(
-          "hidden"
-        );
-        rafflePurchaseBox.style.display =
-          "block";
+        rafflePurchaseBox.classList.remove("hidden");
         raffleQuantityInput.required = true;
         updateRaffleTotal();
       } else {
-        rafflePurchaseBox.classList.add(
-          "hidden"
-        );
-        rafflePurchaseBox.style.display =
-          "none";
+        rafflePurchaseBox.classList.add("hidden");
         raffleQuantityInput.required = false;
         raffleQuantityInput.value = "1";
       }
-
       updateOrderSummary();
     }
 
@@ -2318,32 +2287,17 @@ const submitButton =
         wantBoldShirtInput.checked;
 
       if (enabled) {
-        shirtPurchaseBox.classList.remove(
-          "hidden"
-        );
-        shirtPurchaseBox.style.display =
-          "block";
-
-        document
-          .querySelectorAll(".shirt-qty")
-          .forEach(function(input) {
-            input.disabled = false;
-          });
+        shirtPurchaseBox.classList.remove("hidden");
+        document.querySelectorAll(".shirt-qty").forEach(function(input) {
+          input.disabled = false;
+        });
       } else {
-        shirtPurchaseBox.classList.add(
-          "hidden"
-        );
-        shirtPurchaseBox.style.display =
-          "none";
-
-        document
-          .querySelectorAll(".shirt-qty")
-          .forEach(function(input) {
-            input.value = "0";
-            input.disabled = true;
-          });
+        shirtPurchaseBox.classList.add("hidden");
+        document.querySelectorAll(".shirt-qty").forEach(function(input) {
+          input.value = "0";
+          input.disabled = true;
+        });
       }
-
       updateOrderSummary();
     }
 
@@ -5410,7 +5364,8 @@ boldRidersId:
           "is-selected"
         );
         preorderCard.classList.add(
-          "is-disabled"
+          "is-disabled",
+          "hidden"
         );
 
         preorderCard.setAttribute(
@@ -5439,7 +5394,7 @@ boldRidersId:
 
     if (
       preorderCheckbox &&
-      document.getElementById("raffleCouponMasterInput")?.checked
+      document.getElementById("wantRaffleCoupon")?.checked
     ) {
       preorderCheckbox.disabled = false;
     }

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOLD AFTER DARK — REKAP PRODUKSI KAOS</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/admin/js/admin-auth.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    :root{--red:#e00000;--bg:#050505;--card:#111;--card2:#171717;--border:#303030;--text:#fff;--muted:#999;--green:#20d96b}
+    body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#260000 0%,#0b0b0b 38%,#050505 72%,#000 100%);color:var(--text);font-family:Arial,Helvetica,sans-serif;padding:20px}
+    .container{max-width:1200px;margin:0 auto}.header{text-align:center;margin-bottom:22px}.brand{font-size:30px;font-weight:900;letter-spacing:4px}.brand .red{color:var(--red)}.subtitle{margin-top:7px;color:#aaa;font-size:11px;font-weight:700;letter-spacing:3px}
+    .card{background:rgba(17,17,17,.96);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px}.hidden{display:none!important}.message{display:none;padding:13px 14px;margin-bottom:15px;border-radius:9px;font-size:12px;font-weight:700;line-height:1.5}.message.show{display:block}.message.error{background:#300000;border:1px solid #8c0000;color:#ff8a8a}.message.success{background:#062d16;border:1px solid #15934a;color:#65e99a}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.btn{min-height:42px;padding:10px 15px;border:none;border-radius:8px;font-weight:900;cursor:pointer}.btn-red{background:var(--red);color:#fff}.btn-dark{background:#242424;color:#fff;border:1px solid #444}.btn:disabled{opacity:.55;cursor:not-allowed}
+    .section-title{font-size:16px;font-weight:900;letter-spacing:1px;margin-bottom:14px}.meta{color:var(--muted);font-size:12px;line-height:1.6}
+    .summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.stat{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}.label{color:#888;font-size:10px;font-weight:800;letter-spacing:1px;margin-bottom:6px}.value{font-size:28px;font-weight:900}
+    .production-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.production-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;overflow:hidden}.production-head{padding:13px 15px;background:#191919;font-weight:900}.production-table{width:100%;border-collapse:collapse}.production-table th,.production-table td{padding:12px 14px;border-bottom:1px solid #292929;text-align:left;font-size:12px}.production-table th{color:#999;font-size:10px;letter-spacing:.7px}.production-table td:last-child,.production-table th:last-child{text-align:right}.total-row td{font-weight:900;color:#fff}.total-row{background:#151515}
+    .order-table-wrap{overflow:auto}.order-table{width:100%;min-width:850px;border-collapse:collapse}.order-table th,.order-table td{padding:10px;border-bottom:1px solid #252525;font-size:11px;text-align:left}.order-table th{color:#999;font-size:10px;letter-spacing:.6px}.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:rgba(32,217,107,.12);border:1px solid rgba(32,217,107,.38);color:#62eb98;font-size:9px;font-weight:900}
+    @media(max-width:850px){.summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.production-grid{grid-template-columns:1fr}}@media(max-width:520px){body{padding:12px}.brand{font-size:22px;letter-spacing:2.5px}.summary-grid{grid-template-columns:1fr 1fr}.toolbar{flex-direction:column}.toolbar .btn{width:100%}}
+    body.embedded-admin .header{display:none}body.embedded-admin{padding:12px;background:#0b0b0b}body.embedded-admin .container{max-width:none}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header"><div class="brand">BOLD <span class="red">AFTER</span> DARK</div><div class="subtitle">REKAP PRODUKSI KAOS</div></div>
+
+    <section id="secretScreen" class="card">
+      <div class="section-title">MEMERIKSA AKSES</div>
+      <div id="secretMessage" class="message"></div>
+      <div class="meta">Memerlukan permission <strong>report.view</strong>.</div>
+    </section>
+
+    <section id="dashboardScreen" class="hidden">
+      <div id="dashboardMessage" class="message"></div>
+      <div class="toolbar">
+        <button id="refreshButton" class="btn btn-red">REFRESH REKAP</button>
+        <button id="backButton" class="btn btn-dark">KEMBALI VERIFIKASI</button>
+        <button id="logoutButton" class="btn btn-dark">LOGOUT</button>
+      </div>
+
+      <div class="card">
+        <div class="section-title">RINGKASAN PRODUKSI</div>
+        <div id="generatedMeta" class="meta">Memuat...</div>
+        <div class="summary-grid" style="margin-top:14px">
+          <div class="stat"><div class="label">TRANSAKSI LUNAS</div><div id="approvedCount" class="value">0</div></div>
+          <div class="stat"><div class="label">ORDER KAOS</div><div id="shirtOrderCount" class="value">0</div></div>
+          <div class="stat"><div class="label">LENGAN PENDEK</div><div id="shortTotal" class="value">0</div></div>
+          <div class="stat"><div class="label">LENGAN PANJANG</div><div id="longTotal" class="value">0</div></div>
+        </div>
+        <div class="stat" style="margin-top:10px"><div class="label">TOTAL SEMUA KAOS</div><div id="shirtTotal" class="value">0</div></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">REKAP JUMLAH KAOS PER UKURAN</div>
+        <div class="production-grid">
+          <div class="production-card"><div class="production-head">LENGAN PENDEK</div><table class="production-table"><thead><tr><th>UKURAN</th><th>JUMLAH</th></tr></thead><tbody id="shortBody"></tbody></table></div>
+          <div class="production-card"><div class="production-head">LENGAN PANJANG</div><table class="production-table"><thead><tr><th>UKURAN</th><th>JUMLAH</th></tr></thead><tbody id="longBody"></tbody></table></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">ORDER YANG SUDAH LUNAS</div>
+        <div class="meta" style="margin-bottom:12px">Hanya transaksi dengan status <span class="badge">APPROVED / LUNAS</span> yang masuk dalam rekap produksi.</div>
+        <div class="order-table-wrap"><table class="order-table"><thead><tr><th>ID</th><th>NAMA</th><th>DETAIL KAOS</th><th>VERIFIED</th></tr></thead><tbody id="ordersBody"></tbody></table></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    "use strict";
+    const SUPABASE_URL="https://yrvnmmascklkuzpjkwxn.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY="sb_publishable_YGi3tPBuF9tW4KKnLJ5dDQ_AcBZ19WH";
+    const PURCHASE_SERVICE_URL=SUPABASE_URL+"/functions/v1/purchase-service";
+    const secretScreen=document.getElementById("secretScreen");
+    const dashboardScreen=document.getElementById("dashboardScreen");
+    const secretMessage=document.getElementById("secretMessage");
+    const dashboardMessage=document.getElementById("dashboardMessage");
+    const refreshButton=document.getElementById("refreshButton");
+    const backButton=document.getElementById("backButton");
+    const logoutButton=document.getElementById("logoutButton");
+    const generatedMeta=document.getElementById("generatedMeta");
+    const approvedCount=document.getElementById("approvedCount");
+    const shirtOrderCount=document.getElementById("shirtOrderCount");
+    const shortTotal=document.getElementById("shortTotal");
+    const longTotal=document.getElementById("longTotal");
+    const shirtTotal=document.getElementById("shirtTotal");
+    const shortBody=document.getElementById("shortBody");
+    const longBody=document.getElementById("longBody");
+    const ordersBody=document.getElementById("ordersBody");
+    const IS_EMBEDDED=window.self!==window.top;
+    if(IS_EMBEDDED)document.body.classList.add("embedded-admin");
+    let currentAdminAccess=null;
+
+    function showMessage(el,type,text){el.className="message show "+type;el.textContent=text}
+    function hideMessage(el){el.className="message";el.textContent=""}
+    function token(){return currentAdminAccess?.session?.access_token||""}
+    function headers(){return {Accept:"application/json",apikey:SUPABASE_PUBLISHABLE_KEY,Authorization:"Bearer "+token()}}
+    function rupiah(n){return "Rp"+Number(n||0).toLocaleString("id-ID")}
+    function esc(s){return String(s??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c]))}
+    function fmtDate(s){if(!s)return "-";return new Date(s).toLocaleString("id-ID")}
+    function itemText(item){const sleeve=item.sleeveType==="LONG"?"Panjang":"Pendek";return `Kaos ${sleeve} ${item.size||"-"} × ${Number(item.quantity||0)}`}
+
+    async function loadReport(){
+      hideMessage(dashboardMessage);refreshButton.disabled=true;refreshButton.textContent="MEMUAT...";
+      try{
+        const res=await fetch(PURCHASE_SERVICE_URL+"?action=adminShirtProductionReport",{method:"GET",headers:headers()});
+        const raw=await res.text();let data;try{data=JSON.parse(raw)}catch{throw new Error("Server mengembalikan response yang tidak valid.")}
+        if(!res.ok||!data.success)throw new Error(data.message||data.detail||"Gagal mengambil rekap produksi kaos.");
+        const s=data.summary||{};const sizes=data.sizes||{};const order=sizes.order||["S","M","L","XL","2XL","3XL","4XL"];
+        approvedCount.textContent=s.approvedPurchaseCount||0;shirtOrderCount.textContent=s.shirtOrderCount||0;shortTotal.textContent=s.shortTotal||0;longTotal.textContent=s.longTotal||0;shirtTotal.textContent=s.shirtTotal||0;
+        generatedMeta.textContent="Dihitung berdasarkan transaksi APPROVED/LUNAS. Diperbarui: "+fmtDate(data.generatedAt)+".";
+        function renderSizes(body,map,total){body.innerHTML=order.map(sz=>`<tr><td>${esc(sz)}</td><td>${Number(map?.[sz]||0)}</td></tr>`).join("")+`<tr class="total-row"><td>TOTAL</td><td>${Number(total||0)}</td></tr>`}
+        renderSizes(shortBody,sizes.short,s.shortTotal);renderSizes(longBody,sizes.long,s.longTotal);
+        ordersBody.innerHTML=(data.orders||[]).map(o=>`<tr><td>${esc(o.purchaseId)}</td><td>${esc(o.buyerName)}</td><td>${(o.items||[]).map(itemText).map(esc).join("<br>")}</td><td>${esc(fmtDate(o.verifiedAt))}</td></tr>`).join("")||'<tr><td colspan="4" style="text-align:center;color:#777">Belum ada order kaos lunas.</td></tr>';
+      }catch(e){showMessage(dashboardMessage,"error",e.message||"Gagal memuat rekap.");}
+      finally{refreshButton.disabled=false;refreshButton.textContent="REFRESH REKAP"}
+    }
+
+    async function start(){
+      try{
+        currentAdminAccess=await window.BMTC_ADMIN_AUTH.requirePermission("report.view");
+        secretScreen.classList.add("hidden");dashboardScreen.classList.remove("hidden");await loadReport();
+      }catch(e){showMessage(secretMessage,"error",e.message||"Akses ditolak.")}
+    }
+    refreshButton.addEventListener("click",loadReport);
+    backButton.addEventListener("click",()=>{window.location.href="/bold-after-dark/purchase-admin.html"});
+    logoutButton.addEventListener("click",async()=>{try{await window.BMTC_ADMIN_AUTH.logout()}finally{window.location.href="/admin/"}});
+    start();
+  </script>
+</body>
+</html>

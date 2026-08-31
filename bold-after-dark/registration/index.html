@@ -986,10 +986,10 @@
               type="checkbox"
               disabled
             >
-            <span>Saya ingin mendapatkan tiket undian</span>
+            <span>PEMBELIAN LA BOLD 12</span>
           </label>
           <div class="product-toggle-help">
-            Aktifkan untuk memesan LA BOLD 12. Jika tidak dicentang, bagian LA BOLD tidak ikut dihitung.
+            Beli 1 BUNGKUS LA BOLD 12 mendapatkan 1 kupon undian. Jika tidak dicentang, bagian LA BOLD tidak ikut dihitung.
           </div>
         </div>
 
@@ -1000,7 +1000,7 @@
           <div class="optional-product-header">
             <div class="optional-product-title" id="purchaseSectionTitle">PEMBELIAN LA BOLD 12</div>
             <div class="optional-product-subtitle">
-              Tentukan jumlah BUNGKUS. Setelah pembayaran disetujui, setiap 1 BUNGKUS mendapatkan 1 tiket undian sekali pakai.
+              Tentukan jumlah BUNGKUS. Setelah pembayaran disetujui, setiap 1 BUNGKUS mendapatkan 1 kupon undian sekali pakai.
             </div>
           </div>
 
@@ -1033,6 +1033,8 @@
               <strong id="raffleTotalText">Rp0</strong>
             </div>
           </div>
+
+        <div id="couponEstimateText" class="product-toggle-help hidden"></div>
         </div>
 
         <div id="boldShirtToggle" class="product-toggle hidden">
@@ -1045,10 +1047,11 @@
               name="wantBoldShirt"
               type="checkbox"
             >
-            <span>Saya ingin PRE ORDER KAOS BOLD AFTER DARK</span>
+            <span>PRE ORDER KAOS BOLD AFTER DARK</span>
           </label>
           <div class="product-toggle-help">
-            Pilih jumlah berdasarkan ukuran dan model lengan. Lengan pendek dan lengan panjang dapat dipesan bersamaan.
+            Beli 1 PCS kaos Bold After Dark mendapatkan 2 kupon undian.
+            Kupon undian diberikan setelah pembayaran dinyatakan lunas/APPROVED oleh panitia.
           </div>
         </div>
 
@@ -1059,6 +1062,8 @@
           <div class="optional-product-header">
             <div class="optional-product-title">PRE ORDER KAOS BOLD AFTER DARK</div>
             <div class="optional-product-subtitle">
+              Beli 1 PCS kaos Bold After Dark mendapatkan 2 kupon undian.
+              Kupon diberikan setelah pembayaran dinyatakan lunas/APPROVED oleh panitia.
               Isi jumlah untuk setiap ukuran. Biarkan 0 jika tidak memesan ukuran tersebut.
             </div>
           </div>
@@ -1674,6 +1679,9 @@
     const paymentMethodInput =
       document.getElementById("paymentMethod");
 
+    const couponEstimateText =
+      document.getElementById("couponEstimateText");
+
     const selectedPaymentAccount =
       document.getElementById("selectedPaymentAccount");
 
@@ -2283,6 +2291,52 @@ const submitButton =
         formatRupiah(quantity * ACTIVE_PRODUCT_UNIT_PRICE);
 
       updateOrderSummary();
+    }
+
+    function updateCouponEstimate() {
+      if (!couponEstimateText) {
+        return;
+      }
+
+      if (!raffleCouponMasterInput.checked) {
+        couponEstimateText.classList.add("hidden");
+        couponEstimateText.textContent = "";
+        return;
+      }
+
+      const laQuantity =
+        wantRaffleTicketInput.checked
+          ? Number(raffleQuantityInput.value || 0)
+          : 0;
+
+      const shirtItems =
+        wantBoldShirtInput.checked
+          ? getShirtLines()
+          : [];
+
+      const shirtQuantity =
+        shirtItems.reduce(
+          function(sum, item) {
+            return sum + Number(item.quantity || 0);
+          },
+          0
+        );
+
+      const couponCount =
+        laQuantity +
+        (shirtQuantity * 2);
+
+      if (couponCount <= 0) {
+        couponEstimateText.classList.add("hidden");
+        couponEstimateText.textContent = "";
+        return;
+      }
+
+      couponEstimateText.classList.remove("hidden");
+      couponEstimateText.textContent =
+        "Perkiraan kupon undian: " +
+        couponCount +
+        " kupon setelah pembayaran dinyatakan lunas/APPROVED.";
     }
 
     function updateOrderSummary() {
@@ -5259,10 +5313,10 @@ boldRidersId:
   const PREORDER_END_DATE = "2026-09-18T23:59:59+07:00";
 
   const preorderCheckbox =
-    document.getElementById("wantShirt");
+    document.getElementById("wantBoldShirt");
 
   const preorderCard =
-    document.getElementById("shirtOptionCard");
+    document.getElementById("boldShirtToggle");
 
   const deadlineNote =
     document.getElementById("preorderDeadlineNote");
@@ -5336,6 +5390,53 @@ boldRidersId:
     updatePreorderAvailability,
     60 * 1000
   );
+})();
+</script>
+
+
+<script>
+(function () {
+  function refreshCouponEstimate() {
+    if (typeof updateCouponEstimate === "function") {
+      updateCouponEstimate();
+    }
+  }
+
+  [
+    "raffleCouponMasterInput",
+    "wantRaffleTicket",
+    "wantBoldShirt",
+    "raffleQuantity"
+  ].forEach(function (id) {
+    const element =
+      document.getElementById(id);
+
+    if (element) {
+      element.addEventListener(
+        "change",
+        refreshCouponEstimate
+      );
+      element.addEventListener(
+        "input",
+        refreshCouponEstimate
+      );
+    }
+  });
+
+  document
+    .querySelectorAll(".shirt-qty")
+    .forEach(function (element) {
+      element.addEventListener(
+        "change",
+        refreshCouponEstimate
+      );
+      element.addEventListener(
+        "input",
+        refreshCouponEstimate
+      );
+    });
+
+  refreshCouponEstimate();
 })();
 </script>
 

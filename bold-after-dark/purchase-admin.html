@@ -601,6 +601,13 @@
         >
           REFRESH
         </button>
+        <button
+          id="shirtProductionReportButton"
+          class="btn btn-dark"
+          type="button"
+        >
+          REKAP PRODUKSI KAOS
+        </button>
 
         <button
           id="deleteAllButton"
@@ -2886,6 +2893,23 @@
       "click",
       loadPurchases
     );
+
+    const shirtProductionReportButton =
+      document.getElementById(
+        "shirtProductionReportButton"
+      );
+
+    shirtProductionReportButton &&
+      shirtProductionReportButton.addEventListener(
+        "click",
+        function () {
+          window.open(
+            "/bold-after-dark/shirt-production-report.html",
+            "_blank",
+            "noopener"
+          );
+        }
+      );
 
     deleteAllButton.addEventListener(
       "click",

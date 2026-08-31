@@ -819,6 +819,22 @@
       }
     }
   </style>
+<style>
+    .preorder-deadline-note {
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: #fff3cd;
+      color: #7a5600;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .preorder-deadline-note.is-closed {
+      background: #f1f1f1;
+      color: #666;
+    }
+</style>
 </head>
 
 <body>
@@ -5236,6 +5252,92 @@ boldRidersId:
     );
 
   </script>
+
+
+<script>
+(function () {
+  const PREORDER_END_DATE = "2026-09-18T23:59:59+07:00";
+
+  const preorderCheckbox =
+    document.getElementById("wantShirt");
+
+  const preorderCard =
+    document.getElementById("shirtOptionCard");
+
+  const deadlineNote =
+    document.getElementById("preorderDeadlineNote");
+
+  function isPreorderOpen() {
+    return new Date() <= new Date(PREORDER_END_DATE);
+  }
+
+  function updatePreorderAvailability() {
+    const open =
+      isPreorderOpen();
+
+    if (!open) {
+      if (preorderCheckbox) {
+        preorderCheckbox.checked = false;
+        preorderCheckbox.disabled = true;
+      }
+
+      if (preorderCard) {
+        preorderCard.classList.remove(
+          "is-selected"
+        );
+        preorderCard.classList.add(
+          "is-disabled"
+        );
+
+        preorderCard.setAttribute(
+          "aria-disabled",
+          "true"
+        );
+      }
+
+      if (deadlineNote) {
+        deadlineNote.textContent =
+          "Pre Order Kaos Bold After Dark sudah ditutup. Batas pemesanan: 18 September 2026.";
+        deadlineNote.classList.add(
+          "is-closed"
+        );
+      }
+
+      document
+        .querySelectorAll(".shirt-qty")
+        .forEach(function (input) {
+          input.value = "0";
+          input.disabled = true;
+        });
+
+      return;
+    }
+
+    if (
+      preorderCheckbox &&
+      document.getElementById("wantRaffleCoupon")?.checked
+    ) {
+      preorderCheckbox.disabled = false;
+    }
+
+    if (deadlineNote) {
+      deadlineNote.textContent =
+        "Pre Order Kaos Bold After Dark dibuka sampai 18 September 2026.";
+      deadlineNote.classList.remove(
+        "is-closed"
+      );
+    }
+  }
+
+  updatePreorderAvailability();
+
+  // Keep the deadline authoritative if the page stays open across midnight.
+  window.setInterval(
+    updatePreorderAvailability,
+    60 * 1000
+  );
+})();
+</script>
 
 </body>
 </html>

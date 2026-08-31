@@ -1098,7 +1098,7 @@
             class="btn-primary"
             type="submit"
           >
-            REGISTER NOW
+            FREE AKSES SAJA
           </button>
 
         </div>
@@ -5346,6 +5346,74 @@ paymentMethodInput.addEventListener(
   );
 
   renderPurchaseSummary();
+})();
+</script>
+
+
+<script>
+/* Dynamic REGISTER NOW button text */
+(function () {
+  const button =
+    document.getElementById("submitButton");
+
+  const purchaseKey =
+    "boldAfterDarkPurchaseSummary";
+
+  if (!button) {
+    return;
+  }
+
+  function hasPurchase() {
+    try {
+      const raw =
+        sessionStorage.getItem(
+          purchaseKey
+        );
+
+      if (!raw) {
+        return false;
+      }
+
+      const data =
+        JSON.parse(raw);
+
+      return Boolean(
+        data &&
+        Array.isArray(data.items) &&
+        data.items.some(function (item) {
+          return (
+            Number(item.quantity || 0) > 0
+          );
+        })
+      );
+    } catch (error) {
+      console.warn(
+        "Gagal membaca status pembelian.",
+        error
+      );
+
+      return false;
+    }
+  }
+
+  function updateRegisterButton() {
+    button.textContent =
+      hasPurchase()
+        ? "DAFTAR DAN PESAN"
+        : "FREE AKSES SAJA";
+  }
+
+  window.addEventListener(
+    "pageshow",
+    updateRegisterButton
+  );
+
+  window.addEventListener(
+    "storage",
+    updateRegisterButton
+  );
+
+  updateRegisterButton();
 })();
 </script>
 

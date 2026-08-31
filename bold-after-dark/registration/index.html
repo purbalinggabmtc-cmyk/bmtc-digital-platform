@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>BOLD AFTER DARK — REGISTRATION V6</title>
+  <title>V4 FIX - BOLD AFTER DARK — REGISTRATION V6</title>
 
   <style>
     * {
@@ -835,54 +835,45 @@
       color: #666;
     }
 </style>
-<style>
-/* FINAL MOBILE/NO-JS FALLBACK FOR PRODUCT TOGGLES */
-#raffleCouponMasterInput:checked ~ #laBoldToggle,
-#raffleCouponMasterInput:checked ~ #boldShirtToggle {
-  display: block !important;
-}
 
-#raffleCouponMasterInput:not(:checked) ~ #laBoldToggle,
-#raffleCouponMasterInput:not(:checked) ~ #boldShirtToggle {
-  display: none !important;
-}
 
-#raffleCouponMasterInput:checked ~ #laBoldToggle .product-toggle-label,
-#raffleCouponMasterInput:checked ~ #boldShirtToggle .product-toggle-label {
-  display: flex !important;
-}
-
-@media (max-width: 600px) {
-  #raffleCouponMasterInput:checked ~ #laBoldToggle,
-  #raffleCouponMasterInput:checked ~ #boldShirtToggle {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    width: 100% !important;
-    max-width: 100% !important;
+<style id="bmtc-mobile-products-v4">
+  #laBoldToggle,
+  #boldShirtToggle {
+    width: 100%;
+    box-sizing: border-box;
   }
 
-  #raffleCouponMasterInput:checked ~ #boldShirtToggle {
-    margin-top: 12px !important;
-  }
+  @media (max-width: 600px) {
+    #laBoldToggle,
+    #boldShirtToggle {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
 
-  #raffleCouponMasterInput:checked ~ #boldShirtToggle .product-toggle-help {
-    display: block !important;
-    visibility: visible !important;
+    #boldShirtToggle .product-toggle-help {
+      display: block;
+    }
   }
-}
 </style>
 
-<style>
-/* BOLD AFTER DARK - PRODUCT TOGGLE ABSOLUTE FIX */
-#laBoldToggle, #boldShirtToggle {
-  width: 100% !important;
+
+<style id="clean-product-toggle-css">
+/* CLEAN PRODUCT TOGGLE */
+#laBoldToggle,
+#boldShirtToggle {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
-#laBoldToggle.hidden, #boldShirtToggle.hidden {
-  /* JS below decides visibility; avoid accidental mobile CSS hiding. */
-}
+
 @media (max-width: 600px) {
-  #laBoldToggle, #boldShirtToggle, #rafflePurchaseBox, #shirtPurchaseBox {
+  #laBoldToggle,
+  #boldShirtToggle,
+  #rafflePurchaseBox,
+  #shirtPurchaseBox {
     width: 100% !important;
     max-width: 100% !important;
   }
@@ -891,7 +882,6 @@
 
 </head>
 
-<!-- MOBILE PREORDER FINAL -->
 <body>
 
   <div class="container">
@@ -1030,7 +1020,7 @@
           </div>
         </div>
 
-        <div id="laBoldToggle" class="product-toggle hidden">
+        <div id="laBoldToggle" class="product-toggle">
           <label
             for="wantRaffleTicket"
             class="product-toggle-label"
@@ -1043,7 +1033,6 @@
             >
             <span>PEMBELIAN LA BOLD 12</span>
           </label>
-          <div class="product-toggle-help">Beli 1 BUNGKUS LA BOLD 12 mendapatkan 1 kupon undian. Kupon diberikan setelah pembayaran dinyatakan lunas/APPROVED.</div>
           <div class="product-toggle-help">
             Beli 1 BUNGKUS LA BOLD 12 mendapatkan 1 kupon undian. Jika tidak dicentang, bagian LA BOLD tidak ikut dihitung.
           </div>
@@ -1093,7 +1082,7 @@
         <div id="couponEstimateText" class="product-toggle-help hidden"></div>
         </div>
 
-        <div id="boldShirtToggle" class="product-toggle hidden">
+        <div id="boldShirtToggle" class="product-toggle">
           <label
             for="wantBoldShirt"
             class="product-toggle-label"
@@ -1105,7 +1094,6 @@
             >
             <span>PRE ORDER KAOS BOLD AFTER DARK</span>
           </label>
-          <div class="product-toggle-help">Beli 1 PCS kaos Bold After Dark mendapatkan 2 kupon undian. Kupon diberikan setelah pembayaran dinyatakan lunas/APPROVED.</div>
           <div class="product-toggle-help">
             Beli 1 PCS kaos Bold After Dark mendapatkan 2 kupon undian.
             Kupon undian diberikan setelah pembayaran dinyatakan lunas/APPROVED oleh panitia.
@@ -2267,70 +2255,156 @@ const submitButton =
       }
     }
 
+    function setVisibleState(element, visible) {
+      if (!element) {
+        return;
+      }
+
+      if (visible) {
+        element.classList.remove("hidden");
+        element.hidden = false;
+        element.removeAttribute("aria-hidden");
+        element.style.setProperty("display", "block", "important");
+        element.style.setProperty("visibility", "visible", "important");
+        element.style.setProperty("opacity", "1", "important");
+      } else {
+        element.classList.add("hidden");
+        element.hidden = true;
+        element.setAttribute("aria-hidden", "true");
+        element.style.setProperty("display", "none", "important");
+      }
+    }
+
+    function setProductVisible(
+      element,
+      visible
+    ) {
+      if (!element) {
+        return;
+      }
+
+      element.classList.toggle(
+        "hidden",
+        !visible
+      );
+
+      element.hidden = !visible;
+
+      element.style.display =
+        visible
+          ? "block"
+          : "none";
+    }
+
     function updateCouponMasterState() {
-      const enabled = raffleCouponMasterInput.checked;
+      const masterOn =
+        raffleCouponMasterInput.checked === true;
 
-      laBoldToggle.classList.toggle("hidden", !enabled);
-      boldShirtToggle.classList.toggle("hidden", !enabled);
-      wantRaffleTicketInput.disabled = !enabled;
-      wantBoldShirtInput.disabled = !enabled;
+      wantRaffleTicketInput.disabled =
+        !masterOn;
 
-      if (!enabled) {
-        wantRaffleTicketInput.checked = false;
-        wantBoldShirtInput.checked = false;
-        rafflePurchaseBox.classList.add("hidden");
-        shirtPurchaseBox.classList.add("hidden");
-        paymentGatewayBox.classList.add("hidden");
-        raffleQuantityInput.required = false;
-        paymentMethodInput.required = false;
-        paymentMethodInput.value = "";
-        raffleQuantityInput.value = "1";
-        document.querySelectorAll(".shirt-qty").forEach(function(input) {
-          input.value = "0";
-          input.disabled = true;
-        });
-        updatePaymentAccount();
+      wantBoldShirtInput.disabled =
+        !masterOn;
+
+      setProductVisible(
+        laBoldToggle,
+        masterOn
+      );
+
+      setProductVisible(
+        boldShirtToggle,
+        masterOn
+      );
+
+      if (!masterOn) {
+        wantRaffleTicketInput.checked =
+          false;
+
+        wantBoldShirtInput.checked =
+          false;
+
+        raffleQuantityInput.value =
+          "1";
+
+        raffleQuantityInput.required =
+          false;
+
+        setProductVisible(
+          rafflePurchaseBox,
+          false
+        );
+
+        setProductVisible(
+          shirtPurchaseBox,
+          false
+        );
+
+        document
+          .querySelectorAll(
+            ".shirt-qty"
+          )
+          .forEach(function(input) {
+            input.value = "0";
+            input.disabled = true;
+          });
+
+        paymentMethodInput.value =
+          "";
+        paymentMethodInput.required =
+          false;
       }
 
       updateRafflePurchaseFields();
       updateShirtPurchaseFields();
+      updatePaymentVisibility();
       updateOrderSummary();
     }
 
     function updateRafflePurchaseFields() {
-      const enabled =
-        raffleCouponMasterInput.checked &&
-        wantRaffleTicketInput.checked;
+      const active =
+        raffleCouponMasterInput.checked === true &&
+        wantRaffleTicketInput.checked === true;
 
-      if (enabled) {
-        rafflePurchaseBox.classList.remove("hidden");
-        raffleQuantityInput.required = true;
+      setProductVisible(
+        rafflePurchaseBox,
+        active
+      );
+
+      raffleQuantityInput.required =
+        active;
+
+      if (active) {
         updateRaffleTotal();
-      } else {
-        rafflePurchaseBox.classList.add("hidden");
-        raffleQuantityInput.required = false;
-        raffleQuantityInput.value = "1";
       }
+
+      updatePaymentVisibility();
       updateOrderSummary();
     }
 
     function updateShirtPurchaseFields() {
-      const enabled =
-        raffleCouponMasterInput.checked &&
-        wantBoldShirtInput.checked;
+      const active =
+        raffleCouponMasterInput.checked === true &&
+        wantBoldShirtInput.checked === true;
 
-      if (enabled) {
-        shirtPurchaseBox.classList.remove("hidden");
-        document.querySelectorAll(".shirt-qty").forEach(function(input) {
-          input.disabled = false;
+      setProductVisible(
+        shirtPurchaseBox,
+        active
+      );
+
+      document
+        .querySelectorAll(
+          ".shirt-qty"
+        )
+        .forEach(function(input) {
+          input.disabled = !active;
+
+          if (!active) {
+            input.value = "0";
+          }
         });
-      } else {
-        shirtPurchaseBox.classList.add("hidden");
-        document.querySelectorAll(".shirt-qty").forEach(function(input) {
-          input.value = "0";
-          input.disabled = true;
-        });
-      }
+
+      updateShirtSummary();
+      updatePaymentVisibility();
       updateOrderSummary();
     }
 
@@ -5365,90 +5439,7 @@ boldRidersId:
   </script>
 
 
-<script>
-(function () {
-  const PREORDER_END_DATE = "2026-09-18T23:59:59+07:00";
 
-  const preorderCheckbox =
-    document.getElementById("wantBoldShirt");
-
-  const preorderCard =
-    document.getElementById("boldShirtToggle");
-
-  const deadlineNote =
-    document.getElementById("preorderDeadlineNote");
-
-  function isPreorderOpen() {
-    return new Date() <= new Date(PREORDER_END_DATE);
-  }
-
-  function updatePreorderAvailability() {
-    const open =
-      isPreorderOpen();
-
-    if (!open) {
-      if (preorderCheckbox) {
-        preorderCheckbox.checked = false;
-        preorderCheckbox.disabled = true;
-      }
-
-      if (preorderCard) {
-        preorderCard.classList.remove(
-          "is-selected"
-        );
-        preorderCard.classList.add(
-          "is-disabled"
-        );
-
-        preorderCard.setAttribute(
-          "aria-disabled",
-          "true"
-        );
-      }
-
-      if (deadlineNote) {
-        deadlineNote.textContent =
-          "Pre Order Kaos Bold After Dark sudah ditutup. Batas pemesanan: 18 September 2026.";
-        deadlineNote.classList.add(
-          "is-closed"
-        );
-      }
-
-      document
-        .querySelectorAll(".shirt-qty")
-        .forEach(function (input) {
-          input.value = "0";
-          input.disabled = true;
-        });
-
-      return;
-    }
-
-    if (
-      preorderCheckbox &&
-      document.getElementById("wantRaffleCoupon")?.checked
-    ) {
-      preorderCheckbox.disabled = false;
-    }
-
-    if (deadlineNote) {
-      deadlineNote.textContent =
-        "Pre Order Kaos Bold After Dark dibuka sampai 18 September 2026.";
-      deadlineNote.classList.remove(
-        "is-closed"
-      );
-    }
-  }
-
-  updatePreorderAvailability();
-
-  // Keep the deadline authoritative if the page stays open across midnight.
-  window.setInterval(
-    updatePreorderAvailability,
-    60 * 1000
-  );
-})();
-</script>
 
 
 <script>
@@ -5498,143 +5489,90 @@ boldRidersId:
 </script>
 
 
-<script>
+
+
+
+
+
+
+<script id="clean-preorder-deadline">
 (function () {
-  "use strict";
+  const PREORDER_CUTOFF =
+    new Date(
+      "2026-09-19T00:00:00+07:00"
+    );
 
-  const master = document.getElementById("raffleCouponMasterInput");
-  const laToggle = document.getElementById("laBoldToggle");
-  const shirtToggle = document.getElementById("boldShirtToggle");
-  const laCheckbox = document.getElementById("wantRaffleTicket");
-  const shirtCheckbox = document.getElementById("wantBoldShirt");
-  const laBox = document.getElementById("rafflePurchaseBox");
-  const shirtBox = document.getElementById("shirtPurchaseBox");
+  function updatePreorderDeadline() {
+    const checkbox =
+      document.getElementById(
+        "wantBoldShirt"
+      );
 
-  if (!master || !laToggle || !shirtToggle || !laCheckbox || !shirtCheckbox) {
-    console.error("BOLD PRODUCT TOGGLE: required elements missing.");
-    return;
-  }
+    const toggle =
+      document.getElementById(
+        "boldShirtToggle"
+      );
 
-  function show(el) {
-    if (!el) return;
-    el.classList.remove("hidden");
-    el.hidden = false;
-    el.removeAttribute("aria-hidden");
-    el.style.setProperty("display", "block", "important");
-    el.style.setProperty("visibility", "visible", "important");
-    el.style.setProperty("opacity", "1", "important");
-  }
+    const purchaseBox =
+      document.getElementById(
+        "shirtPurchaseBox"
+      );
 
-  function hide(el) {
-    if (!el) return;
-    el.classList.add("hidden");
-    el.hidden = true;
-    el.setAttribute("aria-hidden", "true");
-    el.style.setProperty("display", "none", "important");
-  }
+    const master =
+      document.getElementById(
+        "raffleCouponMasterInput"
+      );
 
-  function syncProductChoices() {
-    const masterOn = master.checked === true;
-
-    if (masterOn) {
-      show(laToggle);
-      show(shirtToggle);
-
-      laCheckbox.disabled = false;
-      shirtCheckbox.disabled = false;
-    } else {
-      hide(laToggle);
-      hide(shirtToggle);
-
-      laCheckbox.checked = false;
-      shirtCheckbox.checked = false;
-      laCheckbox.disabled = true;
-      shirtCheckbox.disabled = true;
-
-      hide(laBox);
-      hide(shirtBox);
-
-      document.querySelectorAll(".shirt-qty").forEach(function (input) {
-        input.value = "0";
-        input.disabled = true;
-      });
-
-      const raffleQty = document.getElementById("raffleQuantity");
-      if (raffleQty) {
-        raffleQty.value = "1";
-        raffleQty.required = false;
-      }
+    if (
+      !checkbox ||
+      !toggle ||
+      !purchaseBox ||
+      !master
+    ) {
+      return;
     }
 
-    syncLa();
-    syncShirt();
+    const isOpen =
+      new Date() <
+      PREORDER_CUTOFF;
 
-    // Re-run existing page calculations if present.
-    [
-      "updateRaffleTotal",
-      "updateShirtSummary",
-      "updatePaymentVisibility",
-      "updatePaymentAccount",
-      "updateOrderSummary"
-    ].forEach(function (name) {
-      try {
-        if (typeof window[name] === "function") window[name]();
-      } catch (e) {
-        console.warn("BOLD PRODUCT TOGGLE:", name, e);
-      }
-    });
-  }
+    if (!isOpen) {
+      checkbox.checked = false;
+      checkbox.disabled = true;
 
-  function syncLa() {
-    const active =
-      master.checked === true &&
-      laCheckbox.checked === true;
+      toggle.classList.add("hidden");
+      toggle.hidden = true;
+      toggle.style.display = "none";
 
-    if (active) {
-      show(laBox);
-      const raffleQty = document.getElementById("raffleQuantity");
-      if (raffleQty) raffleQty.required = true;
-    } else {
-      hide(laBox);
-      const raffleQty = document.getElementById("raffleQuantity");
-      if (raffleQty) raffleQty.required = false;
+      purchaseBox.classList.add(
+        "hidden"
+      );
+      purchaseBox.hidden = true;
+      purchaseBox.style.display =
+        "none";
+
+      document
+        .querySelectorAll(
+          ".shirt-qty"
+        )
+        .forEach(function(input) {
+          input.value = "0";
+          input.disabled = true;
+        });
+
+      return;
     }
+
+    checkbox.disabled =
+      !master.checked;
   }
 
-  function syncShirt() {
-    const active =
-      master.checked === true &&
-      shirtCheckbox.checked === true;
+  updatePreorderDeadline();
 
-    if (active) {
-      show(shirtBox);
-      document.querySelectorAll(".shirt-qty").forEach(function (input) {
-        input.disabled = false;
-      });
-    } else {
-      hide(shirtBox);
-      document.querySelectorAll(".shirt-qty").forEach(function (input) {
-        input.disabled = true;
-        input.value = "0";
-      });
-    }
-  }
-
-  master.addEventListener("change", syncProductChoices);
-  laCheckbox.addEventListener("change", function () {
-    syncLa();
-  });
-  shirtCheckbox.addEventListener("change", function () {
-    syncShirt();
-  });
-
-  // Important for mobile browsers restoring a page from bfcache.
-  window.addEventListener("pageshow", function () {
-    setTimeout(syncProductChoices, 0);
-  });
-
-  // Initial state.
-  syncProductChoices();
+  window.setInterval(
+    updatePreorderDeadline,
+    60000
+  );
 })();
 </script>
 

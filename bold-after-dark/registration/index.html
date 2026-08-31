@@ -836,45 +836,10 @@
     }
 </style>
 <style>
-/* FINAL MOBILE/NO-JS FALLBACK FOR PRODUCT TOGGLES */
-#raffleCouponMasterInput:checked ~ #laBoldToggle,
-#raffleCouponMasterInput:checked ~ #boldShirtToggle {
-  display: block !important;
-}
 
-#raffleCouponMasterInput:not(:checked) ~ #laBoldToggle,
-#raffleCouponMasterInput:not(:checked) ~ #boldShirtToggle {
-  display: none !important;
-}
-
-#raffleCouponMasterInput:checked ~ #laBoldToggle .product-toggle-label,
-#raffleCouponMasterInput:checked ~ #boldShirtToggle .product-toggle-label {
-  display: flex !important;
-}
-
-@media (max-width: 600px) {
-  #raffleCouponMasterInput:checked ~ #laBoldToggle,
-  #raffleCouponMasterInput:checked ~ #boldShirtToggle {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  #raffleCouponMasterInput:checked ~ #boldShirtToggle {
-    margin-top: 12px !important;
-  }
-
-  #raffleCouponMasterInput:checked ~ #boldShirtToggle .product-toggle-help {
-    display: block !important;
-    visibility: visible !important;
-  }
-}
-</style>
 </head>
 
-<!-- MOBILE PREORDER FINAL -->
+<!-- MOBILE PREORDER FINAL v10 -->
 <body>
 
   <div class="container">
@@ -2249,27 +2214,70 @@ const submitButton =
     }
 
     function updateCouponMasterState() {
-      const enabled = raffleCouponMasterInput.checked;
+      const enabled =
+        Boolean(
+          raffleCouponMasterInput &&
+          raffleCouponMasterInput.checked
+        );
 
-      laBoldToggle.classList.toggle("hidden", !enabled);
-      boldShirtToggle.classList.toggle("hidden", !enabled);
-      wantRaffleTicketInput.disabled = !enabled;
-      wantBoldShirtInput.disabled = !enabled;
+      // The two product checkboxes are available only after
+      // the master "Saya ingin kupon undian" checkbox is checked.
+      laBoldToggle.classList.toggle(
+        "hidden",
+        !enabled
+      );
+
+      boldShirtToggle.classList.toggle(
+        "hidden",
+        !enabled
+      );
+
+      // Explicit display values prevent mobile browsers/CSS
+      // from retaining a stale hidden state.
+      laBoldToggle.style.display =
+        enabled ? "block" : "none";
+
+      boldShirtToggle.style.display =
+        enabled ? "block" : "none";
+
+      wantRaffleTicketInput.disabled =
+        !enabled;
+
+      wantBoldShirtInput.disabled =
+        !enabled;
 
       if (!enabled) {
         wantRaffleTicketInput.checked = false;
         wantBoldShirtInput.checked = false;
-        rafflePurchaseBox.classList.add("hidden");
-        shirtPurchaseBox.classList.add("hidden");
-        paymentGatewayBox.classList.add("hidden");
+
+        rafflePurchaseBox.classList.add(
+          "hidden"
+        );
+        rafflePurchaseBox.style.display =
+          "none";
+
+        shirtPurchaseBox.classList.add(
+          "hidden"
+        );
+        shirtPurchaseBox.style.display =
+          "none";
+
+        paymentGatewayBox.classList.add(
+          "hidden"
+        );
+
         raffleQuantityInput.required = false;
         paymentMethodInput.required = false;
         paymentMethodInput.value = "";
         raffleQuantityInput.value = "1";
-        document.querySelectorAll(".shirt-qty").forEach(function(input) {
-          input.value = "0";
-          input.disabled = true;
-        });
+
+        document
+          .querySelectorAll(".shirt-qty")
+          .forEach(function(input) {
+            input.value = "0";
+            input.disabled = true;
+          });
+
         updatePaymentAccount();
       }
 
@@ -2284,14 +2292,23 @@ const submitButton =
         wantRaffleTicketInput.checked;
 
       if (enabled) {
-        rafflePurchaseBox.classList.remove("hidden");
+        rafflePurchaseBox.classList.remove(
+          "hidden"
+        );
+        rafflePurchaseBox.style.display =
+          "block";
         raffleQuantityInput.required = true;
         updateRaffleTotal();
       } else {
-        rafflePurchaseBox.classList.add("hidden");
+        rafflePurchaseBox.classList.add(
+          "hidden"
+        );
+        rafflePurchaseBox.style.display =
+          "none";
         raffleQuantityInput.required = false;
         raffleQuantityInput.value = "1";
       }
+
       updateOrderSummary();
     }
 
@@ -2301,17 +2318,32 @@ const submitButton =
         wantBoldShirtInput.checked;
 
       if (enabled) {
-        shirtPurchaseBox.classList.remove("hidden");
-        document.querySelectorAll(".shirt-qty").forEach(function(input) {
-          input.disabled = false;
-        });
+        shirtPurchaseBox.classList.remove(
+          "hidden"
+        );
+        shirtPurchaseBox.style.display =
+          "block";
+
+        document
+          .querySelectorAll(".shirt-qty")
+          .forEach(function(input) {
+            input.disabled = false;
+          });
       } else {
-        shirtPurchaseBox.classList.add("hidden");
-        document.querySelectorAll(".shirt-qty").forEach(function(input) {
-          input.value = "0";
-          input.disabled = true;
-        });
+        shirtPurchaseBox.classList.add(
+          "hidden"
+        );
+        shirtPurchaseBox.style.display =
+          "none";
+
+        document
+          .querySelectorAll(".shirt-qty")
+          .forEach(function(input) {
+            input.value = "0";
+            input.disabled = true;
+          });
       }
+
       updateOrderSummary();
     }
 
@@ -5407,7 +5439,7 @@ boldRidersId:
 
     if (
       preorderCheckbox &&
-      document.getElementById("wantRaffleCoupon")?.checked
+      document.getElementById("raffleCouponMasterInput")?.checked
     ) {
       preorderCheckbox.disabled = false;
     }

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Test Get Products</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #f5f5f5;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 12px 18px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    pre {
+      background: #111;
+      color: #eee;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .success {
+      color: green;
+      font-weight: bold;
+    }
+
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Test purchase-service getProducts</h1>
+
+  <p>
+    Test endpoint public untuk mengambil produk aktif.
+  </p>
+
+  <button id="testButton">
+    Test getProducts
+  </button>
+
+  <div id="status"></div>
+
+  <pre id="result">
+Belum ada request.
+  </pre>
+
+  <script>
+    const SUPABASE_URL =
+      "https://PROJECT_REF.supabase.co";
+
+    const FUNCTION_URL =
+      `${SUPABASE_URL}/functions/v1/purchase-service?action=getProducts`;
+
+    const testButton =
+      document.getElementById(
+        "testButton"
+      );
+
+    const statusEl =
+      document.getElementById(
+        "status"
+      );
+
+    const resultEl =
+      document.getElementById(
+        "result"
+      );
+
+    async function testGetProducts() {
+      statusEl.className = "";
+      statusEl.textContent =
+        "Mengirim request...";
+
+      resultEl.textContent =
+        "Loading...";
+
+      try {
+        const response =
+          await fetch(
+            FUNCTION_URL,
+            {
+              method: "GET",
+              headers: {
+                "Accept":
+                  "application/json",
+              },
+            },
+          );
+
+        const rawText =
+          await response.text();
+
+        let data = null;
+
+        try {
+          data =
+            JSON.parse(
+              rawText
+            );
+        } catch {
+          data = {
+            rawResponse:
+              rawText,
+          };
+        }
+
+        resultEl.textContent =
+          JSON.stringify(
+            {
+              httpStatus:
+                response.status,
+
+              httpOk:
+                response.ok,
+
+              response:
+                data,
+            },
+            null,
+            2,
+          );
+
+        if (
+          response.ok &&
+          data?.success === true &&
+          data?.status ===
+            "PRODUCTS_OK"
+        ) {
+          statusEl.className =
+            "success";
+
+          statusEl.textContent =
+            "SUCCESS — getProducts berhasil.";
+        } else {
+          statusEl.className =
+            "error";
+
+          statusEl.textContent =
+            "ERROR — response belum sesuai.";
+        }
+      } catch (error) {
+        statusEl.className =
+          "error";
+
+        statusEl.textContent =
+          "FETCH ERROR";
+
+        resultEl.textContent =
+          JSON.stringify(
+            {
+              message:
+                error instanceof Error
+                  ? error.message
+                  : String(
+                      error
+                    ),
+            },
+            null,
+            2,
+          );
+      }
+    }
+
+    testButton.addEventListener(
+      "click",
+      testGetProducts
+    );
+  </script>
+
+</body>
+</html>

@@ -1636,6 +1636,15 @@
     const WHATSAPP_NUMBER =
       "6282324854187";
 
+    let ACTIVE_PRODUCT_ID =
+      "";
+
+    let ACTIVE_PRODUCT_CODE =
+      "";
+
+    let ACTIVE_PRODUCT_RAFFLE_MULTIPLIER =
+      0;
+
     let ACTIVE_PRODUCT_NAME =
       "Produk";
 
@@ -1980,6 +1989,123 @@ const submitButton =
           String(
             data.product.unitName || ""
           ).trim() || "unit";
+
+        const productsResponse =
+          await fetch(
+            PURCHASE_SERVICE_URL +
+            "?action=getProducts",
+            {
+              method: "GET",
+              cache: "no-store",
+              headers: {
+                "Accept":
+                  "application/json",
+                "apikey":
+                  SUPABASE_PUBLISHABLE_KEY,
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_PUBLISHABLE_KEY
+              }
+            }
+          );
+
+        const productsRaw =
+          await productsResponse.text();
+
+        let productsData;
+
+        try {
+          productsData =
+            JSON.parse(productsRaw);
+        } catch {
+          throw new Error(
+            "Response daftar produk tidak valid."
+          );
+        }
+
+        if (
+          !productsResponse.ok ||
+          !productsData ||
+          productsData.success !== true ||
+          !Array.isArray(productsData.products)
+        ) {
+          throw new Error(
+            productsData &&
+            (productsData.message || productsData.detail)
+              ? (productsData.message || productsData.detail)
+              : "Daftar produk tidak tersedia."
+          );
+        }
+
+        const activeProduct =
+          productsData.products.find(
+            product =>
+              String(
+                product.product_code ||
+                product.productCode ||
+                ""
+              ).trim().toUpperCase() ===
+              "LA_BOLD_12"
+          );
+
+        if (!activeProduct) {
+          throw new Error(
+            "Produk LA_BOLD_12 tidak ditemukan pada tabel products."
+          );
+        }
+
+        ACTIVE_PRODUCT_ID =
+          String(
+            activeProduct.id ||
+            activeProduct.product_id ||
+            activeProduct.productId ||
+            ""
+          ).trim();
+
+        ACTIVE_PRODUCT_CODE =
+          String(
+            activeProduct.product_code ||
+            activeProduct.productCode ||
+            ""
+          ).trim().toUpperCase();
+
+        ACTIVE_PRODUCT_NAME =
+          String(
+            activeProduct.product_name ||
+            activeProduct.productName ||
+            ACTIVE_PRODUCT_NAME
+          ).trim() || ACTIVE_PRODUCT_NAME;
+
+        ACTIVE_PRODUCT_UNIT_PRICE =
+          Number(
+            activeProduct.price ??
+            activeProduct.unit_price ??
+            activeProduct.unitPrice ??
+            ACTIVE_PRODUCT_UNIT_PRICE
+          );
+
+        ACTIVE_PRODUCT_UNIT_NAME =
+          String(
+            activeProduct.unit_name ||
+            activeProduct.unitName ||
+            ACTIVE_PRODUCT_UNIT_NAME
+          ).trim() || ACTIVE_PRODUCT_UNIT_NAME;
+
+        ACTIVE_PRODUCT_RAFFLE_MULTIPLIER =
+          Number(
+            activeProduct.raffle_multiplier ??
+            activeProduct.raffleMultiplier ??
+            0
+          );
+
+        if (
+          !ACTIVE_PRODUCT_ID ||
+          !ACTIVE_PRODUCT_CODE
+        ) {
+          throw new Error(
+            "ID atau kode produk aktif tidak valid."
+          );
+        }
 
         if (
           !Number.isInteger(
@@ -2465,8 +2591,20 @@ const submitButton =
       const items = [];
 
       if (raffleSelected) {
+        if (
+          !ACTIVE_PRODUCT_ID ||
+          !ACTIVE_PRODUCT_CODE
+        ) {
+          return {
+            ok: false,
+            message: "Data produk belum siap. Muat ulang halaman dan coba lagi.",
+            element: wantRaffleTicketInput
+          };
+        }
+
         items.push({
-          itemType: "LA_BOLD_12",
+          productId: ACTIVE_PRODUCT_ID,
+          itemType: ACTIVE_PRODUCT_CODE,
           variant: "STANDARD",
           size: null,
           sleeveType: null,

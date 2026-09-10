@@ -1639,6 +1639,9 @@
     let ACTIVE_PRODUCT_ID =
       "";
 
+    let SHIRT_PRODUCT_ID =
+      "";
+    
     let ACTIVE_PRODUCT_CODE =
       "";
 
@@ -2045,7 +2048,7 @@ const submitButton =
                 product.productCode ||
                 ""
               ).trim().toUpperCase() ===
-              "LA_BOLD_12"
+              "TS001"
           );
 
         if (!activeProduct) {
@@ -2615,14 +2618,30 @@ const submitButton =
 
       for (const shirt of shirtItems) {
         items.push({
-          itemType: "BOLD_AFTER_DARK_SHIRT",
-          variant: shirt.sleeve === "SHORT" ? "LENGAN PENDEK" : "LENGAN PANJANG",
-          size: shirt.size,
-          sleeveType: shirt.sleeve,
-          quantity: shirt.quantity,
-          unitPrice: shirt.unitPrice
-        });
-      }
+          productId:
+          SHIRT_PRODUCT_ID,
+
+          itemType:
+            "TS001",
+          
+          variant:
+      shirt.sleeve === "SHORT"
+        ? "LENGAN PENDEK"
+        : "LENGAN PANJANG",
+
+    size:
+      shirt.size,
+
+    sleeveType:
+      shirt.sleeve,
+
+    quantity:
+      shirt.quantity,
+
+    unitPrice:
+      shirt.unitPrice
+  });
+}
 
       ACTIVE_ORDER_ITEMS = items;
 

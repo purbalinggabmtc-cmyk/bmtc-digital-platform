@@ -1943,6 +1943,15 @@
       cancelAutoReset();
 
       if (
+    currentPurchase &&
+    String(
+      currentPurchase.paymentStatus || ""
+    ).toUpperCase() === "APPROVED"
+  ) {
+    return;
+  }
+
+      if (
         !navigator.onLine ||
         requestInFlight ||
         deliveryProcessing ||

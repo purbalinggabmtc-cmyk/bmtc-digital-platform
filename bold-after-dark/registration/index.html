@@ -2615,16 +2615,34 @@ const submitButton =
           unitPrice: ACTIVE_PRODUCT_UNIT_PRICE
         });
       }
+console.log(
+  "SHIRT PRODUCT ID:",
+  SHIRT_PRODUCT_ID
+);
 
-      for (const shirt of shirtItems) {
-        items.push({
-          productId:
-          SHIRT_PRODUCT_ID,
+console.log(
+  "SHIRT ITEMS:",
+  shirtItems
+);
+     for (const shirt of shirtItems) {
 
-          itemType:
-            "TS001",
-          
-          variant:
+  if (!SHIRT_PRODUCT_ID) {
+    return {
+      ok:false,
+      message:
+        "Produk T-Shirt belum tersedia. Muat ulang halaman.",
+    };
+  }
+
+
+  items.push({
+    productId:
+      SHIRT_PRODUCT_ID,
+
+    itemType:
+      "TS001",
+
+    variant:
       shirt.sleeve === "SHORT"
         ? "LENGAN PENDEK"
         : "LENGAN PANJANG",
@@ -2639,7 +2657,7 @@ const submitButton =
       shirt.quantity,
 
     unitPrice:
-      shirt.unitPrice
+      shirt.unitPrice,
   });
 }
 

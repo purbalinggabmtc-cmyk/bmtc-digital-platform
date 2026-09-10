@@ -3042,25 +3042,7 @@
 
       return `
         <div class="purchase-panel">
-          <div class="purchase-heading">
-            BARANG PEMBELIAN
-          </div>
-
-          <div class="purchase-product">
-            ${escapeHtml(
-              purchase.productName || "-"
-            )}
-          </div>
-
-       <div class="purchase-qty">
-  ${escapeHtml(
-    purchase.quantity
-  )}
-  ${escapeHtml(
-    purchase.unitName || "unit"
-  )}
-</div>
-
+         
 ${
   Array.isArray(purchase.items) &&
   purchase.items.length

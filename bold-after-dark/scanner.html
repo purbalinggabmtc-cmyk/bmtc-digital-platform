@@ -3052,14 +3052,85 @@
             )}
           </div>
 
-          <div class="purchase-qty">
-            ${escapeHtml(
-              purchase.quantity
-            )}
-            ${escapeHtml(
-              purchase.unitName || "unit"
-            )}
-          </div>
+       <div class="purchase-qty">
+  ${escapeHtml(
+    purchase.quantity
+  )}
+  ${escapeHtml(
+    purchase.unitName || "unit"
+  )}
+</div>
+
+${
+  Array.isArray(purchase.items) &&
+  purchase.items.length
+    ? `
+      <div class="purchase-items">
+        <div class="purchase-field-label">
+          DETAIL BARANG
+        </div>
+
+        ${purchase.items.map(
+          (item) => `
+            <div class="purchase-item-row">
+              <strong>
+                ${escapeHtml(
+                  item.item_type || "-"
+                )}
+              </strong>
+
+              ${
+                item.variant
+                  ? `
+                  <span>
+                    (${escapeHtml(
+                      item.variant
+                    )})
+                  </span>
+                  `
+                  : ""
+              }
+
+              <div>
+                JUMLAH:
+                ${escapeHtml(
+                  item.quantity
+                )}
+              </div>
+
+              ${
+                item.size
+                  ? `
+                  <div>
+                    UKURAN:
+                    ${escapeHtml(
+                      item.size
+                    )}
+                  </div>
+                  `
+                  : ""
+              }
+
+              ${
+                item.sleeve_type
+                  ? `
+                  <div>
+                    LENGAN:
+                    ${escapeHtml(
+                      item.sleeve_type
+                    )}
+                  </div>
+                  `
+                  : ""
+              }
+
+            </div>
+          `
+        ).join("")}
+      </div>
+    `
+    : ""
+}
 
           <div class="purchase-grid">
             <div class="purchase-field">

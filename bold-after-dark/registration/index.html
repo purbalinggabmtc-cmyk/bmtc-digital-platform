@@ -2121,32 +2121,50 @@ const submitButton =
           );
         }
 
-const shirtProduct =
-  data.products?.find(
+        const shirtProduct =
+  productsData.products.find(
     product =>
       String(
-        product.product_code
-      ).toUpperCase() === "TS001"
+        product.product_code ||
+        product.productCode ||
+        ""
+      )
+      .trim()
+      .toUpperCase() ===
+      "TS001"
   );
 
 
 if (shirtProduct) {
 
   SHIRT_PRODUCT_ID =
-    shirtProduct.id;
+    String(
+      shirtProduct.id
+    ).trim();
+
 
   SHIRT_SHORT_UNIT_PRICE =
     Number(
-      shirtProduct.price
+      shirtProduct.price || 0
     );
+
 
   SHIRT_LONG_UNIT_PRICE =
     Number(
-      shirtProduct.price
+      shirtProduct.price || 0
     );
 
 }
-        
+
+        console.log(
+  "FINAL SHIRT CONFIG:",
+  {
+    id: SHIRT_PRODUCT_ID,
+    short: SHIRT_SHORT_UNIT_PRICE,
+    long: SHIRT_LONG_UNIT_PRICE
+  }
+);
+      
         createShirtRows();
         applyProductSettingsToUi();
 

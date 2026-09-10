@@ -1636,18 +1636,6 @@
     const WHATSAPP_NUMBER =
       "6282324854187";
 
-    let ACTIVE_PRODUCT_ID =
-      "";
-
-    let SHIRT_PRODUCT_ID =
-      "";
-    
-    let ACTIVE_PRODUCT_CODE =
-      "";
-
-    let ACTIVE_PRODUCT_RAFFLE_MULTIPLIER =
-      0;
-
     let ACTIVE_PRODUCT_NAME =
       "Produk";
 
@@ -1993,123 +1981,6 @@ const submitButton =
             data.product.unitName || ""
           ).trim() || "unit";
 
-        const productsResponse =
-          await fetch(
-            PURCHASE_SERVICE_URL +
-            "?action=getProducts",
-            {
-              method: "GET",
-              cache: "no-store",
-              headers: {
-                "Accept":
-                  "application/json",
-                "apikey":
-                  SUPABASE_PUBLISHABLE_KEY,
-                "Authorization":
-                  "Bearer " +
-                  SUPABASE_PUBLISHABLE_KEY
-              }
-            }
-          );
-
-        const productsRaw =
-          await productsResponse.text();
-
-        let productsData;
-
-        try {
-          productsData =
-            JSON.parse(productsRaw);
-        } catch {
-          throw new Error(
-            "Response daftar produk tidak valid."
-          );
-        }
-
-        if (
-          !productsResponse.ok ||
-          !productsData ||
-          productsData.success !== true ||
-          !Array.isArray(productsData.products)
-        ) {
-          throw new Error(
-            productsData &&
-            (productsData.message || productsData.detail)
-              ? (productsData.message || productsData.detail)
-              : "Daftar produk tidak tersedia."
-          );
-        }
-
-        const activeProduct =
-          productsData.products.find(
-            product =>
-              String(
-                product.product_code ||
-                product.productCode ||
-                ""
-              ).trim().toUpperCase() ===
-              "TS001"
-          );
-
-        if (!activeProduct) {
-          throw new Error(
-            "Produk LA_BOLD_12 tidak ditemukan pada tabel products."
-          );
-        }
-
-        ACTIVE_PRODUCT_ID =
-          String(
-            activeProduct.id ||
-            activeProduct.product_id ||
-            activeProduct.productId ||
-            ""
-          ).trim();
-
-        ACTIVE_PRODUCT_CODE =
-          String(
-            activeProduct.product_code ||
-            activeProduct.productCode ||
-            ""
-          ).trim().toUpperCase();
-
-        ACTIVE_PRODUCT_NAME =
-          String(
-            activeProduct.product_name ||
-            activeProduct.productName ||
-            ACTIVE_PRODUCT_NAME
-          ).trim() || ACTIVE_PRODUCT_NAME;
-
-        ACTIVE_PRODUCT_UNIT_PRICE =
-          Number(
-            activeProduct.price ??
-            activeProduct.unit_price ??
-            activeProduct.unitPrice ??
-            ACTIVE_PRODUCT_UNIT_PRICE
-          );
-
-        ACTIVE_PRODUCT_UNIT_NAME =
-          String(
-            activeProduct.unit_name ||
-            activeProduct.unitName ||
-            ACTIVE_PRODUCT_UNIT_NAME
-          ).trim() || ACTIVE_PRODUCT_UNIT_NAME;
-
-        ACTIVE_PRODUCT_RAFFLE_MULTIPLIER =
-          Number(
-            activeProduct.raffle_multiplier ??
-            activeProduct.raffleMultiplier ??
-            0
-          );
-
-        if (
-          !ACTIVE_PRODUCT_ID ||
-          !ACTIVE_PRODUCT_CODE
-        ) {
-          throw new Error(
-            "ID atau kode produk aktif tidak valid."
-          );
-        }
-
         if (
           !Number.isInteger(
             ACTIVE_PRODUCT_UNIT_PRICE
@@ -2121,50 +1992,16 @@ const submitButton =
           );
         }
 
-        const shirtProduct =
-  productsData.products.find(
-    product =>
-      String(
-        product.product_code ||
-        product.productCode ||
-        ""
-      )
-      .trim()
-      .toUpperCase() ===
-      "TS001"
-  );
-
-
-if (shirtProduct) {
-
-  SHIRT_PRODUCT_ID =
-    String(
-      shirtProduct.id
-    ).trim();
-
-
-  SHIRT_SHORT_UNIT_PRICE =
-    Number(
-      shirtProduct.price || 0
-    );
-
-
-  SHIRT_LONG_UNIT_PRICE =
-    Number(
-      shirtProduct.price || 0
-    );
-
-}
-
-        console.log(
-  "FINAL SHIRT CONFIG:",
-  {
-    id: SHIRT_PRODUCT_ID,
-    short: SHIRT_SHORT_UNIT_PRICE,
-    long: SHIRT_LONG_UNIT_PRICE
-  }
-);
-      
+        SHIRT_SHORT_UNIT_PRICE = Number(
+          data.merchandise && data.merchandise.shortPrice
+            ? data.merchandise.shortPrice
+            : 0
+        );
+        SHIRT_LONG_UNIT_PRICE = Number(
+          data.merchandise && data.merchandise.longPrice
+            ? data.merchandise.longPrice
+            : 0
+        );
         createShirtRows();
         applyProductSettingsToUi();
 
@@ -2368,12 +2205,6 @@ if (shirtProduct) {
         `;
       }
 
-      console.log(
-  "CREATE SHIRT ROW PRICE:",
-  SHIRT_SHORT_UNIT_PRICE,
-  SHIRT_LONG_UNIT_PRICE
-);
-      
       shortSleeveRows.innerHTML = SHIRT_SIZES
         .map(size => rowHtml("SHORT", size, SHIRT_SHORT_UNIT_PRICE))
         .join("");
@@ -2591,15 +2422,7 @@ if (shirtProduct) {
     function validateRafflePurchase() {
       const raffleSelected = wantRaffleTicketInput.checked;
       const shirtSelected = wantBoldShirtInput.checked;
-      const shirtItems =
-        shirtSelected
-        ? getShirtLines()
-        : [];
-
-      console.log(
-      "SHIRT ITEMS:",
-      shirtItems
-    );
+      const shirtItems = shirtSelected ? getShirtLines() : [];
 
       if (!raffleSelected && !shirtSelected) {
         return {
@@ -2642,20 +2465,8 @@ if (shirtProduct) {
       const items = [];
 
       if (raffleSelected) {
-        if (
-          !ACTIVE_PRODUCT_ID ||
-          !ACTIVE_PRODUCT_CODE
-        ) {
-          return {
-            ok: false,
-            message: "Data produk belum siap. Muat ulang halaman dan coba lagi.",
-            element: wantRaffleTicketInput
-          };
-        }
-
         items.push({
-          productId: ACTIVE_PRODUCT_ID,
-          itemType: ACTIVE_PRODUCT_CODE,
+          itemType: "LA_BOLD_12",
           variant: "STANDARD",
           size: null,
           sleeveType: null,
@@ -2663,51 +2474,17 @@ if (shirtProduct) {
           unitPrice: ACTIVE_PRODUCT_UNIT_PRICE
         });
       }
-console.log(
-  "SHIRT PRODUCT ID:",
-  SHIRT_PRODUCT_ID
-);
 
-console.log(
-  "SHIRT ITEMS:",
-  shirtItems
-);
-     for (const shirt of shirtItems) {
-
-  if (!SHIRT_PRODUCT_ID) {
-    return {
-      ok:false,
-      message:
-        "Produk T-Shirt belum tersedia. Muat ulang halaman.",
-    };
-  }
-
-
-  items.push({
-    productId:
-      SHIRT_PRODUCT_ID,
-
-    itemType:
-      "TS001",
-
-    variant:
-      shirt.sleeve === "SHORT"
-        ? "LENGAN PENDEK"
-        : "LENGAN PANJANG",
-
-    size:
-      shirt.size,
-
-    sleeveType:
-      shirt.sleeve,
-
-    quantity:
-      shirt.quantity,
-
-    unitPrice:
-      shirt.unitPrice,
-  });
-}
+      for (const shirt of shirtItems) {
+        items.push({
+          itemType: "BOLD_AFTER_DARK_SHIRT",
+          variant: shirt.sleeve === "SHORT" ? "LENGAN PENDEK" : "LENGAN PANJANG",
+          size: shirt.size,
+          sleeveType: shirt.sleeve,
+          quantity: shirt.quantity,
+          unitPrice: shirt.unitPrice
+        });
+      }
 
       ACTIVE_ORDER_ITEMS = items;
 
@@ -2723,12 +2500,6 @@ console.log(
       registrationData,
       raffleData
     ) {
-console.log(
-  "FINAL PURCHASE ITEMS:",
-  raffleData.items
-);
-
-     
       const createResponse =
         await fetch(
           PURCHASE_SERVICE_URL +
@@ -2741,36 +2512,17 @@ console.log(
               "apikey": SUPABASE_PUBLISHABLE_KEY,
               "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
             },
-           const payload = {
-  buyerName: registrationData.name,
-  whatsapp: registrationData.whatsapp,
-  registrationPassId: registrationData.passId,
-  quantity: raffleData.quantity || 0,
-  paymentMethod: raffleData.paymentMethod,
-  items: raffleData.items || []
-};
+            body: JSON.stringify({
+              buyerName: registrationData.name,
+              whatsapp: registrationData.whatsapp,
+              registrationPassId: registrationData.passId,
+              quantity: raffleData.quantity || 0,
+              paymentMethod: raffleData.paymentMethod,
+              items: raffleData.items || []
+            })
+          }
+        );
 
-console.log(
-  "CREATE PURCHASE PAYLOAD:",
-  JSON.stringify(payload, null, 2)
-);
-
-const createResponse =
-  await fetch(
-    PURCHASE_SERVICE_URL +
-    "?action=createPurchase",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "apikey": SUPABASE_PUBLISHABLE_KEY,
-        "Authorization":
-          "Bearer " + SUPABASE_PUBLISHABLE_KEY
-      },
-      body: JSON.stringify(payload)
-    }
-  );
       const raw = await createResponse.text();
       let data;
 
@@ -2869,10 +2621,6 @@ const createResponse =
         "MEMERIKSA...";
 
       try {
-        console.log(
-  "LOOKUP PURCHASE ID:",
-  purchaseId
-);
         const response =
           await fetch(
             PURCHASE_SERVICE_URL +

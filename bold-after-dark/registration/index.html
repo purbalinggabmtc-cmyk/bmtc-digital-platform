@@ -2591,7 +2591,15 @@ if (shirtProduct) {
     function validateRafflePurchase() {
       const raffleSelected = wantRaffleTicketInput.checked;
       const shirtSelected = wantBoldShirtInput.checked;
-      const shirtItems = shirtSelected ? getShirtLines() : [];
+      const shirtItems =
+        shirtSelected
+        ? getShirtLines()
+        : [];
+
+      console.log(
+      "SHIRT ITEMS:",
+      shirtItems
+    );
 
       if (!raffleSelected && !shirtSelected) {
         return {

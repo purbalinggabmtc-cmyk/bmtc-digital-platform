@@ -2121,16 +2121,32 @@ const submitButton =
           );
         }
 
-        SHIRT_SHORT_UNIT_PRICE = Number(
-          data.merchandise && data.merchandise.shortPrice
-            ? data.merchandise.shortPrice
-            : 0
-        );
-        SHIRT_LONG_UNIT_PRICE = Number(
-          data.merchandise && data.merchandise.longPrice
-            ? data.merchandise.longPrice
-            : 0
-        );
+const shirtProduct =
+  data.products?.find(
+    product =>
+      String(
+        product.product_code
+      ).toUpperCase() === "TS001"
+  );
+
+
+if (shirtProduct) {
+
+  SHIRT_PRODUCT_ID =
+    shirtProduct.id;
+
+  SHIRT_SHORT_UNIT_PRICE =
+    Number(
+      shirtProduct.price
+    );
+
+  SHIRT_LONG_UNIT_PRICE =
+    Number(
+      shirtProduct.price
+    );
+
+}
+        
         createShirtRows();
         applyProductSettingsToUi();
 
@@ -2334,6 +2350,12 @@ const submitButton =
         `;
       }
 
+      console.log(
+  "CREATE SHIRT ROW PRICE:",
+  SHIRT_SHORT_UNIT_PRICE,
+  SHIRT_LONG_UNIT_PRICE
+);
+      
       shortSleeveRows.innerHTML = SHIRT_SIZES
         .map(size => rowHtml("SHORT", size, SHIRT_SHORT_UNIT_PRICE))
         .join("");

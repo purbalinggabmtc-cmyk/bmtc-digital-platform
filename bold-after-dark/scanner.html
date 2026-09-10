@@ -3055,24 +3055,15 @@ ${
         ${purchase.items.map(
           (item) => `
             <div class="purchase-item-row">
-              <strong>
-                ${escapeHtml(
-                  item.item_type || "-"
-                )}
-              </strong>
+            <strong>
+              ${escapeHtml(
+              item.product?.product_name ||
+              item.item_type ||
+              "-"
+              )}
+            </strong>
 
-              ${
-                item.variant
-                  ? `
-                  <span>
-                    (${escapeHtml(
-                      item.variant
-                    )})
-                  </span>
-                  `
-                  : ""
-              }
-
+        
               <div>
                 JUMLAH:
                 ${escapeHtml(

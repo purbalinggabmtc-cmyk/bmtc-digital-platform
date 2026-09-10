@@ -2741,17 +2741,36 @@ console.log(
               "apikey": SUPABASE_PUBLISHABLE_KEY,
               "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
             },
-            body: JSON.stringify({
-              buyerName: registrationData.name,
-              whatsapp: registrationData.whatsapp,
-              registrationPassId: registrationData.passId,
-              quantity: raffleData.quantity || 0,
-              paymentMethod: raffleData.paymentMethod,
-              items: raffleData.items || []
-            })
-          }
-        );
+           const payload = {
+  buyerName: registrationData.name,
+  whatsapp: registrationData.whatsapp,
+  registrationPassId: registrationData.passId,
+  quantity: raffleData.quantity || 0,
+  paymentMethod: raffleData.paymentMethod,
+  items: raffleData.items || []
+};
 
+console.log(
+  "CREATE PURCHASE PAYLOAD:",
+  JSON.stringify(payload, null, 2)
+);
+
+const createResponse =
+  await fetch(
+    PURCHASE_SERVICE_URL +
+    "?action=createPurchase",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "apikey": SUPABASE_PUBLISHABLE_KEY,
+        "Authorization":
+          "Bearer " + SUPABASE_PUBLISHABLE_KEY
+      },
+      body: JSON.stringify(payload)
+    }
+  );
       const raw = await createResponse.text();
       let data;
 
